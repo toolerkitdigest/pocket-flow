@@ -96,7 +96,7 @@ $availableBalance = 0.00;
 
     <a
         class="brand"
-        href="index.html"
+        href="index.php"
     >
 
         <span class="brand-mark">
@@ -123,15 +123,15 @@ $availableBalance = 0.00;
             Earn
         </a>
 
-        <a href="history.html">
+        <a href="history.php">
             History
         </a>
 
-        <a href="referrals.html">
+        <a href="referrals.php">
             Refer & Earn
         </a>
 
-        <a href="withdraw.html">
+        <a href="withdraw.php">
             Withdraw
         </a>
 
@@ -142,7 +142,7 @@ $availableBalance = 0.00;
 
         <a
             class="btn btn-primary"
-            href="withdraw.html"
+            href="withdraw.php"
         >
             Balance $<?= number_format($availableBalance, 2) ?>
         </a>
@@ -194,7 +194,7 @@ $availableBalance = 0.00;
             </a>
 
 
-            <a href="history.html">
+            <a href="history.php">
 
                 ◷
 
@@ -205,7 +205,7 @@ $availableBalance = 0.00;
             </a>
 
 
-            <a href="referrals.html">
+            <a href="referrals.php">
 
                 ♧
 
@@ -216,7 +216,7 @@ $availableBalance = 0.00;
             </a>
 
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
 
                 ▣
 
@@ -260,7 +260,7 @@ $availableBalance = 0.00;
             </span>
 
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
                 Withdraw Funds →
             </a>
 
@@ -514,7 +514,7 @@ $availableBalance = 0.00;
                 </p>
 
 
-                <a href="history.html">
+                <a href="history.php">
                     View Offer History →
                 </a>
 
