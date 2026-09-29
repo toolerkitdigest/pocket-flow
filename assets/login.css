@@ -1,0 +1,810 @@
+:root {
+    --pf-bg: #080d1a;
+    --pf-bg-soft: #0c1324;
+    --pf-surface: #111827;
+    --pf-surface-2: #151e31;
+    --pf-surface-hover: #1a253b;
+
+    --pf-primary: #6366f1;
+    --pf-primary-hover: #818cf8;
+    --pf-primary-dark: #4f46e5;
+    --pf-accent: #22d3ee;
+
+    --pf-text: #f8fafc;
+    --pf-text-secondary: #a7b1c2;
+    --pf-text-muted: #718096;
+
+    --pf-border: rgba(148, 163, 184, 0.14);
+    --pf-danger: #f87171;
+    --pf-danger-bg: rgba(239, 68, 68, 0.10);
+
+    --pf-radius: 12px;
+    --pf-radius-lg: 18px;
+
+    --pf-header-height: 76px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(99, 102, 241, 0.09),
+            transparent 38%
+        ),
+        var(--pf-bg);
+
+    color: var(--pf-text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   SITE HEADER
+   ========================================================= */
+
+.site-header {
+    height: var(--pf-header-height);
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid var(--pf-border);
+
+    background: rgba(8, 13, 26, 0.88);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    position: relative;
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 1.25rem;
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
+
+    white-space: nowrap;
+}
+
+.brand > span:last-child {
+    color: var(--pf-text);
+}
+
+.brand > span:last-child span {
+    color: var(--pf-primary-hover);
+}
+
+.brand-mark {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pf-primary),
+            var(--pf-accent)
+        );
+
+    color: white;
+
+    font-size: 1rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 8px 25px rgba(99, 102, 241, 0.25);
+}
+
+
+/* =========================================================
+   DESKTOP NAVIGATION
+   ========================================================= */
+
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+
+    margin-left: 48px;
+}
+
+.desktop-nav a {
+    color: var(--pf-text-secondary);
+
+    font-size: 0.94rem;
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+.desktop-nav a:hover {
+    color: var(--pf-text);
+}
+
+.header-actions {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 10px;
+
+    padding: 10px 18px;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-ghost {
+    color: var(--pf-text-secondary);
+
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid var(--pf-border);
+}
+
+.btn-ghost:hover {
+    color: var(--pf-text);
+
+    background: rgba(255, 255, 255, 0.07);
+
+    border-color:
+        rgba(148, 163, 184, 0.25);
+}
+
+.btn-primary {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pf-primary),
+            var(--pf-primary-dark)
+        );
+
+    box-shadow:
+        0 10px 28px rgba(79, 70, 229, 0.25);
+}
+
+.btn-primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            var(--pf-primary-hover),
+            var(--pf-primary)
+        );
+
+    box-shadow:
+        0 12px 32px rgba(99, 102, 241, 0.35);
+}
+
+.btn-large {
+    min-height: 52px;
+
+    padding: 13px 20px;
+}
+
+
+/* =========================================================
+   MOBILE HAMBURGER
+   ========================================================= */
+
+.mobile-menu-toggle {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    margin-left: auto;
+
+    padding: 0;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    cursor: pointer;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.mobile-menu-toggle span {
+    width: 19px;
+    height: 2px;
+
+    border-radius: 10px;
+
+    background: var(--pf-text);
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform:
+        translateY(7px)
+        rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform:
+        translateY(-7px)
+        rotate(-45deg);
+}
+
+
+/* =========================================================
+   MOBILE NAVIGATION
+   ========================================================= */
+
+.mobile-nav {
+    display: none;
+
+    position: absolute;
+
+    top: var(--pf-header-height);
+    left: 0;
+    right: 0;
+
+    padding:
+        14px 5%
+        20px;
+
+    background:
+        rgba(8, 13, 26, 0.98);
+
+    border-bottom:
+        1px solid var(--pf-border);
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.25);
+}
+
+.mobile-nav.open {
+    display: block;
+}
+
+.mobile-nav a {
+    display: flex;
+    align-items: center;
+
+    min-height: 48px;
+
+    padding: 0 14px;
+
+    border-radius: 10px;
+
+    color: var(--pf-text-secondary);
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.mobile-nav a:hover {
+    color: var(--pf-text);
+
+    background:
+        rgba(99, 102, 241, 0.10);
+}
+
+.mobile-nav-login {
+    margin-top: 8px;
+
+    justify-content: center;
+
+    color: white !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pf-primary),
+            var(--pf-primary-dark)
+        );
+}
+
+
+/* =========================================================
+   AUTH PAGE
+   ========================================================= */
+
+.auth-page {
+    min-height:
+        calc(100vh - var(--pf-header-height));
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding:
+        64px 20px
+        80px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.auth-card {
+    width: 100%;
+
+    padding: 38px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 24, 39, 0.98),
+            rgba(12, 19, 36, 0.98)
+        );
+
+    border:
+        1px solid var(--pf-border);
+
+    border-radius:
+        var(--pf-radius-lg);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.35);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.auth-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--pf-primary),
+            var(--pf-accent)
+        );
+}
+
+
+/* =========================================================
+   AUTH HEADING
+   ========================================================= */
+
+.auth-heading {
+    margin-bottom: 28px;
+}
+
+.auth-heading h1 {
+    margin: 0 0 9px;
+
+    color: var(--pf-text);
+
+    font-size:
+        clamp(1.65rem, 4vw, 2rem);
+
+    line-height: 1.2;
+
+    letter-spacing: -0.035em;
+}
+
+.auth-heading p {
+    margin: 0;
+
+    color: var(--pf-text-secondary);
+
+    font-size: 0.95rem;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.auth-error {
+    margin-bottom: 22px;
+
+    padding: 13px 15px;
+
+    border:
+        1px solid rgba(248, 113, 113, 0.25);
+
+    border-radius: 10px;
+
+    background: var(--pf-danger-bg);
+}
+
+.auth-error p {
+    margin: 4px 0;
+
+    color: var(--pf-danger);
+
+    font-size: 0.87rem;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.auth-field label {
+    color: var(--pf-text);
+
+    font-size: 0.88rem;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   PASSWORD LABEL ROW
+   ========================================================= */
+
+.password-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.forgot-password {
+    color: var(--pf-primary-hover);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease;
+}
+
+.forgot-password:hover {
+    color: var(--pf-accent);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.auth-field input {
+    width: 100%;
+
+    height: 50px;
+
+    padding: 0 14px;
+
+    border:
+        1px solid rgba(148, 163, 184, 0.18);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        rgba(8, 13, 26, 0.72);
+
+    color: var(--pf-text);
+
+    font-family: inherit;
+    font-size: 0.94rem;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.auth-field input::placeholder {
+    color: var(--pf-text-muted);
+}
+
+.auth-field input:hover {
+    border-color:
+        rgba(148, 163, 184, 0.28);
+}
+
+.auth-field input:focus {
+    border-color:
+        var(--pf-primary);
+
+    background:
+        rgba(8, 13, 26, 0.9);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99, 102, 241, 0.13);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    margin-top: 4px;
+
+    gap: 10px;
+}
+
+.auth-submit span {
+    font-size: 1.15rem;
+
+    transition:
+        transform 0.2s ease;
+}
+
+.auth-submit:hover span {
+    transform:
+        translateX(3px);
+}
+
+
+/* =========================================================
+   AUTH FOOTER
+   ========================================================= */
+
+.auth-footer {
+    margin-top: 25px;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid var(--pf-border);
+
+    text-align: center;
+
+    color: var(--pf-text-secondary);
+
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    margin-left: 4px;
+
+    color: var(--pf-primary-hover);
+
+    font-weight: 700;
+}
+
+.auth-footer a:hover {
+    color: var(--pf-accent);
+}
+
+
+/* =========================================================
+   AUTH NOTE
+   ========================================================= */
+
+.auth-note {
+    margin-top: 18px;
+
+    color: var(--pf-text-muted);
+
+    font-size: 0.76rem;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    :root {
+        --pf-header-height: 68px;
+    }
+
+    .site-header {
+        height: 68px;
+
+        padding: 0 20px;
+    }
+
+    .desktop-nav {
+        display: none;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .auth-page {
+        min-height:
+            calc(100vh - var(--pf-header-height));
+
+        padding:
+            38px 16px
+            60px;
+    }
+
+    .auth-card {
+        padding:
+            30px 22px;
+
+        border-radius: 15px;
+    }
+
+    .auth-heading {
+        margin-bottom: 24px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .site-header {
+        padding: 0 15px;
+    }
+
+    .brand {
+        font-size: 1.1rem;
+    }
+
+    .brand-mark {
+        width: 33px;
+        height: 33px;
+    }
+
+    .auth-page {
+        padding:
+            28px 12px
+            50px;
+    }
+
+    .auth-card {
+        padding:
+            27px 18px;
+    }
+
+    .auth-heading h1 {
+        font-size: 1.55rem;
+    }
+
+    .auth-heading p {
+        font-size: 0.88rem;
+    }
+
+    .auth-field input {
+        height: 48px;
+    }
+
+    .password-label-row {
+        align-items: flex-start;
+    }
+
+    .forgot-password {
+        font-size: 0.74rem;
+    }
+}
