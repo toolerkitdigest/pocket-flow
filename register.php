@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
 
 require_once __DIR__ . '/includes/auth.php';
 
@@ -80,106 +77,233 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Create Account - PoketFlow</title>
 
-    <link rel="stylesheet" href="assets/poketflow.css">
+    <link
+        rel="stylesheet"
+        href="assets/poketflow.css"
+    >
+
 </head>
 
 <body>
 
-    <main style="max-width:500px;margin:80px auto;padding:20px;">
+<header class="site-header">
 
-        <div class="pf-card">
+    <a href="index.html" class="brand">
 
-            <h1>Create your PoketFlow account</h1>
+        <span class="brand-mark">P</span>
 
-            <p>
-                Join PoketFlow and start discovering available opportunities.
-            </p>
+        <span>
+            Poket<span>Flow</span>
+        </span>
+
+    </a>
+
+    <nav class="desktop-nav">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="offers.html">
+            Earn
+        </a>
+
+    </nav>
+
+    <div class="header-actions">
+
+        <a
+            href="login.php"
+            class="btn btn-ghost"
+        >
+            Log In
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="auth-page">
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-brand">
+
+                <a href="index.html" class="brand">
+
+                    <span class="brand-mark">P</span>
+
+                    <span>
+                        Poket<span>Flow</span>
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h1>
+                    Create Your Account
+                </h1>
+
+                <p>
+                    Join PoketFlow and start discovering available rewards.
+                </p>
+
+            </div>
+
 
             <?php if ($errors): ?>
 
-                <div>
+                <div class="auth-error">
+
                     <?php foreach ($errors as $error): ?>
 
                         <p><?= e($error) ?></p>
 
                     <?php endforeach; ?>
+
                 </div>
 
             <?php endif; ?>
 
-            <form method="POST" action="">
 
-                <div>
-                    <label for="name">Full Name</label>
+            <form
+                method="POST"
+                action=""
+                class="auth-form"
+            >
+
+                <div class="auth-field">
+
+                    <label for="name">
+                        Full Name
+                    </label>
 
                     <input
                         type="text"
                         id="name"
                         name="name"
-                        required
+                        placeholder="Enter your full name"
                         value="<?= e($_POST['name'] ?? '') ?>"
+                        autocomplete="name"
+                        required
                     >
+
                 </div>
 
-                <div>
-                    <label for="email">Email Address</label>
+
+                <div class="auth-field">
+
+                    <label for="email">
+                        Email Address
+                    </label>
 
                     <input
                         type="email"
                         id="email"
                         name="email"
-                        required
+                        placeholder="you@example.com"
                         value="<?= e($_POST['email'] ?? '') ?>"
+                        autocomplete="email"
+                        required
                     >
+
                 </div>
 
-                <div>
-                    <label for="country">Country</label>
+
+                <div class="auth-field">
+
+                    <label for="country">
+                        Country
+                    </label>
 
                     <input
                         type="text"
                         id="country"
                         name="country"
+                        placeholder="Enter your country"
                         value="<?= e($_POST['country'] ?? '') ?>"
+                        autocomplete="country-name"
                     >
+
                 </div>
 
-                <div>
-                    <label for="password">Password</label>
+
+                <div class="auth-field">
+
+                    <label for="password">
+                        Password
+                    </label>
 
                     <input
                         type="password"
                         id="password"
                         name="password"
+                        placeholder="Minimum 8 characters"
                         minlength="8"
+                        autocomplete="new-password"
                         required
                     >
+
                 </div>
 
-                <button type="submit">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-large auth-submit"
+                >
                     Create Account
+                    <span>→</span>
                 </button>
 
             </form>
 
-            <p>
+
+            <div class="auth-footer">
+
                 Already have an account?
-                <a href="login.php">Log in</a>
-            </p>
+
+                <a href="login.php">
+                    Log in
+                </a>
+
+            </div>
+
+
+            <div class="auth-note">
+
+                By creating an account, you agree to use PoketFlow
+                responsibly and follow our platform rules.
+
+            </div>
 
         </div>
 
-    </main>
+    </div>
+
+</main>
 
 </body>
 </html>
