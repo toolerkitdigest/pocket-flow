@@ -69,7 +69,7 @@ if ($referralCode !== '') {
         <a href="offers.php">Earn</a>
         <a href="history.php">History</a>
         <a class="active" href="referrals.php">Refer & Earn</a>
-        <a href="withdraw.html">Withdraw</a>
+        <a href="withdraw.php">Withdraw</a>
     </nav>
 
 </header>
