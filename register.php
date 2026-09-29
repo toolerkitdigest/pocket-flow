@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <link
         rel="stylesheet"
-        href="assets/poketflow.css"
+        href="assets/register.css"
     >
 
 </head>
