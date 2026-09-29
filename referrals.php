@@ -59,7 +59,7 @@ if ($referralCode !== '') {
 
 <header class="app-header">
 
-    <a class="brand" href="index.html">
+    <a class="brand" href="index.php">
         <span class="brand-mark">P</span>
         <span>Poket<span>Flow</span></span>
     </a>
@@ -96,7 +96,7 @@ if ($referralCode !== '') {
                 ♧ <span>Refer & Earn</span>
             </a>
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
                 ▣ <span>Withdraw</span>
             </a>
 
