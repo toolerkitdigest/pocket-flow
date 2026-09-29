@@ -146,20 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="auth-card">
 
-            <div class="auth-brand">
-
-                <a href="index.html" class="brand">
-
-                    <span class="brand-mark">P</span>
-
-                    <span>
-                        Poket<span>Flow</span>
-                    </span>
-
-                </a>
-
-            </div>
-
+            
 
             <div class="auth-heading">
 
