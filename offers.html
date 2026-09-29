@@ -1,15 +1,545 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/includes/auth.php';
+
+
+// --------------------------------------------------
+// Protect offers page
+// --------------------------------------------------
+
+if (!isLoggedIn()) {
+    redirect('login.php');
+}
+
+
+// --------------------------------------------------
+// Get logged-in user
+// --------------------------------------------------
+
+$userId = (int) $_SESSION['user_id'];
+
+$stmt = $pdo->prepare(
+    'SELECT
+        id,
+        name,
+        email,
+        country,
+        status
+     FROM users
+     WHERE id = ?
+     LIMIT 1'
+);
+
+$stmt->execute([$userId]);
+
+$user = $stmt->fetch();
+
+
+// --------------------------------------------------
+// Safety check
+// --------------------------------------------------
+
+if (!$user) {
+
+    $_SESSION = [];
+
+    session_destroy();
+
+    redirect('login.php');
+}
+
+
+// --------------------------------------------------
+// Dashboard values
+//
+// Real earnings will be connected later.
+// --------------------------------------------------
+
+$availableBalance = 0.00;
+
+?>
+
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offers — PoketFlow</title><link rel="stylesheet" href="assets/poketflow.css"></head>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1"
+    >
+
+    <title>Offers — PoketFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/poketflow.css"
+    >
+
+</head>
+
+
 <body class="app-page">
-<header class="app-header"><a class="brand" href="index.html"><span class="brand-mark">P</span><span>Pocket<span>Flow</span></span></a><nav><a href="dashboard.html">Home</a><a class="active" href="offers.html">Earn</a><a href="history.html">History</a><a href="referrals.html">Refer & Earn</a><a href="withdraw.html">Withdraw</a></nav><div class="header-actions"><a class="btn btn-primary" href="withdraw.html">Balance $0.00</a></div></header>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="app-header">
+
+
+    <a
+        class="brand"
+        href="index.html"
+    >
+
+        <span class="brand-mark">
+            P
+        </span>
+
+        <span>
+            Poket<span>Flow</span>
+        </span>
+
+    </a>
+
+
+    <nav>
+
+        <a href="dashboard.php">
+            Home
+        </a>
+
+        <a
+            class="active"
+            href="offers.php"
+        >
+            Earn
+        </a>
+
+        <a href="history.html">
+            History
+        </a>
+
+        <a href="referrals.html">
+            Refer & Earn
+        </a>
+
+        <a href="withdraw.html">
+            Withdraw
+        </a>
+
+    </nav>
+
+
+    <div class="header-actions">
+
+        <a
+            class="btn btn-primary"
+            href="withdraw.html"
+        >
+            Balance $<?= number_format($availableBalance, 2) ?>
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ==================================================
+     APP LAYOUT
+================================================== -->
+
 <main class="app-shell">
-  <aside class="sidebar"><div class="sidebar-nav"><a href="dashboard.html">⌂ <span>Home</span></a><a class="active" href="offers.html">▦ <span>Offers</span></a><a href="history.html">◷ <span>History</span></a><a href="referrals.html">♧ <span>Refer & Earn</span></a><a href="withdraw.html">▣ <span>Withdraw</span></a></div><div class="side-balance"><small>Your Balance</small><strong>$0.00</strong><span>Available to withdraw</span><a href="withdraw.html">Withdraw Funds →</a></div></aside>
-  <section class="app-content"><div class="page-title"><div><span class="kicker">EARN REWARDS</span><h1>Offers</h1><p>Complete available offers to grow your balance. The list refreshes automatically.</p></div></div>
-    <div class="offer-tabs"><button class="selected">All Offers</button><button>App Install</button><button>Survey</button><button>Dual Submission</button></div>
-    <div class="dashboard-grid"><div class="offer-grid dashboard-offers">
-      <article class="offer-card"><div class="offer-icon">◎</div><div class="offer-body"><span class="tag">App Install</span><h3>Available app offer</h3><p>Follow the advertiser's instructions and complete the required steps.</p></div><div class="offer-bottom"><strong>Reward shown by offer</strong><button class="btn btn-primary">Start →</button></div></article>
-      <article class="offer-card"><div class="offer-icon orange">▤</div><div class="offer-body"><span class="tag">Survey</span><h3>Available survey</h3><p>Complete the survey requirements to receive the listed reward.</p></div><div class="offer-bottom"><strong>Reward shown by offer</strong><button class="btn btn-primary">Start →</button></div></article>
-      <article class="offer-card"><div class="offer-icon cyan">◇</div><div class="offer-body"><span class="tag">Special Offer</span><h3>Featured opportunity</h3><p>Review the requirements before starting an available offer.</p></div><div class="offer-bottom"><strong>Reward shown by offer</strong><button class="btn btn-primary">Start →</button></div></article>
-    </div><aside class="info-card"><div class="info-icon">◷</div><h3>Track your completions</h3><p>Visit Offer History to see your recent activity and completion status.</p><a href="history.html">View Offer History →</a><hr><small>Completion tracking can take some time depending on the offer.</small></aside></div>
-  </section>
-</main></body></html>
+
+
+    <!-- ==================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-nav">
+
+
+            <a href="dashboard.php">
+
+                ⌂
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <a
+                class="active"
+                href="offers.php"
+            >
+
+                ▦
+
+                <span>
+                    Offers
+                </span>
+
+            </a>
+
+
+            <a href="history.html">
+
+                ◷
+
+                <span>
+                    History
+                </span>
+
+            </a>
+
+
+            <a href="referrals.html">
+
+                ♧
+
+                <span>
+                    Refer & Earn
+                </span>
+
+            </a>
+
+
+            <a href="withdraw.html">
+
+                ▣
+
+                <span>
+                    Withdraw
+                </span>
+
+            </a>
+
+
+            <a href="logout.php">
+
+                ↪
+
+                <span>
+                    Log Out
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- Balance -->
+
+        <div class="side-balance">
+
+            <small>
+                Your Balance
+            </small>
+
+
+            <strong>
+                $<?= number_format($availableBalance, 2) ?>
+            </strong>
+
+
+            <span>
+                Available to withdraw
+            </span>
+
+
+            <a href="withdraw.html">
+                Withdraw Funds →
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- ==================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <section class="app-content">
+
+
+        <!-- Page Title -->
+
+        <div class="page-title">
+
+            <div>
+
+                <span class="kicker">
+                    EARN REWARDS
+                </span>
+
+
+                <h1>
+                    Offers
+                </h1>
+
+
+                <p>
+                    Complete available offers to grow your balance.
+                    The list refreshes automatically.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             OFFER FILTERS
+        ================================================== -->
+
+        <div class="offer-tabs">
+
+            <button
+                type="button"
+                class="selected"
+            >
+                All Offers
+            </button>
+
+
+            <button type="button">
+                App Install
+            </button>
+
+
+            <button type="button">
+                Survey
+            </button>
+
+
+            <button type="button">
+                Dual Submission
+            </button>
+
+        </div>
+
+
+        <!-- ==================================================
+             OFFER AREA
+        ================================================== -->
+
+        <div class="dashboard-grid">
+
+
+            <div class="offer-grid dashboard-offers">
+
+
+                <!-- OFFER 1 -->
+
+                <article class="offer-card">
+
+                    <div class="offer-icon">
+                        ◎
+                    </div>
+
+
+                    <div class="offer-body">
+
+                        <span class="tag">
+                            App Install
+                        </span>
+
+
+                        <h3>
+                            Available app offer
+                        </h3>
+
+
+                        <p>
+                            Follow the advertiser's instructions
+                            and complete the required steps.
+                        </p>
+
+                    </div>
+
+
+                    <div class="offer-bottom">
+
+                        <strong>
+                            Reward shown by offer
+                        </strong>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                        >
+                            Start →
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- OFFER 2 -->
+
+                <article class="offer-card">
+
+                    <div class="offer-icon orange">
+                        ▤
+                    </div>
+
+
+                    <div class="offer-body">
+
+                        <span class="tag">
+                            Survey
+                        </span>
+
+
+                        <h3>
+                            Available survey
+                        </h3>
+
+
+                        <p>
+                            Complete the survey requirements
+                            to receive the listed reward.
+                        </p>
+
+                    </div>
+
+
+                    <div class="offer-bottom">
+
+                        <strong>
+                            Reward shown by offer
+                        </strong>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                        >
+                            Start →
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- OFFER 3 -->
+
+                <article class="offer-card">
+
+                    <div class="offer-icon cyan">
+                        ◇
+                    </div>
+
+
+                    <div class="offer-body">
+
+                        <span class="tag">
+                            Special Offer
+                        </span>
+
+
+                        <h3>
+                            Featured opportunity
+                        </h3>
+
+
+                        <p>
+                            Review the requirements before
+                            starting an available offer.
+                        </p>
+
+                    </div>
+
+
+                    <div class="offer-bottom">
+
+                        <strong>
+                            Reward shown by offer
+                        </strong>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                        >
+                            Start →
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+
+            <!-- ==================================================
+                 INFORMATION CARD
+            ================================================== -->
+
+            <aside class="info-card">
+
+
+                <div class="info-icon">
+                    ◷
+                </div>
+
+
+                <h3>
+                    Track your completions
+                </h3>
+
+
+                <p>
+                    Visit Offer History to see your recent
+                    activity and completion status.
+                </p>
+
+
+                <a href="history.html">
+                    View Offer History →
+                </a>
+
+
+                <hr>
+
+
+                <small>
+                    Completion tracking can take some time
+                    depending on the offer.
+                </small>
+
+
+            </aside>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>
