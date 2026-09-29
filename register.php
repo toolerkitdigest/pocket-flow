@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <title>Create Account - PoketFlow</title>
 
-    <link rel="stylesheet" href="assets/pocketflow.css">
+    <link rel="stylesheet" href="assets/poketflow.css">
 </head>
 
 <body>
