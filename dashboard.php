@@ -112,7 +112,7 @@ $totalEarned = 0.00;
 
     <a
         class="brand"
-        href="index.html"
+        href="index.php"
     >
 
         <span class="brand-mark">
@@ -135,19 +135,19 @@ $totalEarned = 0.00;
             Home
         </a>
 
-        <a href="offers.html">
+        <a href="offers.php">
             Earn
         </a>
 
-        <a href="history.html">
+        <a href="history.php">
             History
         </a>
 
-        <a href="referrals.html">
+        <a href="referrals.php">
             Refer & Earn
         </a>
 
-        <a href="withdraw.html">
+        <a href="withdraw.php">
             Withdraw
         </a>
 
@@ -158,7 +158,7 @@ $totalEarned = 0.00;
 
         <a
             class="btn btn-primary"
-            href="withdraw.html"
+            href="withdraw.php"
         >
             $<?= number_format($availableBalance, 2) ?>
         </a>
@@ -196,7 +196,7 @@ $totalEarned = 0.00;
             </a>
 
 
-            <a href="offers.html">
+            <a href="offers.php">
                 ▦
                 <span>
                     Offers
@@ -204,7 +204,7 @@ $totalEarned = 0.00;
             </a>
 
 
-            <a href="history.html">
+            <a href="history.php">
                 ◷
                 <span>
                     History
@@ -212,7 +212,7 @@ $totalEarned = 0.00;
             </a>
 
 
-            <a href="referrals.html">
+            <a href="referrals.php">
                 ♧
                 <span>
                     Refer & Earn
@@ -220,7 +220,7 @@ $totalEarned = 0.00;
             </a>
 
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
                 ▣
                 <span>
                     Withdraw
@@ -257,7 +257,7 @@ $totalEarned = 0.00;
                 Available to withdraw
             </span>
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
                 Withdraw Funds →
             </a>
 
@@ -303,7 +303,7 @@ $totalEarned = 0.00;
 
             <a
                 class="btn btn-primary"
-                href="offers.html"
+                href="offers.php"
             >
                 Find Offers →
             </a>
@@ -391,7 +391,7 @@ $totalEarned = 0.00;
             </h2>
 
 
-            <a href="offers.html">
+            <a href="offers.php">
                 View all →
             </a>
 
@@ -405,7 +405,7 @@ $totalEarned = 0.00;
             <!-- Offers -->
 
             <a
-                href="offers.html"
+                href="offers.php"
                 class="earn-card"
             >
 
@@ -431,7 +431,7 @@ $totalEarned = 0.00;
             <!-- Surveys -->
 
             <a
-                href="offers.html"
+                href="offers.php"
                 class="earn-card"
             >
 
@@ -457,7 +457,7 @@ $totalEarned = 0.00;
             <!-- Referrals -->
 
             <a
-                href="referrals.html"
+                href="referrals.php"
                 class="earn-card"
             >
 
