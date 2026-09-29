@@ -104,6 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <header class="site-header">
 
+    <!-- Brand -->
+
     <a href="index.html" class="brand">
 
         <span class="brand-mark">P</span>
@@ -113,6 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </span>
 
     </a>
+
+
+    <!-- Desktop Navigation -->
 
     <nav class="desktop-nav">
 
@@ -126,6 +131,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </nav>
 
+
+    <!-- Desktop Actions -->
+
     <div class="header-actions">
 
         <a
@@ -137,6 +145,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
 
+
+    <!-- Mobile Hamburger -->
+
+    <button
+        type="button"
+        class="mobile-menu-toggle"
+        id="mobileMenuToggle"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+
+    <!-- Mobile Navigation -->
+
+    <nav
+        class="mobile-nav"
+        id="mobileNav"
+        aria-hidden="true"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="offers.html">
+            Earn
+        </a>
+
+        <a
+            href="login.php"
+            class="mobile-nav-login"
+        >
+            Log In
+        </a>
+
+    </nav>
+
 </header>
 
 
@@ -145,8 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-container">
 
         <div class="auth-card">
-
-            
 
             <div class="auth-heading">
 
@@ -291,6 +340,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 </main>
+
+
+<script>
+
+    const mobileMenuToggle =
+        document.getElementById('mobileMenuToggle');
+
+    const mobileNav =
+        document.getElementById('mobileNav');
+
+
+    mobileMenuToggle.addEventListener('click', function () {
+
+        const isOpen =
+            mobileNav.classList.toggle('open');
+
+        mobileMenuToggle.classList.toggle(
+            'active',
+            isOpen
+        );
+
+        mobileMenuToggle.setAttribute(
+            'aria-expanded',
+            isOpen ? 'true' : 'false'
+        );
+
+        mobileMenuToggle.setAttribute(
+            'aria-label',
+            isOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+        mobileNav.setAttribute(
+            'aria-hidden',
+            isOpen ? 'false' : 'true'
+        );
+
+    });
+
+
+    mobileNav.querySelectorAll('a').forEach(function (link) {
+
+        link.addEventListener('click', function () {
+
+            mobileNav.classList.remove('open');
+
+            mobileMenuToggle.classList.remove('active');
+
+            mobileMenuToggle.setAttribute(
+                'aria-expanded',
+                'false'
+            );
+
+            mobileMenuToggle.setAttribute(
+                'aria-label',
+                'Open navigation menu'
+            );
+
+            mobileNav.setAttribute(
+                'aria-hidden',
+                'true'
+            );
+
+        });
+
+    });
+
+</script>
 
 </body>
 </html>
