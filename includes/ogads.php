@@ -362,6 +362,7 @@ function syncOgadsOffer(
                 countries = ?,
                 devices = ?,
                 network_offer_url = ?,
+                image_url = ?,
                 incentive_allowed = 1,
                 status = "ACTIVE",
                 approval_status = "APPROVED",
