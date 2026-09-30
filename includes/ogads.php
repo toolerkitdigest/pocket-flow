@@ -295,6 +295,8 @@ function syncOgadsOffer(
         (string) ($offer['link'] ?? '')
     );
 
+    $imageUrl,
+
     $imageUrl = trim(
     (string) ($offer['picture'] ?? '')
     );
@@ -413,6 +415,7 @@ function syncOgadsOffer(
         VALUES (
             "CPA_NETWORK",
             NULL,
+            ?
             ?,
             ?,
             ?,
