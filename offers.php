@@ -1,12 +1,10 @@
 <?php
 
-
 declare(strict_types=1);
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
-
 
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/ogads.php';
@@ -27,7 +25,10 @@ if (!isLoggedIn()) {
 
 $userId = (int) $_SESSION['user_id'];
 
-$user = getUser($pdo, $userId);
+$user = getUser(
+    $pdo,
+    $userId
+);
 
 $ogadsError = null;
 
@@ -47,8 +48,31 @@ if (!$user) {
 
 
 // --------------------------------------------------
-// Fetch and synchronize OGAds offers
+// Get real wallet balance
 // --------------------------------------------------
+
+$availableBalance = getUserBalance(
+    $pdo,
+    $userId
+);
+
+
+// --------------------------------------------------
+// Fetch LIVE visitor-specific OGAds offers
+//
+// IMPORTANT:
+//
+// We do NOT synchronize these offers into the
+// global campaigns table here.
+//
+// OGAds returns inventory based on the visitor's
+// IP, device, language, etc.
+//
+// We keep the current eligible offers in the
+// session for the next step: start-offer.php.
+// --------------------------------------------------
+
+$campaigns = [];
 
 try {
 
@@ -70,6 +94,10 @@ try {
     );
 
 
+    // --------------------------------------------------
+    // Ask OGAds for this visitor's live inventory
+    // --------------------------------------------------
+
     $ogadsOffers = fetchOgadsOffers(
         $ip,
         $userAgent,
@@ -80,44 +108,204 @@ try {
     );
 
 
-    syncOgadsOffers(
-        $pdo,
-        $ogadsOffers
-    );
+    // --------------------------------------------------
+    // Process visitor-specific offers
+    // --------------------------------------------------
+
+    foreach ($ogadsOffers as $offer) {
+
+        $externalOfferId = trim(
+            (string) ($offer['offerid'] ?? '')
+        );
+
+
+        // ----------------------------------------------
+        // Offer must have an ID
+        // ----------------------------------------------
+
+        if ($externalOfferId === '') {
+            continue;
+        }
+
+
+        // ----------------------------------------------
+        // Clean offer information
+        // ----------------------------------------------
+
+        $title = cleanOgadsText(
+            $offer['name_short']
+                ?? $offer['name']
+                ?? 'OGAds Offer'
+        );
+
+
+        $description = cleanOgadsText(
+            $offer['description'] ?? ''
+        );
+
+
+        $instructions = cleanOgadsText(
+            $offer['adcopy'] ?? ''
+        );
+
+
+        $category = getOgadsOfferCategory(
+            $offer
+        );
+
+
+        $countries = trim(
+            (string) ($offer['country'] ?? '')
+        );
+
+
+        $devices = trim(
+            (string) ($offer['device'] ?? '')
+        );
+
+
+        $networkOfferUrl = trim(
+            (string) ($offer['link'] ?? '')
+        );
+
+
+        $imageUrl = trim(
+            (string) ($offer['picture'] ?? '')
+        );
+
+
+        $networkPayout = round(
+            (float) ($offer['payout'] ?? 0),
+            2
+        );
+
+
+        // ----------------------------------------------
+        // Must have a payout
+        // ----------------------------------------------
+
+        if ($networkPayout <= 0) {
+            continue;
+        }
+
+
+        // ----------------------------------------------
+        // Must have an actual participation URL
+        // ----------------------------------------------
+
+        if ($networkOfferUrl === '') {
+            continue;
+        }
+
+
+        // ----------------------------------------------
+        // Apply PoketFlow safety filters
+        // ----------------------------------------------
+
+        $campaignForFilter = [
+            'title' => $title,
+            'description' => $description,
+            'category' => $category,
+            'instructions' => $instructions,
+        ];
+
+
+        if (!isCampaignAllowed(
+            $pdo,
+            $campaignForFilter
+        )) {
+            continue;
+        }
+
+
+        // ----------------------------------------------
+        // Calculate worker reward
+        // ----------------------------------------------
+
+        $rewards = calculateOgadsReward(
+            $pdo,
+            $networkPayout
+        );
+
+
+        // ----------------------------------------------
+        // Build visitor-specific offer
+        // ----------------------------------------------
+
+        $campaigns[] = [
+
+            /*
+             * Temporary identifier.
+             *
+             * This is the OGAds external offer ID,
+             * NOT a PoketFlow campaign ID.
+             */
+            'id' => $externalOfferId,
+
+            'source_type' => 'CPA_NETWORK',
+
+            'network_id' => null,
+
+            'external_offer_id' => $externalOfferId,
+
+            'network_offer_url' => $networkOfferUrl,
+
+            'image_url' => $imageUrl,
+
+            'title' => $title,
+
+            'description' => $description,
+
+            'category' => $category,
+
+            'instructions' => $instructions,
+
+            'network_payout' => $networkPayout,
+
+            'reward_rate' => $rewards['reward_rate'],
+
+            'worker_reward' => $rewards['worker_reward'],
+
+            'platform_margin' => $rewards['platform_margin'],
+
+            'countries' => $countries,
+
+            'devices' => $devices,
+
+            'os' => '',
+
+            'incentive_allowed' => 1,
+
+            'status' => 'ACTIVE',
+
+            'approval_status' => 'APPROVED',
+
+        ];
+    }
+
+
+    // --------------------------------------------------
+    // Store the current visitor's eligible offers
+    // in the session.
+    //
+    // start-offer.php will use this in Stage 2.
+    // --------------------------------------------------
+
+    $_SESSION['ogads_offers'] = $campaigns;
 
 
 } catch (Throwable $e) {
 
     $ogadsError = $e->getMessage();
+
+    /*
+     * Clear old visitor-specific offers if the
+     * current API request failed.
+     */
+    $_SESSION['ogads_offers'] = [];
+
+    $campaigns = [];
 }
-
-
-// --------------------------------------------------
-// Get real wallet balance
-// --------------------------------------------------
-
-$availableBalance = getUserBalance(
-    $pdo,
-    $userId
-);
-
-
-// --------------------------------------------------
-// Get active campaigns
-//
-// This automatically applies:
-//
-// 1. ACTIVE status
-// 2. APPROVED status
-// 3. Start/end dates
-// 4. Country eligibility
-// 5. Offer safety filters
-// --------------------------------------------------
-
-$campaigns = getActiveCampaigns(
-    $pdo,
-    $user['country'] ?? null
-);
 
 
 // --------------------------------------------------
@@ -537,7 +725,7 @@ function getOfferCategory(array $campaign): string
 
                             <p>
                                 There are currently no offers
-                                available for your country.
+                                available for your location.
                                 Please check again later.
                             </p>
 
@@ -689,7 +877,7 @@ function getOfferCategory(array $campaign): string
 
 
                                 <a
-                                    href="start-offer.php?id=<?= (int) $campaign['id'] ?>"
+                                    href="start-offer.php?offer_id=<?= e((string) $campaign['external_offer_id']) ?>"
                                     class="btn btn-primary"
                                 >
                                     Start →
