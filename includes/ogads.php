@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+
+/**
+ * Load private OGAds configuration.
+ */
 function getOgadsConfig(): array
 {
     $configPath = '/home/u541027683/private/poketflow-config.php';
@@ -28,6 +32,9 @@ function getOgadsConfig(): array
 }
 
 
+/**
+ * Fetch visitor-specific offers from OGAds.
+ */
 function fetchOgadsOffers(
     string $ip,
     string $userAgent,
@@ -36,6 +43,7 @@ function fetchOgadsOffers(
     int $ctype = 0,
     int $max = 50
 ): array {
+
     $config = getOgadsConfig();
 
     $params = [
@@ -47,24 +55,35 @@ function fetchOgadsOffers(
         'max' => $max,
     ];
 
-    $url = $config['endpoint'] . '?' . http_build_query($params);
+    $url = $config['endpoint']
+        . '?'
+        . http_build_query($params);
+
 
     $ch = curl_init();
 
     curl_setopt_array($ch, [
+
         CURLOPT_URL => $url,
+
         CURLOPT_RETURNTRANSFER => true,
+
         CURLOPT_HTTPHEADER => [
             'Authorization: Bearer ' . $config['api_key'],
             'Accept: application/json',
         ],
+
         CURLOPT_CONNECTTIMEOUT => 10,
+
         CURLOPT_TIMEOUT => 30,
     ]);
 
+
     $response = curl_exec($ch);
 
+
     if ($response === false) {
+
         $error = curl_error($ch);
 
         curl_close($ch);
@@ -74,37 +93,48 @@ function fetchOgadsOffers(
         );
     }
 
+
     $httpCode = curl_getinfo(
         $ch,
         CURLINFO_HTTP_CODE
     );
 
+
     curl_close($ch);
 
+
     if ($httpCode < 200 || $httpCode >= 300) {
+
         throw new RuntimeException(
             'OGAds API returned HTTP status ' . $httpCode . '.'
         );
     }
 
+
     try {
+
         $data = json_decode(
             $response,
             true,
             512,
             JSON_THROW_ON_ERROR
         );
+
     } catch (JsonException $e) {
+
         throw new RuntimeException(
             'OGAds API returned invalid JSON.'
         );
     }
 
+
     if (
         !isset($data['success']) ||
         $data['success'] !== true
     ) {
-        $error = $data['error'] ?? 'Unknown OGAds API error.';
+
+        $error = $data['error']
+            ?? 'Unknown OGAds API error.';
 
         throw new RuntimeException(
             'OGAds API error: ' . $error
@@ -112,8 +142,11 @@ function fetchOgadsOffers(
     }
 
 
+    return $data['offers'] ?? [];
+}
 
-    /**
+
+/**
  * Get or create the OGAds network record.
  */
 function getOgadsNetworkId(PDO $pdo): int
@@ -125,13 +158,19 @@ function getOgadsNetworkId(PDO $pdo): int
          LIMIT 1'
     );
 
-    $stmt->execute(['ogads']);
+    $stmt->execute([
+        'ogads'
+    ]);
+
 
     $networkId = $stmt->fetchColumn();
 
+
     if ($networkId !== false) {
+
         return (int) $networkId;
     }
+
 
     $stmt = $pdo->prepare(
         'INSERT INTO networks (
@@ -143,18 +182,21 @@ function getOgadsNetworkId(PDO $pdo): int
         VALUES (?, ?, ?, "ACTIVE")'
     );
 
+
     $stmt->execute([
         'OGAds',
         'ogads',
         'https://trckapp.org/api/v2',
     ]);
 
+
     return (int) $pdo->lastInsertId();
 }
 
 
 /**
- * Determine a simple PoketFlow category from the offer content.
+ * Determine a simple PoketFlow category
+ * from OGAds offer content.
  */
 function getOgadsOfferCategory(array $offer): string
 {
@@ -170,12 +212,15 @@ function getOgadsOfferCategory(array $offer): string
         )
     );
 
+
     if (
         str_contains($text, 'survey') ||
         str_contains($text, 'questionnaire')
     ) {
+
         return 'Survey';
     }
+
 
     if (
         str_contains($text, 'install') ||
@@ -183,8 +228,10 @@ function getOgadsOfferCategory(array $offer): string
         str_contains($text, 'android') ||
         str_contains($text, 'iphone')
     ) {
+
         return 'App';
     }
+
 
     if (
         str_contains($text, 'signup') ||
@@ -192,8 +239,10 @@ function getOgadsOfferCategory(array $offer): string
         str_contains($text, 'registration') ||
         str_contains($text, 'register')
     ) {
+
         return 'Signup';
     }
+
 
     return 'Offer';
 }
@@ -214,7 +263,11 @@ function cleanOgadsText(?string $text): string
         'UTF-8'
     );
 
-    $text = preg_replace('/\s+/', ' ', $text);
+    $text = preg_replace(
+        '/\s+/',
+        ' ',
+        $text
+    );
 
     return trim($text);
 }
@@ -227,26 +280,34 @@ function calculateOgadsReward(
     PDO $pdo,
     float $networkPayout
 ): array {
+
     $rewardRate = (float) getSetting(
         $pdo,
         'default_worker_reward_rate',
         '40'
     );
 
+
     $workerReward = round(
         $networkPayout * ($rewardRate / 100),
         2
     );
+
 
     $platformMargin = round(
         $networkPayout - $workerReward,
         2
     );
 
+
     return [
+
         'reward_rate' => $rewardRate,
+
         'worker_reward' => $workerReward,
+
         'platform_margin' => $platformMargin,
+
     ];
 }
 
@@ -259,13 +320,17 @@ function syncOgadsOffer(
     int $networkId,
     array $offer
 ): ?int {
+
     $externalOfferId = trim(
         (string) ($offer['offerid'] ?? '')
     );
 
+
     if ($externalOfferId === '') {
+
         return null;
     }
+
 
     $title = cleanOgadsText(
         $offer['name_short']
@@ -273,35 +338,46 @@ function syncOgadsOffer(
             ?? 'OGAds Offer'
     );
 
+
     $description = cleanOgadsText(
         $offer['description'] ?? ''
     );
+
 
     $instructions = cleanOgadsText(
         $offer['adcopy'] ?? ''
     );
 
-    $category = getOgadsOfferCategory($offer);
+
+    $category = getOgadsOfferCategory(
+        $offer
+    );
+
 
     $countries = trim(
         (string) ($offer['country'] ?? '')
     );
 
+
     $devices = trim(
         (string) ($offer['device'] ?? '')
     );
 
+
+    /*
+     * Real OGAds participation URL.
+     */
     $networkOfferUrl = trim(
         (string) ($offer['link'] ?? '')
     );
 
-    
 
+    /*
+     * Real OGAds image/icon URL.
+     */
     $imageUrl = trim(
-    (string) ($offer['picture'] ?? '')
+        (string) ($offer['picture'] ?? '')
     );
-
-
 
 
     $networkPayout = round(
@@ -309,30 +385,47 @@ function syncOgadsOffer(
         2
     );
 
+
     if ($networkPayout <= 0) {
+
         return null;
     }
+
 
     /*
-     * Apply PoketFlow's existing safety filters
-     * before saving the offer.
+     * Apply PoketFlow safety filters.
      */
     $campaignForFilter = [
+
         'title' => $title,
+
         'description' => $description,
+
         'category' => $category,
+
         'instructions' => $instructions,
+
     ];
 
-    if (!isCampaignAllowed($pdo, $campaignForFilter)) {
+
+    if (!isCampaignAllowed(
+        $pdo,
+        $campaignForFilter
+    )) {
+
         return null;
     }
+
 
     $rewards = calculateOgadsReward(
         $pdo,
         $networkPayout
     );
 
+
+    /*
+     * Check whether offer already exists.
+     */
     $stmt = $pdo->prepare(
         'SELECT id
          FROM campaigns
@@ -341,13 +434,22 @@ function syncOgadsOffer(
          LIMIT 1'
     );
 
+
     $stmt->execute([
+
         $networkId,
+
         $externalOfferId,
+
     ]);
+
 
     $existingId = $stmt->fetchColumn();
 
+
+    /*
+     * UPDATE existing offer.
+     */
     if ($existingId !== false) {
 
         $stmt = $pdo->prepare(
@@ -372,24 +474,45 @@ function syncOgadsOffer(
              WHERE id = ?'
         );
 
+
         $stmt->execute([
+
             $title,
+
             $description,
+
             $category,
+
             $instructions,
+
             $networkPayout,
+
             $rewards['reward_rate'],
+
             $rewards['worker_reward'],
+
             $rewards['platform_margin'],
+
             $countries,
+
             $devices,
+
             $networkOfferUrl,
+
+            $imageUrl,
+
             (int) $existingId,
+
         ]);
+
 
         return (int) $existingId;
     }
 
+
+    /*
+     * INSERT new offer.
+     */
     $stmt = $pdo->prepare(
         'INSERT INTO campaigns (
             source_type,
@@ -415,7 +538,7 @@ function syncOgadsOffer(
         VALUES (
             "CPA_NETWORK",
             NULL,
-            ?
+            ?,
             ?,
             ?,
             ?,
@@ -435,41 +558,69 @@ function syncOgadsOffer(
         )'
     );
 
+
     $stmt->execute([
+
         $networkId,
+
         $externalOfferId,
+
         $networkOfferUrl,
+
+        $imageUrl,
+
         $title,
+
         $description,
+
         $category,
+
         $instructions,
+
         $networkPayout,
+
         $rewards['reward_rate'],
+
         $rewards['worker_reward'],
+
         $rewards['platform_margin'],
+
         $countries,
+
         $devices,
+
     ]);
+
 
     return (int) $pdo->lastInsertId();
 }
 
 
 /**
- * Synchronize all offers returned by OGAds.
+ * Synchronize all OGAds offers.
  */
 function syncOgadsOffers(
     PDO $pdo,
     array $offers
 ): array {
-    $networkId = getOgadsNetworkId($pdo);
+
+    $networkId = getOgadsNetworkId(
+        $pdo
+    );
+
 
     $result = [
+
         'received' => count($offers),
+
         'saved' => 0,
+
         'updated' => 0,
+
         'rejected' => 0,
+
     ];
+
 
     foreach ($offers as $offer) {
 
@@ -477,10 +628,14 @@ function syncOgadsOffers(
             (string) ($offer['offerid'] ?? '')
         );
 
+
         if ($externalOfferId === '') {
+
             $result['rejected']++;
+
             continue;
         }
+
 
         $stmt = $pdo->prepare(
             'SELECT id
@@ -490,12 +645,18 @@ function syncOgadsOffers(
              LIMIT 1'
         );
 
+
         $stmt->execute([
+
             $networkId,
+
             $externalOfferId,
+
         ]);
 
+
         $existingId = $stmt->fetchColumn();
+
 
         $campaignId = syncOgadsOffer(
             $pdo,
@@ -503,20 +664,26 @@ function syncOgadsOffers(
             $offer
         );
 
+
         if ($campaignId === null) {
+
             $result['rejected']++;
+
             continue;
         }
 
+
         if ($existingId !== false) {
+
             $result['updated']++;
+
         } else {
+
             $result['saved']++;
+
         }
     }
 
-    return $result;
-}
 
-    return $data['offers'] ?? [];
+    return $result;
 }
