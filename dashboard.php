@@ -63,23 +63,24 @@ $nameParts = explode(' ', $userName);
 $firstName = $nameParts[0] ?? 'Member';
 
 
-// --------------------------------------------------
-// Dashboard values
-//
-// These remain placeholders until we build the
-// actual earnings system.
-// --------------------------------------------------
-
-// --------------------------------------------------
+/// --------------------------------------------------
 // Dashboard earnings
 // --------------------------------------------------
 
-$availableBalance = getUserBalance($userId);
+$availableBalance = getUserBalance(
+    $pdo,
+    $userId
+);
 
-$pendingBalance = getUserPendingBalance($userId);
+$pendingBalance = getUserPendingBalance(
+    $pdo,
+    $userId
+);
 
-$totalEarned = getUserTotalEarned($userId);
-
+$totalEarned = getUserTotalEarned(
+    $pdo,
+    $userId
+);
 ?>
 <!doctype html>
 
