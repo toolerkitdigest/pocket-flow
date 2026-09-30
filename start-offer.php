@@ -151,14 +151,30 @@ try {
 
 // --------------------------------------------------
 // Store tracking ID in session
-//
-// This allows the tracking ID to remain available
-// during the user's offer session.
 // --------------------------------------------------
 
 $_SESSION['active_offer_tracking_id'] = $trackingId;
 
 $_SESSION['active_offer_campaign_id'] = $campaignId;
+
+
+// --------------------------------------------------
+// Attach PoketFlow tracking ID to OGAds URL
+//
+// OGAds supports aff_sub4 as a tracking parameter.
+// We use it to carry our internal tracking ID.
+// --------------------------------------------------
+
+$separator = (
+    strpos($networkOfferUrl, '?') !== false
+)
+    ? '&'
+    : '?';
+
+$networkOfferUrl .=
+    $separator .
+    'aff_sub4=' .
+    rawurlencode($trackingId);
 
 
 // --------------------------------------------------
