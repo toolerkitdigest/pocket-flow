@@ -169,15 +169,27 @@ $canWithdraw = $availableBalance >= $minimumWithdrawal;
             </div>
 
             <button
-                class="btn btn-primary"
-                disabled
-            >
-                Withdraw Funds
-            </button>
+    class="btn btn-primary"
+    type="button"
+    <?= $canWithdraw ? '' : 'disabled' ?>
+>
+    Withdraw Funds
+</button>
 
             <small>
-                Minimum cashout and available payment methods will be configured in the live GPT site.
-            </small>
+    Minimum withdrawal:
+    $<?= number_format($minimumWithdrawal, 2) ?>.
+    <?php if ($canWithdraw): ?>
+        You are eligible to request a withdrawal.
+    <?php else: ?>
+        You need
+        $<?= number_format(
+            max(0, $minimumWithdrawal - $availableBalance),
+            2
+        ) ?>
+        more to reach the minimum withdrawal amount.
+    <?php endif; ?>
+</small>
 
         </div>
 
