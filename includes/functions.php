@@ -462,6 +462,7 @@ function getCampaign(
         'SELECT
             id,
             source_type,
+            image_url,
             advertiser_id,
             network_id,
             external_offer_id,
