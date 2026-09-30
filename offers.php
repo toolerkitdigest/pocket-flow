@@ -553,14 +553,12 @@ function getOfferCategory(array $campaign): string
                                 flow.
                                 -->
 
-                                <button
-                                    type="button"
-                                    class="btn btn-primary"
-                                    disabled
-                                    title="Offer tracking will be enabled next"
-                                >
-                                    Start →
-                                </button>
+                                <a
+    href="start-offer.php?id=<?= (int) $campaign['id'] ?>"
+    class="btn btn-primary"
+>
+    Start →
+</a>
 
                             </div>
 
