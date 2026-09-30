@@ -395,6 +395,7 @@ function syncOgadsOffer(
             network_id,
             external_offer_id,
             network_offer_url,
+            image_url,
             title,
             description,
             category,
