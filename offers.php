@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/ogads.php';
 
 
 // --------------------------------------------------
@@ -21,6 +22,47 @@ if (!isLoggedIn()) {
 $userId = (int) $_SESSION['user_id'];
 
 $user = getUser($pdo, $userId);
+
+$ogadsError = null;
+
+try {
+
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '';
+
+    $scheme = (
+        !empty($_SERVER['HTTPS']) &&
+        $_SERVER['HTTPS'] !== 'off'
+    ) ? 'https' : 'http';
+
+    $site = $scheme . '://' . (
+        $_SERVER['HTTP_HOST'] ?? 'poketflow.com'
+    ) . (
+        $_SERVER['REQUEST_URI'] ?? '/offers.php'
+    );
+
+    $ogadsOffers = fetchOgadsOffers(
+        $ip,
+        $userAgent,
+        $language,
+        $site,
+        0,
+        50
+    );
+
+    syncOgadsOffers(
+        $pdo,
+        $ogadsOffers
+    );
+
+} catch (Throwable $e) {
+
+    $ogadsError = $e->getMessage();
+}
+
 
 
 // --------------------------------------------------
