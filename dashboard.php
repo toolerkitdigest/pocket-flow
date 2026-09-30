@@ -70,11 +70,15 @@ $firstName = $nameParts[0] ?? 'Member';
 // actual earnings system.
 // --------------------------------------------------
 
-$availableBalance = 0.00;
+// --------------------------------------------------
+// Dashboard earnings
+// --------------------------------------------------
 
-$pendingBalance = 0.00;
+$availableBalance = getUserBalance($userId);
 
-$totalEarned = 0.00;
+$pendingBalance = getUserPendingBalance($userId);
+
+$totalEarned = getUserTotalEarned($userId);
 
 ?>
 <!doctype html>
