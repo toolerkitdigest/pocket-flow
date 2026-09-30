@@ -20,21 +20,7 @@ if (!isLoggedIn()) {
 
 $userId = (int) $_SESSION['user_id'];
 
-$stmt = $pdo->prepare(
-    'SELECT
-        id,
-        name,
-        email,
-        country,
-        status
-     FROM users
-     WHERE id = ?
-     LIMIT 1'
-);
-
-$stmt->execute([$userId]);
-
-$user = $stmt->fetch();
+$user = getUser($pdo, $userId);
 
 
 // --------------------------------------------------
@@ -52,12 +38,105 @@ if (!$user) {
 
 
 // --------------------------------------------------
-// Dashboard values
-//
-// Real earnings will be connected later.
+// Get real wallet balance
 // --------------------------------------------------
 
-$availableBalance = 0.00;
+$availableBalance = getUserBalance(
+    $pdo,
+    $userId
+);
+
+
+// --------------------------------------------------
+// Get active campaigns
+//
+// This automatically applies:
+//
+// 1. ACTIVE status
+// 2. APPROVED status
+// 3. Start/end dates
+// 4. Country eligibility
+// 5. Offer safety filters
+// --------------------------------------------------
+
+$campaigns = getActiveCampaigns(
+    $pdo,
+    $user['country'] ?? null
+);
+
+
+// --------------------------------------------------
+// Determine offer icon
+// --------------------------------------------------
+
+function getOfferIcon(string $category): string
+{
+    $category = strtolower(trim($category));
+
+    return match (true) {
+
+        str_contains($category, 'app'),
+        str_contains($category, 'install')
+            => '◎',
+
+        str_contains($category, 'survey')
+            => '▤',
+
+        str_contains($category, 'submit')
+            => '◇',
+
+        default
+            => '◆',
+    };
+}
+
+
+// --------------------------------------------------
+// Determine icon class
+// --------------------------------------------------
+
+function getOfferIconClass(string $category): string
+{
+    $category = strtolower(trim($category));
+
+    return match (true) {
+
+        str_contains($category, 'survey')
+            => 'orange',
+
+        str_contains($category, 'special'),
+        str_contains($category, 'featured')
+            => 'cyan',
+
+        default
+            => '',
+    };
+}
+
+
+// --------------------------------------------------
+// Format offer category
+// --------------------------------------------------
+
+function getOfferCategory(array $campaign): string
+{
+    $category = trim(
+        (string) ($campaign['category'] ?? '')
+    );
+
+    if ($category !== '') {
+        return $category;
+    }
+
+    return match ($campaign['source_type'] ?? '') {
+
+        'DIRECT_ADVERTISER'
+            => 'Special Offer',
+
+        default
+            => 'Offer',
+    };
+}
 
 ?>
 
@@ -96,7 +175,7 @@ $availableBalance = 0.00;
 
     <a
         class="brand"
-        href="index.php"
+        href="index.html"
     >
 
         <span class="brand-mark">
@@ -344,148 +423,154 @@ $availableBalance = 0.00;
             <div class="offer-grid dashboard-offers">
 
 
-                <!-- OFFER 1 -->
-
-                <article class="offer-card">
-
-                    <div class="offer-icon">
-                        ◎
-                    </div>
+                <?php if (empty($campaigns)): ?>
 
 
-                    <div class="offer-body">
+                    <!-- ==================================================
+                         NO OFFERS
+                    ================================================== -->
 
-                        <span class="tag">
-                            App Install
-                        </span>
+                    <article class="offer-card">
 
-
-                        <h3>
-                            Available app offer
-                        </h3>
-
-
-                        <p>
-                            Follow the advertiser's instructions
-                            and complete the required steps.
-                        </p>
-
-                    </div>
+                        <div class="offer-icon">
+                            ◷
+                        </div>
 
 
-                    <div class="offer-bottom">
+                        <div class="offer-body">
 
-                        <strong>
-                            Reward shown by offer
-                        </strong>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Start →
-                        </button>
-
-                    </div>
-
-                </article>
+                            <span class="tag">
+                                No Offers
+                            </span>
 
 
-                <!-- OFFER 2 -->
-
-                <article class="offer-card">
-
-                    <div class="offer-icon orange">
-                        ▤
-                    </div>
+                            <h3>
+                                No offers available right now
+                            </h3>
 
 
-                    <div class="offer-body">
+                            <p>
+                                There are currently no offers
+                                available for your country.
+                                Please check again later.
+                            </p>
 
-                        <span class="tag">
-                            Survey
-                        </span>
-
-
-                        <h3>
-                            Available survey
-                        </h3>
+                        </div>
 
 
-                        <p>
-                            Complete the survey requirements
-                            to receive the listed reward.
-                        </p>
+                        <div class="offer-bottom">
 
-                    </div>
+                            <strong>
+                                Check back soon
+                            </strong>
 
+                        </div>
 
-                    <div class="offer-bottom">
-
-                        <strong>
-                            Reward shown by offer
-                        </strong>
+                    </article>
 
 
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Start →
-                        </button>
-
-                    </div>
-
-                </article>
+                <?php else: ?>
 
 
-                <!-- OFFER 3 -->
+                    <?php foreach ($campaigns as $campaign): ?>
 
-                <article class="offer-card">
+                        <?php
 
-                    <div class="offer-icon cyan">
-                        ◇
-                    </div>
+                        $category = getOfferCategory(
+                            $campaign
+                        );
+
+                        $icon = getOfferIcon(
+                            $category
+                        );
+
+                        $iconClass = getOfferIconClass(
+                            $category
+                        );
+
+                        $title = trim(
+                            (string) (
+                                $campaign['title'] ?? 'Available Offer'
+                            )
+                        );
+
+                        $description = trim(
+                            (string) (
+                                $campaign['description'] ?? ''
+                            )
+                        );
+
+                        $reward = (float) (
+                            $campaign['worker_reward'] ?? 0
+                        );
+
+                        ?>
+
+                        <!-- ==================================================
+                             REAL OFFER
+                        ================================================== -->
+
+                        <article class="offer-card">
 
 
-                    <div class="offer-body">
-
-                        <span class="tag">
-                            Special Offer
-                        </span>
-
-
-                        <h3>
-                            Featured opportunity
-                        </h3>
+                            <div
+                                class="offer-icon <?= e($iconClass) ?>"
+                            >
+                                <?= e($icon) ?>
+                            </div>
 
 
-                        <p>
-                            Review the requirements before
-                            starting an available offer.
-                        </p>
+                            <div class="offer-body">
 
-                    </div>
-
-
-                    <div class="offer-bottom">
-
-                        <strong>
-                            Reward shown by offer
-                        </strong>
+                                <span class="tag">
+                                    <?= e($category) ?>
+                                </span>
 
 
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Start →
-                        </button>
+                                <h3>
+                                    <?= e($title) ?>
+                                </h3>
 
-                    </div>
 
-                </article>
+                                <p>
+                                    <?= e($description) ?>
+                                </p>
+
+                            </div>
+
+
+                            <div class="offer-bottom">
+
+                                <strong>
+                                    Earn
+                                    $<?= number_format($reward, 2) ?>
+                                </strong>
+
+
+                                <!--
+                                Stage 3 will replace this disabled
+                                button with the secure start-offer.php
+                                flow.
+                                -->
+
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    disabled
+                                    title="Offer tracking will be enabled next"
+                                >
+                                    Start →
+                                </button>
+
+                            </div>
+
+
+                        </article>
+
+                    <?php endforeach; ?>
+
+
+                <?php endif; ?>
 
 
             </div>
