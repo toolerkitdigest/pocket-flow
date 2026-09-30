@@ -675,8 +675,68 @@ function getOfferCategory(array $campaign): string
 
 
 </main>
-
-
+            
 </body>
+                
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filterButtons = document.querySelectorAll(
+        '.offer-tabs button'
+    );
+
+    const offerCards = document.querySelectorAll(
+        '.dashboard-offers .offer-card[data-offer-category]'
+    );
+
+    filterButtons.forEach(function (button) {
+
+        button.addEventListener('click', function () {
+
+            const filter = button.dataset.filter;
+
+            filterButtons.forEach(function (item) {
+                item.classList.remove('selected');
+            });
+
+            button.classList.add('selected');
+
+            offerCards.forEach(function (card) {
+
+                const category = (
+                    card.dataset.offerCategory || ''
+                ).toLowerCase();
+
+                let show = false;
+
+                if (filter === 'all') {
+                    show = true;
+                }
+
+                if (filter === 'app') {
+                    show = category.includes('app');
+                }
+
+                if (filter === 'survey') {
+                    show = category.includes('survey');
+                }
+
+                if (filter === 'other') {
+                    show =
+                        !category.includes('app') &&
+                        !category.includes('survey');
+                }
+
+                card.style.display = show
+                    ? ''
+                    : 'none';
+            });
+        });
+    });
+
+});
+</script>
+
+                
 
 </html>
