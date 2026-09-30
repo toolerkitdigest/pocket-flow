@@ -35,12 +35,18 @@ if (!$user) {
 
 /*
 |--------------------------------------------------------------------------
-| Balance
+| Wallet
 |--------------------------------------------------------------------------
-| Temporary value.
-| This will later come from the user's actual earnings ledger.
 */
-$availableBalance = 0.00;
+
+$availableBalance = getUserBalance($userId);
+
+$minimumWithdrawal = (float) getSetting(
+    'minimum_withdrawal',
+    5.00
+);
+
+$canWithdraw = $availableBalance >= $minimumWithdrawal;
 
 ?>
 <!doctype html>
