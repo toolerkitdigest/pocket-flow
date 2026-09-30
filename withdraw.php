@@ -39,15 +39,18 @@ if (!$user) {
 |--------------------------------------------------------------------------
 */
 
-$availableBalance = getUserBalance($userId);
+$availableBalance = getUserBalance(
+    $pdo,
+    $userId
+);
 
 $minimumWithdrawal = (float) getSetting(
+    $pdo,
     'minimum_withdrawal',
-    5.00
+    '5.00'
 );
 
 $canWithdraw = $availableBalance >= $minimumWithdrawal;
-
 ?>
 <!doctype html>
 <html lang="en">
