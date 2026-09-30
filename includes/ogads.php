@@ -295,6 +295,13 @@ function syncOgadsOffer(
         (string) ($offer['link'] ?? '')
     );
 
+    $imageUrl = trim(
+    (string) ($offer['picture'] ?? '')
+    );
+
+
+
+
     $networkPayout = round(
         (float) ($offer['payout'] ?? 0),
         2
