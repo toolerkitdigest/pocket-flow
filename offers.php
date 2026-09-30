@@ -553,14 +553,10 @@ function getOfferCategory(array $campaign): string
                                 flow.
                                 -->
 
-                                <a
-    href="start-offer.php?id=<?= (int) $campaign['id'] ?>"
-    class="btn btn-primary"
->
-    Start →
-</a>
-
-                            </div>
+                                <ahref="start-offer.php?id=<?= (int) $campaign['id'] ?>" class="btn btn-primary">
+                                    Start →
+                                </a>
+                                </div>
 
 
                         </article>
