@@ -192,17 +192,15 @@ function getOfferCategory(array $campaign): string
 
     <meta
         name="viewport"
-        content="width=device-width,initial-scale=1"
-    >
+        content="width=device-width,initial-scale=1">
 
     <title>Offers — PoketFlow</title>
 
     <link
         rel="stylesheet"
-        href="assets/poketflow.css"
-    >
+        href="assets/poketflow.css">
 
-</head>
+    </head>
 
 
 <body class="app-page">
@@ -215,10 +213,8 @@ function getOfferCategory(array $campaign): string
 <header class="app-header">
 
 
-    <a
-        class="brand"
-        href="index.php"
-    >
+    <a class="brand"
+        href="index.php">
 
         <span class="brand-mark">
             P
@@ -239,8 +235,7 @@ function getOfferCategory(array $campaign): string
 
         <a
             class="active"
-            href="offers.php"
-        >
+            href="offers.php">
             Earn
         </a>
 
@@ -263,8 +258,7 @@ function getOfferCategory(array $campaign): string
 
         <a
             class="btn btn-primary"
-            href="withdraw.php"
-        >
+            href="withdraw.php">
             Balance $<?= number_format($availableBalance, 2) ?>
         </a>
 
@@ -303,8 +297,7 @@ function getOfferCategory(array $campaign): string
 
             <a
                 class="active"
-                href="offers.php"
-            >
+                href="offers.php">
 
                 ▦
 
@@ -555,11 +548,25 @@ function getOfferCategory(array $campaign): string
                         <article class="offer-card">
 
 
-                            <div
-                                class="offer-icon <?= e($iconClass) ?>"
-                            >
-                                <?= e($icon) ?>
-                            </div>
+                            <div class="offer-icon <?= e($iconClass) ?>">
+
+    <?php if (!empty($campaign['image_url'])): ?>
+
+        <img
+            src="<?= e($campaign['image_url']) ?>"
+            alt="<?= e($title) ?>"
+            loading="lazy"
+        >
+
+    <?php else: ?>
+
+        <?= e($icon) ?>
+
+    <?php endif; ?>
+
+</div>
+
+                            
 
 
                             <div class="offer-body">
