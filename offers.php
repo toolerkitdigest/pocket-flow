@@ -595,7 +595,7 @@ function getOfferCategory(array $campaign): string
                                 flow.
                                 -->
 
-                                <ahref="start-offer.php?id=<?= (int) $campaign['id'] ?>" class="btn btn-primary">
+                                <a href="start-offer.php?id=<?= (int) $campaign['id'] ?>" class="btn btn-primary">
                                     Start →
                                 </a>
                                 </div>
@@ -616,7 +616,7 @@ function getOfferCategory(array $campaign): string
                  INFORMATION CARD
             ================================================== -->
 
-            <aside class="info-card">
+            <a side class="info-card">
 
 
                 <div class="info-icon">
