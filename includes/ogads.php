@@ -111,5 +111,400 @@ function fetchOgadsOffers(
         );
     }
 
+
+
+    /**
+ * Get or create the OGAds network record.
+ */
+function getOgadsNetworkId(PDO $pdo): int
+{
+    $stmt = $pdo->prepare(
+        'SELECT id
+         FROM networks
+         WHERE slug = ?
+         LIMIT 1'
+    );
+
+    $stmt->execute(['ogads']);
+
+    $networkId = $stmt->fetchColumn();
+
+    if ($networkId !== false) {
+        return (int) $networkId;
+    }
+
+    $stmt = $pdo->prepare(
+        'INSERT INTO networks (
+            name,
+            slug,
+            api_endpoint,
+            status
+        )
+        VALUES (?, ?, ?, "ACTIVE")'
+    );
+
+    $stmt->execute([
+        'OGAds',
+        'ogads',
+        'https://trckapp.org/api/v2',
+    ]);
+
+    return (int) $pdo->lastInsertId();
+}
+
+
+/**
+ * Determine a simple PoketFlow category from the offer content.
+ */
+function getOgadsOfferCategory(array $offer): string
+{
+    $text = strtolower(
+        implode(
+            ' ',
+            [
+                (string) ($offer['name'] ?? ''),
+                (string) ($offer['name_short'] ?? ''),
+                (string) ($offer['description'] ?? ''),
+                (string) ($offer['adcopy'] ?? ''),
+            ]
+        )
+    );
+
+    if (
+        str_contains($text, 'survey') ||
+        str_contains($text, 'questionnaire')
+    ) {
+        return 'Survey';
+    }
+
+    if (
+        str_contains($text, 'install') ||
+        str_contains($text, 'app') ||
+        str_contains($text, 'android') ||
+        str_contains($text, 'iphone')
+    ) {
+        return 'App';
+    }
+
+    if (
+        str_contains($text, 'signup') ||
+        str_contains($text, 'sign up') ||
+        str_contains($text, 'registration') ||
+        str_contains($text, 'register')
+    ) {
+        return 'Signup';
+    }
+
+    return 'Offer';
+}
+
+
+/**
+ * Clean offer text before storing it.
+ */
+function cleanOgadsText(?string $text): string
+{
+    $text = (string) $text;
+
+    $text = strip_tags($text);
+
+    $text = html_entity_decode(
+        $text,
+        ENT_QUOTES | ENT_HTML5,
+        'UTF-8'
+    );
+
+    $text = preg_replace('/\s+/', ' ', $text);
+
+    return trim($text);
+}
+
+
+/**
+ * Calculate worker reward and platform margin.
+ */
+function calculateOgadsReward(
+    PDO $pdo,
+    float $networkPayout
+): array {
+    $rewardRate = (float) getSetting(
+        $pdo,
+        'default_worker_reward_rate',
+        '40'
+    );
+
+    $workerReward = round(
+        $networkPayout * ($rewardRate / 100),
+        2
+    );
+
+    $platformMargin = round(
+        $networkPayout - $workerReward,
+        2
+    );
+
+    return [
+        'reward_rate' => $rewardRate,
+        'worker_reward' => $workerReward,
+        'platform_margin' => $platformMargin,
+    ];
+}
+
+
+/**
+ * Synchronize one OGAds offer into campaigns.
+ */
+function syncOgadsOffer(
+    PDO $pdo,
+    int $networkId,
+    array $offer
+): ?int {
+    $externalOfferId = trim(
+        (string) ($offer['offerid'] ?? '')
+    );
+
+    if ($externalOfferId === '') {
+        return null;
+    }
+
+    $title = cleanOgadsText(
+        $offer['name_short']
+            ?? $offer['name']
+            ?? 'OGAds Offer'
+    );
+
+    $description = cleanOgadsText(
+        $offer['description'] ?? ''
+    );
+
+    $instructions = cleanOgadsText(
+        $offer['adcopy'] ?? ''
+    );
+
+    $category = getOgadsOfferCategory($offer);
+
+    $countries = trim(
+        (string) ($offer['country'] ?? '')
+    );
+
+    $devices = trim(
+        (string) ($offer['device'] ?? '')
+    );
+
+    $networkOfferUrl = trim(
+        (string) ($offer['link'] ?? '')
+    );
+
+    $networkPayout = round(
+        (float) ($offer['payout'] ?? 0),
+        2
+    );
+
+    if ($networkPayout <= 0) {
+        return null;
+    }
+
+    /*
+     * Apply PoketFlow's existing safety filters
+     * before saving the offer.
+     */
+    $campaignForFilter = [
+        'title' => $title,
+        'description' => $description,
+        'category' => $category,
+        'instructions' => $instructions,
+    ];
+
+    if (!isCampaignAllowed($pdo, $campaignForFilter)) {
+        return null;
+    }
+
+    $rewards = calculateOgadsReward(
+        $pdo,
+        $networkPayout
+    );
+
+    $stmt = $pdo->prepare(
+        'SELECT id
+         FROM campaigns
+         WHERE network_id = ?
+           AND external_offer_id = ?
+         LIMIT 1'
+    );
+
+    $stmt->execute([
+        $networkId,
+        $externalOfferId,
+    ]);
+
+    $existingId = $stmt->fetchColumn();
+
+    if ($existingId !== false) {
+
+        $stmt = $pdo->prepare(
+            'UPDATE campaigns
+             SET
+                title = ?,
+                description = ?,
+                category = ?,
+                instructions = ?,
+                network_payout = ?,
+                reward_rate = ?,
+                worker_reward = ?,
+                platform_margin = ?,
+                countries = ?,
+                devices = ?,
+                network_offer_url = ?,
+                incentive_allowed = 1,
+                status = "ACTIVE",
+                approval_status = "APPROVED",
+                updated_at = CURRENT_TIMESTAMP
+             WHERE id = ?'
+        );
+
+        $stmt->execute([
+            $title,
+            $description,
+            $category,
+            $instructions,
+            $networkPayout,
+            $rewards['reward_rate'],
+            $rewards['worker_reward'],
+            $rewards['platform_margin'],
+            $countries,
+            $devices,
+            $networkOfferUrl,
+            (int) $existingId,
+        ]);
+
+        return (int) $existingId;
+    }
+
+    $stmt = $pdo->prepare(
+        'INSERT INTO campaigns (
+            source_type,
+            advertiser_id,
+            network_id,
+            external_offer_id,
+            network_offer_url,
+            title,
+            description,
+            category,
+            instructions,
+            network_payout,
+            reward_rate,
+            worker_reward,
+            platform_margin,
+            countries,
+            devices,
+            incentive_allowed,
+            status,
+            approval_status
+        )
+        VALUES (
+            "CPA_NETWORK",
+            NULL,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            1,
+            "ACTIVE",
+            "APPROVED"
+        )'
+    );
+
+    $stmt->execute([
+        $networkId,
+        $externalOfferId,
+        $networkOfferUrl,
+        $title,
+        $description,
+        $category,
+        $instructions,
+        $networkPayout,
+        $rewards['reward_rate'],
+        $rewards['worker_reward'],
+        $rewards['platform_margin'],
+        $countries,
+        $devices,
+    ]);
+
+    return (int) $pdo->lastInsertId();
+}
+
+
+/**
+ * Synchronize all offers returned by OGAds.
+ */
+function syncOgadsOffers(
+    PDO $pdo,
+    array $offers
+): array {
+    $networkId = getOgadsNetworkId($pdo);
+
+    $result = [
+        'received' => count($offers),
+        'saved' => 0,
+        'updated' => 0,
+        'rejected' => 0,
+    ];
+
+    foreach ($offers as $offer) {
+
+        $externalOfferId = trim(
+            (string) ($offer['offerid'] ?? '')
+        );
+
+        if ($externalOfferId === '') {
+            $result['rejected']++;
+            continue;
+        }
+
+        $stmt = $pdo->prepare(
+            'SELECT id
+             FROM campaigns
+             WHERE network_id = ?
+               AND external_offer_id = ?
+             LIMIT 1'
+        );
+
+        $stmt->execute([
+            $networkId,
+            $externalOfferId,
+        ]);
+
+        $existingId = $stmt->fetchColumn();
+
+        $campaignId = syncOgadsOffer(
+            $pdo,
+            $networkId,
+            $offer
+        );
+
+        if ($campaignId === null) {
+            $result['rejected']++;
+            continue;
+        }
+
+        if ($existingId !== false) {
+            $result['updated']++;
+        } else {
+            $result['saved']++;
+        }
+    }
+
+    return $result;
+}
+
     return $data['offers'] ?? [];
 }
