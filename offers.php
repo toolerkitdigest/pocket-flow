@@ -421,33 +421,39 @@ function getOfferCategory(array $campaign): string
              OFFER FILTERS
         ================================================== -->
 
-        <div class="offer-tabs">
+    
+<div class="offer-tabs">
 
-            <button
-                type="button"
-                class="selected"
-            >
-                All Offers
-            </button>
+    <button
+        type="button"
+        class="selected"
+        data-filter="all"
+    >
+        All Offers
+    </button>
 
+    <button
+        type="button"
+        data-filter="app"
+    >
+        App Install
+    </button>
 
-            <button type="button">
-                App Install
-            </button>
+    <button
+        type="button"
+        data-filter="survey"
+    >
+        Survey
+    </button>
 
+    <button
+        type="button"
+        data-filter="other"
+    >
+        Other Offers
+    </button>
 
-            <button type="button">
-                Survey
-            </button>
-
-
-            <button type="button">
-                Dual Submission
-            </button>
-
-        </div>
-
-
+</div>
         <!-- ==================================================
              OFFER AREA
         ================================================== -->
@@ -465,7 +471,10 @@ function getOfferCategory(array $campaign): string
                          NO OFFERS
                     ================================================== -->
 
-                    <article class="offer-card">
+                    <article
+    class="offer-card"
+    data-offer-category="<?= e(strtolower($category)) ?>"
+>
 
                         <div class="offer-icon">
                             ◷
