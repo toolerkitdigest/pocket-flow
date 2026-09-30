@@ -20,7 +20,10 @@ if (!isLoggedIn()) {
 
 $userId = (int) $_SESSION['user_id'];
 
-$user = getUser($pdo, $userId);
+$user = getUser(
+    $pdo,
+    $userId
+);
 
 
 // --------------------------------------------------
@@ -94,7 +97,31 @@ if (!canStartCampaign(
 
     http_response_code(403);
 
-    exit('This offer is not available to you.');
+    exit(
+        'This offer is not available to you.'
+    );
+}
+
+
+// --------------------------------------------------
+// Verify external offer URL exists
+// --------------------------------------------------
+
+$networkOfferUrl = trim(
+    (string) (
+        $campaign['network_offer_url']
+        ?? ''
+    )
+);
+
+
+if ($networkOfferUrl === '') {
+
+    http_response_code(502);
+
+    exit(
+        'This offer is temporarily unavailable.'
+    );
 }
 
 
@@ -116,120 +143,32 @@ try {
 
     http_response_code(500);
 
-    exit('Unable to start this offer. Please try again.');
+    exit(
+        'Unable to start this offer. Please try again.'
+    );
 }
 
 
 // --------------------------------------------------
-// Temporary Stage 3 response
-// --------------------------------------------------
+// Store tracking ID in session
 //
-// We are intentionally NOT redirecting to a CPA network yet.
-//
-// The next part will connect this tracking ID to the
-// appropriate network tracking URL.
+// This allows the tracking ID to remain available
+// during the user's offer session.
 // --------------------------------------------------
 
-?>
+$_SESSION['active_offer_tracking_id'] = $trackingId;
 
-<!doctype html>
-
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width,initial-scale=1"
-    >
-
-    <title>Offer Started — PoketFlow</title>
-
-    <link
-        rel="stylesheet"
-        href="assets/poketflow.css"
-    >
-
-</head>
+$_SESSION['active_offer_campaign_id'] = $campaignId;
 
 
-<body class="app-page">
+// --------------------------------------------------
+// Redirect worker to the actual OGAds offer
+// --------------------------------------------------
 
+header(
+    'Location: ' . $networkOfferUrl,
+    true,
+    302
+);
 
-<main class="app-shell">
-
-
-    <section class="app-content">
-
-
-        <div class="page-title">
-
-            <div>
-
-                <span class="kicker">
-                    OFFER STARTED
-                </span>
-
-
-                <h1>
-                    <?= e($campaign['title']) ?>
-                </h1>
-
-
-                <p>
-                    Your offer session has been created successfully.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="info-card">
-
-            <div class="info-icon">
-                ✓
-            </div>
-
-
-            <h3>
-                Tracking started
-            </h3>
-
-
-            <p>
-                Your PoketFlow tracking session has been recorded.
-                The external offer connection will be enabled
-                in the next step.
-            </p>
-
-
-            <p>
-                Tracking ID:
-                <strong>
-                    <?= e($trackingId) ?>
-                </strong>
-            </p>
-
-
-            <a
-                href="offers.php"
-                class="btn btn-primary"
-            >
-                Back to Offers
-            </a>
-
-        </div>
-
-
-    </section>
-
-
-</main>
-
-
-</body>
-
-</html>
+exit;
