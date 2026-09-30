@@ -295,7 +295,7 @@ function syncOgadsOffer(
         (string) ($offer['link'] ?? '')
     );
 
-    $imageUrl,
+    $imageUrl
 
     $imageUrl = trim(
     (string) ($offer['picture'] ?? '')
