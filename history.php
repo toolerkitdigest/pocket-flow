@@ -33,7 +33,49 @@ if (!$user) {
     redirect('login.php');
 }
 
-$availableBalance = 0.00;
+/*
+|--------------------------------------------------------------------------
+| Get Offer Completion History
+|--------------------------------------------------------------------------
+| Only conversions belonging to the currently logged-in user are shown.
+|
+| APPROVED = completed/credited offer
+| PENDING  = conversion received but not yet finalized
+| REJECTED = conversion rejected
+| REVERSED = previously credited conversion reversed
+|--------------------------------------------------------------------------
+*/
+
+$historyStmt = $pdo->prepare(
+    'SELECT
+        c.id,
+        c.campaign_id,
+        c.network_payout,
+        c.reward_rate,
+        c.worker_reward,
+        c.platform_margin,
+        c.status,
+        c.external_transaction_id,
+        c.converted_at,
+        c.created_at,
+
+        cp.title AS offer_title,
+        cp.category AS offer_category
+
+     FROM conversions c
+
+     INNER JOIN campaigns cp
+        ON cp.id = c.campaign_id
+
+     WHERE c.worker_id = ?
+
+     ORDER BY COALESCE(c.converted_at, c.created_at) DESC
+     LIMIT 100'
+);
+
+$historyStmt->execute([$userId]);
+
+$history = $historyStmt->fetchAll();
 
 ?>
 <!doctype html>
@@ -61,8 +103,8 @@ $availableBalance = 0.00;
         <a href="dashboard.php">Home</a>
         <a href="offers.php">Earn</a>
         <a class="active" href="history.php">History</a>
-        <a href="referrals.html">Refer & Earn</a>
-        <a href="withdraw.html">Withdraw</a>
+        <a href="referrals.php">Refer & Earn</a>
+        <a href="withdraw.php">Withdraw</a>
     </nav>
 
 </header>
@@ -85,11 +127,11 @@ $availableBalance = 0.00;
                 ◷ <span>History</span>
             </a>
 
-            <a href="referrals.html">
+            <a href="referrals.php">
                 ♧ <span>Refer & Earn</span>
             </a>
 
-            <a href="withdraw.html">
+            <a href="withdraw.php">
                 ▣ <span>Withdraw</span>
             </a>
 
@@ -107,21 +149,93 @@ $availableBalance = 0.00;
             Track your recent offer activity and completion status.
         </p>
 
-        <div class="empty-state">
+        <?php if (empty($history)): ?>
 
-            <div>◷</div>
+            <div class="empty-state">
 
-            <h2>No activity yet</h2>
+                <div>◷</div>
 
-            <p>
-                Your completed offers will appear here.
-            </p>
+                <h2>No activity yet</h2>
 
-            <a class="btn btn-primary" href="offers.php">
-                Browse Offers →
-            </a>
+                <p>
+                    Your completed offers will appear here.
+                </p>
 
-        </div>
+                <a class="btn btn-primary" href="offers.php">
+                    Browse Offers →
+                </a>
+
+            </div>
+
+        <?php else: ?>
+
+            <div class="history-list">
+
+                <?php foreach ($history as $item): ?>
+
+                    <?php
+                    $status = strtoupper((string) $item['status']);
+
+                    $statusLabel = match ($status) {
+                        'APPROVED' => 'Completed',
+                        'PENDING' => 'Pending',
+                        'REJECTED' => 'Rejected',
+                        'REVERSED' => 'Reversed',
+                        default => ucfirst(strtolower($status)),
+                    };
+
+                    $dateValue = $item['converted_at'] ?: $item['created_at'];
+
+                    $date = $dateValue
+                        ? date('M j, Y · g:i A', strtotime((string) $dateValue))
+                        : '—';
+
+                    $reward = (float) $item['worker_reward'];
+                    ?>
+
+                    <div class="history-item">
+
+                        <div class="history-main">
+
+                            <div class="history-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    <?= e($item['offer_title'] ?: 'Offer Completion') ?>
+                                </h3>
+
+                                <p>
+                                    <?= e($item['offer_category'] ?: 'Offer') ?>
+                                    ·
+                                    <?= e($date) ?>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="history-right">
+
+                            <strong>
+                                +$<?= number_format($reward, 2) ?>
+                            </strong>
+
+                            <span class="history-status status-<?= strtolower($status) ?>">
+                                <?= e($statusLabel) ?>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        <?php endif; ?>
 
     </section>
 
