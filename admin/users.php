@@ -257,7 +257,7 @@ function usersQuery(array $changes = []): string
 
     <link
         rel="stylesheet"
-        href="/admin/assets/users.css"
+        href="assets/users.css"
     >
 
 </head>
