@@ -12,6 +12,20 @@ $userId = (int) $_SESSION['user_id'];
 
 /*
 |--------------------------------------------------------------------------
+| CSRF protection
+|--------------------------------------------------------------------------
+*/
+
+if (empty($_SESSION['withdraw_csrf_token'])) {
+    $_SESSION['withdraw_csrf_token'] =
+        bin2hex(random_bytes(32));
+}
+
+$csrfToken =
+    $_SESSION['withdraw_csrf_token'];
+
+/*
+|--------------------------------------------------------------------------
 | User
 |--------------------------------------------------------------------------
 */
@@ -38,25 +52,6 @@ if (!$user) {
 
     redirect('login.php');
 }
-
-/*
-|--------------------------------------------------------------------------
-| Wallet
-|--------------------------------------------------------------------------
-*/
-
-$availableBalance = getUserBalance(
-    $pdo,
-    $userId
-);
-
-$minimumWithdrawal = (float) getSetting(
-    $pdo,
-    'minimum_withdrawal',
-    '5.00'
-);
-
-$canWithdraw = $availableBalance >= $minimumWithdrawal;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +85,8 @@ if ($isNigeria) {
     $withdrawalMethods[] = [
         'id' => 'MONIEPOINT',
         'name' => 'Moniepoint',
-        'description' => 'Receive your reward through your Nigerian account.',
+        'description' =>
+            'Receive your reward through your Nigerian account.',
         'icon' => '🇳🇬',
         'type' => 'bank',
     ];
@@ -98,7 +94,8 @@ if ($isNigeria) {
     $withdrawalMethods[] = [
         'id' => 'PALMPAY',
         'name' => 'PalmPay',
-        'description' => 'Receive your reward through your Nigerian account.',
+        'description' =>
+            'Receive your reward through your Nigerian account.',
         'icon' => '🇳🇬',
         'type' => 'bank',
     ];
@@ -107,7 +104,8 @@ if ($isNigeria) {
 $withdrawalMethods[] = [
     'id' => 'PAYPAL',
     'name' => 'PayPal',
-    'description' => 'Receive your reward through your PayPal account.',
+    'description' =>
+        'Receive your reward through your PayPal account.',
     'icon' => '💳',
     'type' => 'paypal',
 ];
@@ -115,7 +113,8 @@ $withdrawalMethods[] = [
 $withdrawalMethods[] = [
     'id' => 'USDT',
     'name' => 'USDT',
-    'description' => 'Receive your reward in Tether.',
+    'description' =>
+        'Receive your reward in Tether.',
     'icon' => '₮',
     'type' => 'crypto',
 ];
@@ -123,7 +122,8 @@ $withdrawalMethods[] = [
 $withdrawalMethods[] = [
     'id' => 'USDC',
     'name' => 'USDC',
-    'description' => 'Receive your reward in USD Coin.',
+    'description' =>
+        'Receive your reward in USD Coin.',
     'icon' => '💵',
     'type' => 'crypto',
 ];
@@ -132,11 +132,6 @@ $withdrawalMethods[] = [
 |--------------------------------------------------------------------------
 | Supported crypto networks
 |--------------------------------------------------------------------------
-|
-| We are starting with a small controlled list.
-| We can expand this later after the payment
-| workflow is fully tested.
-|
 */
 
 $cryptoNetworks = [
@@ -150,6 +145,565 @@ $cryptoNetworks = [
         'Polygon',
     ],
 ];
+
+/*
+|--------------------------------------------------------------------------
+| Flash messages
+|--------------------------------------------------------------------------
+*/
+
+$error = $_SESSION['withdraw_error'] ?? null;
+$success = $_SESSION['withdraw_success'] ?? null;
+
+unset(
+    $_SESSION['withdraw_error'],
+    $_SESSION['withdraw_success']
+);
+
+/*
+|--------------------------------------------------------------------------
+| Handle withdrawal submission
+|--------------------------------------------------------------------------
+*/
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    try {
+
+        /*
+         * CSRF validation.
+         */
+        $postedToken = (string) (
+            $_POST['csrf_token'] ?? ''
+        );
+
+        if (
+            $postedToken === '' ||
+            !hash_equals(
+                $csrfToken,
+                $postedToken
+            )
+        ) {
+            throw new RuntimeException(
+                'Your session has expired. Please refresh the page and try again.'
+            );
+        }
+
+        /*
+         * Selected withdrawal method.
+         */
+        $method = strtoupper(
+            trim(
+                (string) (
+                    $_POST['withdrawal_method']
+                    ?? ''
+                )
+            )
+        );
+
+        $allowedMethods = [
+            'MONIEPOINT',
+            'PALMPAY',
+            'PAYPAL',
+            'USDT',
+            'USDC',
+        ];
+
+        if (
+            !in_array(
+                $method,
+                $allowedMethods,
+                true
+            )
+        ) {
+            throw new RuntimeException(
+                'Please select a valid withdrawal method.'
+            );
+        }
+
+        /*
+         * Nigeria-only methods.
+         */
+        if (
+            in_array(
+                $method,
+                [
+                    'MONIEPOINT',
+                    'PALMPAY',
+                ],
+                true
+            ) &&
+            !$isNigeria
+        ) {
+            throw new RuntimeException(
+                'This withdrawal method is only available to users in Nigeria.'
+            );
+        }
+
+        /*
+         * Amount validation.
+         */
+        $amountInput = trim(
+            (string) (
+                $_POST['withdrawal_amount']
+                ?? ''
+            )
+        );
+
+        if (
+            $amountInput === '' ||
+            !is_numeric($amountInput)
+        ) {
+            throw new RuntimeException(
+                'Please enter a valid withdrawal amount.'
+            );
+        }
+
+        $amount = round(
+            (float) $amountInput,
+            2
+        );
+
+        if ($amount <= 0) {
+            throw new RuntimeException(
+                'Withdrawal amount must be greater than zero.'
+            );
+        }
+
+        /*
+         * Payment details.
+         */
+        $paymentDetails = [];
+        $methodNetwork = null;
+
+        if (
+            $method === 'MONIEPOINT' ||
+            $method === 'PALMPAY'
+        ) {
+
+            $accountName = trim(
+                (string) (
+                    $_POST['account_name']
+                    ?? ''
+                )
+            );
+
+            $accountNumber = trim(
+                (string) (
+                    $_POST['account_number']
+                    ?? ''
+                )
+            );
+
+            if (
+                $accountName === '' ||
+                $accountNumber === ''
+            ) {
+                throw new RuntimeException(
+                    'Please provide your account name and account number.'
+                );
+            }
+
+            /*
+             * Nigerian account numbers are normally
+             * numeric and 10 digits.
+             */
+            if (
+                !preg_match(
+                    '/^\d{10}$/',
+                    $accountNumber
+                )
+            ) {
+                throw new RuntimeException(
+                    'Please enter a valid 10-digit account number.'
+                );
+            }
+
+            if (
+                mb_strlen($accountName) < 2 ||
+                mb_strlen($accountName) > 100
+            ) {
+                throw new RuntimeException(
+                    'Please enter a valid account name.'
+                );
+            }
+
+            $paymentDetails = [
+                'account_name' =>
+                    $accountName,
+
+                'account_number' =>
+                    $accountNumber,
+            ];
+        }
+
+        elseif ($method === 'PAYPAL') {
+
+            $paypalEmail = strtolower(
+                trim(
+                    (string) (
+                        $_POST['paypal_email']
+                        ?? ''
+                    )
+                )
+            );
+
+            if (
+                $paypalEmail === '' ||
+                !filter_var(
+                    $paypalEmail,
+                    FILTER_VALIDATE_EMAIL
+                )
+            ) {
+                throw new RuntimeException(
+                    'Please enter a valid PayPal email address.'
+                );
+            }
+
+            $paymentDetails = [
+                'paypal_email' =>
+                    $paypalEmail,
+            ];
+        }
+
+        elseif (
+            $method === 'USDT' ||
+            $method === 'USDC'
+        ) {
+
+            $methodNetwork = strtoupper(
+                trim(
+                    (string) (
+                        $_POST['crypto_network']
+                        ?? ''
+                    )
+                )
+            );
+
+            $walletAddress = trim(
+                (string) (
+                    $_POST['wallet_address']
+                    ?? ''
+                )
+            );
+
+            $allowedNetworks =
+                $cryptoNetworks[$method]
+                ?? [];
+
+            if (
+                !in_array(
+                    $methodNetwork,
+                    $allowedNetworks,
+                    true
+                )
+            ) {
+                throw new RuntimeException(
+                    'Please select a valid cryptocurrency network.'
+                );
+            }
+
+            if (
+                $walletAddress === '' ||
+                mb_strlen($walletAddress) < 20 ||
+                mb_strlen($walletAddress) > 255
+            ) {
+                throw new RuntimeException(
+                    'Please enter a valid wallet address.'
+                );
+            }
+
+            /*
+             * Store the address as text.
+             *
+             * We deliberately do not attempt to guess
+             * whether an address belongs to a particular
+             * blockchain here. Final payment verification
+             * belongs to the admin/payment process.
+             */
+            $paymentDetails = [
+                'wallet_address' =>
+                    $walletAddress,
+            ];
+        }
+
+        /*
+         |--------------------------------------------------------------------------
+         | Begin atomic wallet + withdrawal transaction
+         |--------------------------------------------------------------------------
+         */
+
+        $pdo->beginTransaction();
+
+        /*
+         * Lock the user row.
+         *
+         * This prevents two simultaneous withdrawal
+         * requests from both spending the same balance.
+         */
+        $lockUser = $pdo->prepare(
+            'SELECT
+                id,
+                status
+             FROM users
+             WHERE id = ?
+             LIMIT 1
+             FOR UPDATE'
+        );
+
+        $lockUser->execute([
+            $userId,
+        ]);
+
+        $lockedUser = $lockUser->fetch();
+
+        if (!$lockedUser) {
+            throw new RuntimeException(
+                'User account could not be found.'
+            );
+        }
+
+        if (
+            strtoupper(
+                (string) (
+                    $lockedUser['status']
+                    ?? ''
+                )
+            ) !== 'ACTIVE'
+        ) {
+            throw new RuntimeException(
+                'Your account is not currently eligible for withdrawals.'
+            );
+        }
+
+        /*
+         * Prevent multiple active withdrawal requests.
+         *
+         * The money from an existing withdrawal is already
+         * reserved, so allowing another pending request
+         * would make the user experience confusing.
+         */
+        $activeWithdrawalStmt =
+            $pdo->prepare(
+                'SELECT id
+                 FROM withdrawals
+                 WHERE user_id = ?
+                   AND status IN (
+                       "PENDING",
+                       "PROCESSING"
+                   )
+                 LIMIT 1
+                 FOR UPDATE'
+            );
+
+        $activeWithdrawalStmt->execute([
+            $userId,
+        ]);
+
+        $activeWithdrawal =
+            $activeWithdrawalStmt->fetchColumn();
+
+        if ($activeWithdrawal !== false) {
+            throw new RuntimeException(
+                'You already have a withdrawal request being processed.'
+            );
+        }
+
+        /*
+         * Recalculate available wallet balance
+         * while the user row is locked.
+         */
+        $balanceStmt = $pdo->prepare(
+            'SELECT
+                COALESCE(
+                    SUM(amount),
+                    0
+                )
+             FROM wallet_transactions
+             WHERE user_id = ?
+               AND status = "COMPLETED"'
+        );
+
+        $balanceStmt->execute([
+            $userId,
+        ]);
+
+        $availableBalance = round(
+            (float) $balanceStmt->fetchColumn(),
+            2
+        );
+
+        if (
+            $availableBalance <
+            $minimumWithdrawal
+        ) {
+            throw new RuntimeException(
+                'You have not reached the minimum withdrawal amount.'
+            );
+        }
+
+        if ($amount > $availableBalance) {
+            throw new RuntimeException(
+                'The withdrawal amount is greater than your available balance.'
+            );
+        }
+
+        /*
+         * Create the withdrawal request first.
+         */
+        $insertWithdrawal = $pdo->prepare(
+            'INSERT INTO withdrawals (
+                user_id,
+                amount,
+                method,
+                method_network,
+                payment_details,
+                status
+            )
+            VALUES (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                "PENDING"
+            )'
+        );
+
+        $insertWithdrawal->execute([
+            $userId,
+            $amount,
+            $method,
+            $methodNetwork,
+            json_encode(
+                $paymentDetails,
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES |
+                JSON_THROW_ON_ERROR
+            ),
+        ]);
+
+        $withdrawalId =
+            (int) $pdo->lastInsertId();
+
+        /*
+         * Reserve/deduct the requested amount from
+         * the user's available wallet.
+         *
+         * This is a COMPLETED wallet transaction because
+         * the money has now been reserved.
+         */
+        $balanceBefore =
+            $availableBalance;
+
+        $balanceAfter =
+            round(
+                $balanceBefore - $amount,
+                2
+            );
+
+        $insertWalletTransaction =
+            $pdo->prepare(
+                'INSERT INTO wallet_transactions (
+                    user_id,
+                    type,
+                    reference_type,
+                    reference_id,
+                    amount,
+                    currency,
+                    balance_before,
+                    balance_after,
+                    status,
+                    description
+                )
+                VALUES (
+                    ?,
+                    "WITHDRAWAL",
+                    "withdrawal",
+                    ?,
+                    ?,
+                    "USD",
+                    ?,
+                    ?,
+                    "COMPLETED",
+                    ?
+                )'
+            );
+
+        $insertWalletTransaction->execute([
+            $userId,
+            $withdrawalId,
+            -$amount,
+            $balanceBefore,
+            $balanceAfter,
+            'Withdrawal request #' .
+                $withdrawalId .
+                ' reserved.',
+        ]);
+
+        /*
+         * Everything succeeded.
+         */
+        $pdo->commit();
+
+        /*
+         * Rotate the CSRF token after a successful
+         * financial operation.
+         */
+        $_SESSION['withdraw_csrf_token'] =
+            bin2hex(random_bytes(32));
+
+        $_SESSION['withdraw_success'] =
+            'Withdrawal request #' .
+            $withdrawalId .
+            ' has been submitted successfully. Your funds have been reserved and the request is now pending review.';
+
+        redirect('withdraw.php');
+
+    } catch (JsonException $e) {
+
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        $_SESSION['withdraw_error'] =
+            'Unable to prepare your withdrawal request. Please try again.';
+
+        redirect('withdraw.php');
+
+    } catch (Throwable $e) {
+
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        $_SESSION['withdraw_error'] =
+            $e->getMessage();
+
+        redirect('withdraw.php');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Current available balance
+|--------------------------------------------------------------------------
+*/
+
+$availableBalance = getUserBalance(
+    $pdo,
+    $userId
+);
+
+$minimumWithdrawal = (float) getSetting(
+    $pdo,
+    'minimum_withdrawal',
+    '5.00'
+);
+
+$canWithdraw =
+    $availableBalance >=
+    $minimumWithdrawal;
 
 ?>
 <!doctype html>
@@ -272,6 +826,7 @@ $cryptoNetworks = [
         .withdraw-notice {
             padding: 14px 16px;
             margin-top: 20px;
+            margin-bottom: 20px;
             border-radius: 12px;
             background: rgba(34,211,238,.07);
             border: 1px solid rgba(34,211,238,.18);
@@ -283,10 +838,33 @@ $cryptoNetworks = [
         .withdraw-warning {
             padding: 14px 16px;
             margin-top: 20px;
+            margin-bottom: 20px;
             border-radius: 12px;
             background: rgba(245,158,11,.08);
             border: 1px solid rgba(245,158,11,.2);
             color: #fbbf24;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .withdraw-error {
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: rgba(239,68,68,.08);
+            border: 1px solid rgba(239,68,68,.2);
+            color: #fca5a5;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .withdraw-success {
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: rgba(34,197,94,.08);
+            border: 1px solid rgba(34,197,94,.2);
+            color: #86efac;
             font-size: 14px;
             line-height: 1.6;
         }
@@ -388,6 +966,22 @@ $cryptoNetworks = [
             Choose how you would like to receive your PoketFlow rewards.
         </p>
 
+        <?php if ($error): ?>
+
+            <div class="withdraw-error">
+                <?= e($error) ?>
+            </div>
+
+        <?php endif; ?>
+
+        <?php if ($success): ?>
+
+            <div class="withdraw-success">
+                <?= e($success) ?>
+            </div>
+
+        <?php endif; ?>
+
         <div class="withdraw-card">
 
             <div>
@@ -423,7 +1017,8 @@ $cryptoNetworks = [
                     $<?= number_format(
                         max(
                             0,
-                            $minimumWithdrawal - $availableBalance
+                            $minimumWithdrawal -
+                            $availableBalance
                         ),
                         2
                     ) ?>
@@ -435,7 +1030,18 @@ $cryptoNetworks = [
 
         </div>
 
-        <div class="withdraw-form">
+        <form
+            method="POST"
+            action="withdraw.php"
+            class="withdraw-form"
+            id="withdraw-form"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= e($csrfToken) ?>"
+            >
 
             <h2>
                 Withdrawal method
@@ -445,11 +1051,8 @@ $cryptoNetworks = [
 
                 <div class="withdraw-warning">
 
-                    Your available balance has not yet reached the
-                    minimum withdrawal amount.
-
-                    Keep completing eligible offers to increase
-                    your balance.
+                    Your available balance has not yet reached
+                    the minimum withdrawal amount.
 
                 </div>
 
@@ -473,6 +1076,7 @@ $cryptoNetworks = [
                             name="withdrawal_method"
                             value="<?= e($method['id']) ?>"
                             data-type="<?= e($method['type']) ?>"
+                            required
                         >
 
                         <span class="withdraw-method-icon">
@@ -508,8 +1112,6 @@ $cryptoNetworks = [
                     Payment details
                 </h2>
 
-                <!-- Bank details -->
-
                 <div
                     id="bank-fields"
                     class="withdraw-hidden"
@@ -542,14 +1144,12 @@ $cryptoNetworks = [
                             id="account_number"
                             name="account_number"
                             inputmode="numeric"
-                            placeholder="Enter account number"
+                            placeholder="Enter 10-digit account number"
                         >
 
                     </div>
 
                 </div>
-
-                <!-- PayPal -->
 
                 <div
                     id="paypal-fields"
@@ -574,8 +1174,6 @@ $cryptoNetworks = [
 
                 </div>
 
-                <!-- Crypto -->
-
                 <div
                     id="crypto-fields"
                     class="withdraw-hidden"
@@ -598,11 +1196,6 @@ $cryptoNetworks = [
 
                         </select>
 
-                        <small>
-                            Make sure the network matches your
-                            receiving wallet.
-                        </small>
-
                     </div>
 
                     <div class="withdraw-field">
@@ -623,16 +1216,13 @@ $cryptoNetworks = [
 
                     <div class="withdraw-warning">
 
-                        Cryptocurrency transactions are generally
-                        irreversible. Sending funds to an incorrect
-                        address or network may result in permanent
-                        loss of funds.
+                        Make sure your wallet address and network
+                        are correct. Cryptocurrency transactions
+                        may be irreversible.
 
                     </div>
 
                 </div>
-
-                <!-- Amount -->
 
                 <div class="withdraw-field">
 
@@ -662,6 +1252,7 @@ $cryptoNetworks = [
                         ) ?>"
                         step="0.01"
                         placeholder="0.00"
+                        required
                     >
 
                     <small>
@@ -687,22 +1278,22 @@ $cryptoNetworks = [
                 <div class="withdraw-notice">
 
                     Withdrawals are reviewed by PoketFlow before
-                    payment is released. Processing time may vary
-                    depending on the selected payment method.
+                    payment is released. Your requested amount
+                    is reserved when you submit the request.
 
                 </div>
 
                 <button
                     class="btn btn-primary"
-                    type="button"
-                    id="review-withdrawal"
+                    type="submit"
+                    id="submit-withdrawal"
                 >
-                    Review Withdrawal
+                    Submit Withdrawal Request
                 </button>
 
             </div>
 
-        </div>
+        </form>
 
     </section>
 
@@ -743,8 +1334,8 @@ const cryptoNetwork =
 const cryptoNetworks =
     <?= json_encode(
         $cryptoNetworks,
-        JSON_UNESCAPED_SLASHES
-        | JSON_UNESCAPED_UNICODE
+        JSON_UNESCAPED_SLASHES |
+        JSON_UNESCAPED_UNICODE
     ) ?>;
 
 methodInputs.forEach(
