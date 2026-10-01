@@ -169,16 +169,10 @@ $campaignTitle = (string) (
         · PoketFlow Admin
     </title>
 
-    <link
-        rel="stylesheet"
-        href="assets/conversions-view.css"
-    >
     
 
-    <link
-        rel="stylesheet"
-        href="assets/conversion-view.css"
-    >
+    <link rel="stylesheet"
+        href="assets/conversion-view.css">
 
 </head>
 
