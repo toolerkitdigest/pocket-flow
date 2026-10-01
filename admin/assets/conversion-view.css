@@ -1,5 +1,10 @@
 /* ================================================================
-   POKETFLOW ADMIN — CONVERSION VIEW
+   POKETFLOW ADMIN
+   CONVERSION VIEW — SELF-CONTAINED STYLESHEET
+================================================================ */
+
+/* ================================================================
+   ROOT / RESET
 ================================================================ */
 
 :root {
@@ -20,12 +25,12 @@
     --pf-muted: #718096;
 
     --pf-border: rgba(255, 255, 255, 0.08);
+
+    --pf-success: #4ade80;
+    --pf-warning: #facc15;
+    --pf-danger: #f87171;
+    --pf-purple: #c084fc;
 }
-
-
-/* ================================================================
-   GLOBAL RESET
-================================================================ */
 
 * {
     box-sizing: border-box;
@@ -45,7 +50,6 @@ html {
 body {
     background: var(--pf-bg);
     color: var(--pf-text);
-
     font-family:
         Inter,
         system-ui,
@@ -53,7 +57,6 @@ body {
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
-
     font-size: 14px;
     line-height: 1.5;
 }
@@ -77,9 +80,7 @@ textarea {
 
 .admin-layout {
     display: flex;
-
     min-height: 100vh;
-
     background: var(--pf-bg);
 }
 
@@ -90,7 +91,6 @@ textarea {
 
 .admin-sidebar {
     position: fixed;
-
     top: 0;
     left: 0;
     bottom: 0;
@@ -101,7 +101,6 @@ textarea {
     flex-direction: column;
 
     background: var(--pf-bg-soft);
-
     border-right: 1px solid var(--pf-border);
 
     z-index: 100;
@@ -124,18 +123,14 @@ textarea {
 }
 
 .admin-brand a {
-    position: relative;
-
     display: inline-flex;
     align-items: center;
-
     gap: 10px;
 
     color: var(--pf-text);
 
     font-size: 19px;
     font-weight: 800;
-
     letter-spacing: -0.02em;
 }
 
@@ -160,7 +155,7 @@ textarea {
             var(--pf-accent)
         );
 
-    color: white;
+    color: #ffffff;
 
     font-size: 18px;
     font-weight: 900;
@@ -190,7 +185,7 @@ textarea {
 
 
 /* ================================================================
-   NAVIGATION
+   ADMIN NAVIGATION
 ================================================================ */
 
 .admin-nav {
@@ -228,7 +223,6 @@ textarea {
     gap: 12px;
 
     padding: 0 13px;
-
     margin-bottom: 3px;
 
     border-radius: 10px;
@@ -269,7 +263,7 @@ textarea {
         linear-gradient(
             90deg,
             rgba(99, 102, 241, 0.18),
-            rgba(99, 102, 241, 0.07)
+            rgba(99, 102, 241, 0.06)
         );
 
     color: var(--pf-primary-hover);
@@ -320,7 +314,6 @@ textarea {
     gap: 11px;
 
     padding: 0 13px;
-
     margin-top: 4px;
 
     border-radius: 9px;
@@ -329,6 +322,10 @@ textarea {
 
     font-size: 13px;
     font-weight: 600;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
 }
 
 .sidebar-link span {
@@ -345,7 +342,7 @@ textarea {
 
 .logout-link:hover {
     background: rgba(248, 113, 113, 0.08);
-    color: #f87171;
+    color: var(--pf-danger);
 }
 
 
@@ -381,8 +378,7 @@ textarea {
 
     padding: 0 30px;
 
-    background:
-        rgba(8, 13, 26, 0.92);
+    background: rgba(8, 13, 26, 0.92);
 
     border-bottom: 1px solid var(--pf-border);
 
@@ -451,7 +447,7 @@ textarea {
             var(--pf-accent)
         );
 
-    color: white;
+    color: #ffffff;
 
     font-size: 14px;
     font-weight: 800;
@@ -486,7 +482,6 @@ textarea {
 
 .admin-content {
     width: 100%;
-
     max-width: 1500px;
 
     padding: 30px;
@@ -511,6 +506,8 @@ textarea {
 
     font-size: 13px;
     font-weight: 700;
+
+    transition: color 0.18s ease;
 }
 
 .detail-back:hover {
@@ -595,6 +592,7 @@ textarea {
 .status-large {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
 
     padding: 9px 14px;
 
@@ -609,22 +607,22 @@ textarea {
 
 .status-approved {
     background: rgba(34, 197, 94, 0.13);
-    color: #4ade80;
+    color: var(--pf-success);
 }
 
 .status-pending {
     background: rgba(250, 204, 21, 0.13);
-    color: #facc15;
+    color: var(--pf-warning);
 }
 
 .status-rejected {
     background: rgba(248, 113, 113, 0.13);
-    color: #f87171;
+    color: var(--pf-danger);
 }
 
 .status-reversed {
     background: rgba(168, 85, 247, 0.13);
-    color: #c084fc;
+    color: var(--pf-purple);
 }
 
 .status-default {
@@ -655,13 +653,13 @@ textarea {
 
 
 /* ================================================================
-   DETAIL CARD
+   DETAIL CARDS
 ================================================================ */
 
 .detail-card {
-    margin-bottom: 22px;
-
     overflow: hidden;
+
+    margin-bottom: 22px;
 
     background: var(--pf-surface);
 
@@ -702,7 +700,7 @@ textarea {
 
 
 /* ================================================================
-   DETAIL ROWS
+   DETAIL LIST
 ================================================================ */
 
 .detail-list {
@@ -817,7 +815,7 @@ textarea {
             var(--pf-accent)
         );
 
-    color: white;
+    color: #ffffff;
 
     font-size: 16px;
     font-weight: 800;
@@ -872,6 +870,8 @@ textarea {
     color: var(--pf-text);
 
     font-size: 32px;
+    font-weight: 800;
+
     line-height: 1.1;
 }
 
@@ -987,21 +987,20 @@ textarea {
    RESPONSIVE — TABLET
 ================================================================ */
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
 
     .admin-sidebar {
-        width: 220px;
+        width: 230px;
     }
 
     .admin-main {
-        width: calc(100% - 220px);
-        margin-left: 220px;
+        width: calc(100% - 230px);
+        margin-left: 230px;
     }
 
     .detail-grid {
         grid-template-columns: 1fr;
     }
-
 }
 
 
@@ -1011,6 +1010,10 @@ textarea {
 
 @media (max-width: 760px) {
 
+    .admin-layout {
+        display: block;
+    }
+
     .admin-sidebar {
         position: relative;
 
@@ -1019,10 +1022,6 @@ textarea {
 
         border-right: 0;
         border-bottom: 1px solid var(--pf-border);
-    }
-
-    .admin-layout {
-        display: block;
     }
 
     .admin-main {
@@ -1051,7 +1050,7 @@ textarea {
     .admin-nav > a {
         flex-shrink: 0;
 
-        margin: 0;
+        margin-bottom: 0;
     }
 
     .admin-nav > a.active::before {
@@ -1094,6 +1093,8 @@ textarea {
 
     .conversion-hero {
         flex-direction: column;
+
+        padding: 20px;
     }
 
     .conversion-hero-right {
@@ -1102,14 +1103,12 @@ textarea {
 
     .status-large {
         width: 100%;
-        justify-content: center;
     }
-
 }
 
 
 /* ================================================================
-   RESPONSIVE — SMALL PHONE
+   RESPONSIVE — SMALL MOBILE
 ================================================================ */
 
 @media (max-width: 500px) {
@@ -1138,11 +1137,15 @@ textarea {
     }
 
     .conversion-hero {
-        padding: 19px;
+        padding: 18px;
     }
 
     .conversion-hero h2 {
         font-size: 21px;
+    }
+
+    .detail-card-header {
+        padding: 16px;
     }
 
     .detail-row {
@@ -1151,10 +1154,6 @@ textarea {
         gap: 6px;
 
         padding: 13px 16px;
-    }
-
-    .detail-card-header {
-        padding: 16px;
     }
 
     .worker-profile {
@@ -1169,4 +1168,7 @@ textarea {
         font-size: 28px;
     }
 
+    .timeline {
+        padding: 16px;
+    }
 }
