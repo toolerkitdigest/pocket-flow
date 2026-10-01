@@ -105,60 +105,6 @@ try {
 
 
 
-    /*
- * TEMPORARY RAW OGADS DIAGNOSTIC
- *
- * Displays the first 10 raw offers returned by OGAds.
- * This does NOT click or follow any offer.
- */
-
-echo '<div style="
-    background:#080d1a;
-    color:#f8fafc;
-    padding:20px;
-    margin:20px;
-    border:2px solid #6366f1;
-    border-radius:12px;
-    font-family:monospace;
-    font-size:14px;
-    line-height:1.6;
-    overflow:auto;
-">';
-
-echo '<h2 style="color:#818cf8;">
-    OGAds Raw API Diagnostic
-</h2>';
-
-echo '<p>Offers received: '
-    . count($ogadsOffers)
-    . '</p>';
-
-echo '<hr>';
-
-foreach (array_slice($ogadsOffers, 0, 10) as $index => $rawOffer) {
-
-    echo '<h3 style="color:#22d3ee;">
-        Offer #' . ($index + 1) . '
-    </h3>';
-
-    echo '<pre style="
-        white-space:pre-wrap;
-        word-break:break-word;
-    ">';
-
-    echo e(print_r($rawOffer, true));
-
-    echo '</pre>';
-
-    echo '<hr>';
-}
-
-echo '</div>';
-
-exit;
-}
-
-
     // --------------------------------------------------
     // Process visitor-specific offers
     // --------------------------------------------------
