@@ -274,6 +274,175 @@ function cleanOgadsText(?string $text): string
 
 
 /**
+ * Check whether a raw OGAds offer is safe to display.
+ *
+ * This is the first safety gate for live OGAds inventory.
+ *
+ * An offer is rejected when:
+ * - It has no meaningful searchable content
+ * - It matches an active REJECT filter
+ *
+ * Safety fields checked:
+ * - name
+ * - name_short
+ * - description
+ * - adcopy
+ * - link
+ */
+function isOgadsOfferSafe(
+    PDO $pdo,
+    array $offer
+): bool {
+
+    $searchableFields = [
+        'name',
+        'name_short',
+        'description',
+        'adcopy',
+        'link',
+    ];
+
+    $searchableText = '';
+
+    foreach ($searchableFields as $field) {
+
+        $value = cleanOgadsText(
+            (string) ($offer[$field] ?? '')
+        );
+
+        if ($value !== '') {
+            $searchableText .= ' ' . $value;
+        }
+    }
+
+    /*
+     * No meaningful information means we cannot
+     * safely evaluate the offer.
+     */
+    if (trim($searchableText) === '') {
+        return false;
+    }
+
+    /*
+     * Normalize the text so variations such as:
+     *
+     * sports-betting
+     * sports_betting
+     * sports/betting
+     *
+     * can be detected consistently.
+     */
+    $searchableText = strtolower($searchableText);
+
+    $searchableText = str_replace(
+        [
+            '-',
+            '_',
+            '/',
+            '\\',
+            '.',
+            ',',
+            ':',
+            ';',
+            '|',
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+        ],
+        ' ',
+        $searchableText
+    );
+
+    $searchableText = preg_replace(
+        '/\s+/u',
+        ' ',
+        $searchableText
+    );
+
+    $searchableText = trim(
+        (string) $searchableText
+    );
+
+    /*
+     * Load active safety filters.
+     */
+    $stmt = $pdo->query(
+        'SELECT keyword
+         FROM offer_filters
+         WHERE action = "REJECT"
+           AND active = 1
+         ORDER BY CHAR_LENGTH(keyword) DESC'
+    );
+
+    $filters = $stmt->fetchAll(
+        PDO::FETCH_COLUMN
+    );
+
+    foreach ($filters as $keyword) {
+
+        $keyword = strtolower(
+            trim((string) $keyword)
+        );
+
+        if ($keyword === '') {
+            continue;
+        }
+
+        /*
+         * Normalize the filter keyword using
+         * the same rules as the offer text.
+         */
+        $keyword = str_replace(
+            [
+                '-',
+                '_',
+                '/',
+                '\\',
+                '.',
+                ',',
+                ':',
+                ';',
+                '|',
+                '(',
+                ')',
+                '[',
+                ']',
+                '{',
+                '}',
+            ],
+            ' ',
+            $keyword
+        );
+
+        $keyword = preg_replace(
+            '/\s+/u',
+            ' ',
+            $keyword
+        );
+
+        $keyword = trim(
+            (string) $keyword
+        );
+
+        if (
+            $keyword !== ''
+            && str_contains(
+                $searchableText,
+                $keyword
+            )
+        ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+/**
  * Calculate worker reward and platform margin.
  */
 function calculateOgadsReward(
