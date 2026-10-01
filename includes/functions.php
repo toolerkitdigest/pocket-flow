@@ -326,53 +326,258 @@ function isCountryEligible(
 |--------------------------------------------------------------------------
 */
 
-function isCampaignAllowed(
-    PDO $pdo,
-    array $campaign
-): bool {
-    $searchText = strtolower(
-        trim(
-            implode(
-                ' ',
-                [
-                    (string) ($campaign['title'] ?? ''),
-                    (string) ($campaign['description'] ?? ''),
-                    (string) ($campaign['category'] ?? ''),
-                    (string) ($campaign['instructions'] ?? ''),
-                ]
-            )
-        )
+/**
+ * Check whether a campaign is safe and eligible to be displayed.
+ *
+ * This is a HARD safety gate.
+ *
+ * An offer must:
+ * 1. Be ACTIVE
+ * 2. Be APPROVED
+ * 3. Not match any active safety filter
+ *
+ * Safety filtering checks:
+ * - title
+ * - description
+ * - category
+ * - instructions
+ * - network offer URL
+ */
+function isCampaignAllowed(PDO $pdo, array $campaign): bool
+{
+    /*
+    |--------------------------------------------------------------------------
+    | 1. Campaign status
+    |--------------------------------------------------------------------------
+    */
+
+    $campaignStatus = strtoupper(
+        trim((string) ($campaign['status'] ?? ''))
     );
 
-    if ($searchText === '') {
-        return true;
+    if ($campaignStatus !== 'ACTIVE') {
+        return false;
     }
 
-    $stmt = $pdo->query(
-        'SELECT keyword
-         FROM offer_filters
-         WHERE action = "REJECT"
-           AND active = 1'
+
+    /*
+    |--------------------------------------------------------------------------
+    | 2. Approval status
+    |--------------------------------------------------------------------------
+    |
+    | CPA campaigns should not become publicly visible simply because
+    | their status is ACTIVE.
+    |
+    */
+
+    $approvalStatus = strtoupper(
+        trim((string) ($campaign['approval_status'] ?? ''))
     );
 
-    $filters = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    if ($approvalStatus !== 'APPROVED') {
+        return false;
+    }
 
-    foreach ($filters as $keyword) {
 
-        $keyword = strtolower(trim((string) $keyword));
+    /*
+    |--------------------------------------------------------------------------
+    | 3. Build searchable offer text
+    |--------------------------------------------------------------------------
+    |
+    | We deliberately inspect several fields.
+    |
+    | A dangerous offer may not reveal its category in the title.
+    | The description, instructions or destination URL may reveal it.
+    |
+    */
+
+    $searchableFields = [
+        'title',
+        'description',
+        'category',
+        'instructions',
+        'network_offer_url',
+    ];
+
+    $searchableText = '';
+
+    foreach ($searchableFields as $field) {
+
+        $value = trim(
+            (string) ($campaign[$field] ?? '')
+        );
+
+        if ($value !== '') {
+            $searchableText .= ' ' . $value;
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 4. Normalize the text
+    |--------------------------------------------------------------------------
+    |
+    | This helps us catch variations such as:
+    |
+    | Sports-Betting
+    | sports_betting
+    | sports betting
+    | SPORTS BETTING
+    |
+    */
+
+    $searchableText = strtolower($searchableText);
+
+    $searchableText = str_replace(
+        [
+            '-',
+            '_',
+            '/',
+            '\\',
+            '.',
+            ',',
+            ':',
+            ';',
+            '|',
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+        ],
+        ' ',
+        $searchableText
+    );
+
+    $searchableText = preg_replace(
+        '/\s+/u',
+        ' ',
+        $searchableText
+    );
+
+    $searchableText = trim(
+        (string) $searchableText
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 5. Load active safety filters
+    |--------------------------------------------------------------------------
+    */
+
+    $stmt = $pdo->query(
+        'SELECT
+            keyword,
+            category,
+            action,
+            reason
+         FROM offer_filters
+         WHERE active = 1
+         ORDER BY
+            CHAR_LENGTH(keyword) DESC,
+            id ASC'
+    );
+
+    $filters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 6. Check every active filter
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($filters as $filter) {
+
+        $action = strtoupper(
+            trim((string) ($filter['action'] ?? ''))
+        );
+
+        /*
+        We only enforce REJECT filters here.
+        Other future actions can be handled separately.
+        */
+
+        if ($action !== 'REJECT') {
+            continue;
+        }
+
+        $keyword = strtolower(
+            trim((string) ($filter['keyword'] ?? ''))
+        );
 
         if ($keyword === '') {
             continue;
         }
 
-        if (str_contains($searchText, $keyword)) {
+
+        /*
+        Normalize the filter keyword in exactly the same way
+        as the campaign text.
+        */
+
+        $keyword = str_replace(
+            [
+                '-',
+                '_',
+                '/',
+                '\\',
+                '.',
+                ',',
+                ':',
+                ';',
+                '|',
+                '(',
+                ')',
+                '[',
+                ']',
+                '{',
+                '}',
+            ],
+            ' ',
+            $keyword
+        );
+
+        $keyword = preg_replace(
+            '/\s+/u',
+            ' ',
+            $keyword
+        );
+
+        $keyword = trim(
+            (string) $keyword
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 7. Reject immediately when a dangerous keyword is found
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $keyword !== ''
+            && str_contains(
+                $searchableText,
+                $keyword
+            )
+        ) {
             return false;
         }
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | 8. Offer passed every safety check
+    |--------------------------------------------------------------------------
+    */
+
     return true;
 }
-
 
 /*
 |--------------------------------------------------------------------------
