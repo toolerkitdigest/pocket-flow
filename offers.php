@@ -104,6 +104,32 @@ try {
     );
 
 
+    echo '<pre>';
+echo 'OGAds offers received: ';
+echo count($ogadsOffers);
+echo "\n\n";
+
+if (!empty($ogadsOffers)) {
+    echo 'First offer keys:' . "\n";
+    echo htmlspecialchars(
+        implode(', ', array_keys($ogadsOffers[0])),
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    echo "\n\nFirst offer data:\n";
+    echo htmlspecialchars(
+        print_r($ogadsOffers[0], true),
+        ENT_QUOTES,
+        'UTF-8'
+    );
+}
+
+echo '</pre>';
+
+exit;
+
+
 
     // --------------------------------------------------
     // Process visitor-specific offers
