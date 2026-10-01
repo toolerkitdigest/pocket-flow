@@ -103,66 +103,6 @@ try {
         50
     );
 
-
-   echo '<pre>';
-
-   echo "OGAds offers received: " . count($ogadsOffers) . "\n\n";
-
-   foreach ($ogadsOffers as $index => $offer) {
-
-    echo "========================================\n";
-    echo "OFFER #" . ($index + 1) . "\n";
-    echo "========================================\n";
-
-    echo "Offer ID: "
-        . ($offer['offerid'] ?? '')
-        . "\n";
-
-    echo "Name: "
-        . ($offer['name'] ?? '')
-        . "\n";
-
-    echo "Name Short: "
-        . ($offer['name_short'] ?? '')
-        . "\n";
-
-    echo "Description: "
-        . ($offer['description'] ?? '')
-        . "\n";
-
-    echo "Adcopy: "
-        . ($offer['adcopy'] ?? '')
-        . "\n";
-
-    echo "Payout: "
-        . ($offer['payout'] ?? '')
-        . "\n";
-
-    echo "Country: "
-        . ($offer['country'] ?? '')
-        . "\n";
-
-    echo "Device: "
-        . ($offer['device'] ?? '')
-        . "\n";
-
-    echo "Type: "
-        . ($offer['ctype'] ?? '')
-        . "\n";
-
-    echo "Link:\n"
-        . ($offer['link'] ?? '')
-        . "\n\n";
-}
-
-echo '</pre>';
-
-exit;
-
-
-    
-
-
     // --------------------------------------------------
     // Process visitor-specific offers
     // --------------------------------------------------
