@@ -110,100 +110,56 @@ try {
 
 
     /*
- * TEMPORARY OGAds SAFETY DIAGNOSTIC
+ * TEMPORARY RAW OGADS DIAGNOSTIC
  *
- * This does NOT open or follow any offer URL.
- * It only displays raw information returned by OGAds
- * for offers using the suspicious redirect domains.
+ * Displays the first 10 raw offers returned by OGAds.
+ * This does NOT click or follow any offer.
  */
 
-foreach ($ogadsOffers as $rawOffer) {
+echo '<div style="
+    background:#080d1a;
+    color:#f8fafc;
+    padding:20px;
+    margin:20px;
+    border:2px solid #6366f1;
+    border-radius:12px;
+    font-family:monospace;
+    font-size:14px;
+    line-height:1.6;
+    overflow:auto;
+">';
 
-    $rawLink = (string) ($rawOffer['link'] ?? '');
+echo '<h2 style="color:#818cf8;">
+    OGAds Raw API Diagnostic
+</h2>';
 
-    if (
-        str_contains($rawLink, 'izy0.com') ||
-        str_contains($rawLink, 'sortequente.com')
-    ) {
-        echo '<div style="
-            background:#111827;
-            color:#f8fafc;
-            padding:20px;
-            margin:20px;
-            border:2px solid #ef4444;
-            border-radius:10px;
-            font-family:monospace;
-            white-space:pre-wrap;
-            word-break:break-word;
-        ">';
+echo '<p>Offers received: '
+    . count($ogadsOffers)
+    . '</p>';
 
-        echo '<strong style="color:#f87171;">
-            SUSPICIOUS OGADS OFFER FOUND
-        </strong><br><br>';
+echo '<hr>';
 
-        echo '<strong>Offer ID:</strong> '
-            . e((string) ($rawOffer['offerid'] ?? ''))
-            . '<br>';
+foreach (array_slice($ogadsOffers, 0, 10) as $index => $rawOffer) {
 
-        echo '<strong>Name:</strong> '
-            . e((string) ($rawOffer['name'] ?? ''))
-            . '<br>';
+    echo '<h3 style="color:#22d3ee;">
+        Offer #' . ($index + 1) . '
+    </h3>';
 
-        echo '<strong>Name Short:</strong> '
-            . e((string) ($rawOffer['name_short'] ?? ''))
-            . '<br>';
+    echo '<pre style="
+        white-space:pre-wrap;
+        word-break:break-word;
+    ">';
 
-        echo '<strong>Description:</strong> '
-            . e((string) ($rawOffer['description'] ?? ''))
-            . '<br>';
+    echo e(print_r($rawOffer, true));
 
-        echo '<strong>Adcopy:</strong> '
-            . e((string) ($rawOffer['adcopy'] ?? ''))
-            . '<br>';
+    echo '</pre>';
 
-        echo '<strong>Category:</strong> '
-            . e((string) ($rawOffer['category'] ?? ''))
-            . '<br>';
+    echo '<hr>';
+}
 
-        echo '<strong>Type:</strong> '
-            . e((string) ($rawOffer['type'] ?? ''))
-            . '<br>';
+echo '</div>';
 
-        echo '<strong>Vertical:</strong> '
-            . e((string) ($rawOffer['vertical'] ?? ''))
-            . '<br>';
-
-        echo '<strong>Advertiser:</strong> '
-            . e((string) ($rawOffer['advertiser'] ?? ''))
-            . '<br>';
-
-        echo '<strong>Country:</strong> '
-            . e((string) ($rawOffer['country'] ?? ''))
-            . '<br>';
-
-        echo '<strong>Device:</strong> '
-            . e((string) ($rawOffer['device'] ?? ''))
-            . '<br>';
-
-        echo '<strong>Payout:</strong> '
-            . e((string) ($rawOffer['payout'] ?? ''))
-            . '<br><br>';
-
-        echo '<strong>OGAds Link:</strong><br>'
-            . e($rawLink)
-            . '<br><br>';
-
-        echo '<strong>Available API Fields:</strong><br>'
-            . e(implode(', ', array_keys($rawOffer)));
-
-        echo '</div>';
-
-        /*
-         * STOP HERE.
-         * Do not continue rendering the offers page.
-         */
-        exit;
-    }
+exit;
 }
 
 
