@@ -1,0 +1,537 @@
+:root {
+    --pf-bg: #080d1a;
+    --pf-bg-soft: #0c1324;
+    --pf-surface: #111827;
+    --pf-surface-2: #151e31;
+    --pf-surface-hover: #1a253b;
+
+    --pf-primary: #6366f1;
+    --pf-primary-hover: #818cf8;
+    --pf-primary-dark: #4f46e5;
+
+    --pf-accent: #22d3ee;
+
+    --pf-text: #f8fafc;
+    --pf-secondary: #a7b1c2;
+    --pf-muted: #718096;
+
+    --pf-border: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ================================================================
+   BACK LINK
+================================================================ */
+
+.detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 18px;
+
+    color: var(--pf-primary-hover);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.detail-back:hover {
+    color: var(--pf-accent);
+}
+
+
+/* ================================================================
+   CONVERSION HERO
+================================================================ */
+
+.conversion-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 24px;
+    margin-bottom: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.12),
+            rgba(34, 211, 238, 0.04)
+        ),
+        var(--pf-surface);
+
+    border: 1px solid var(--pf-border);
+    border-radius: 18px;
+}
+
+.conversion-hero-left {
+    min-width: 0;
+}
+
+.conversion-kicker {
+    margin-bottom: 7px;
+
+    color: var(--pf-accent);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.conversion-hero h2 {
+    margin: 0;
+
+    color: var(--pf-text);
+
+    font-size: 25px;
+    line-height: 1.2;
+}
+
+.conversion-id {
+    margin-top: 7px;
+
+    color: var(--pf-muted);
+
+    font-size: 12px;
+}
+
+.conversion-hero-right {
+    flex-shrink: 0;
+}
+
+
+/* ================================================================
+   STATUS
+================================================================ */
+
+.status-large {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 9px 14px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.status-approved {
+    background: rgba(34, 197, 94, 0.13);
+    color: #4ade80;
+}
+
+.status-pending {
+    background: rgba(250, 204, 21, 0.13);
+    color: #facc15;
+}
+
+.status-rejected {
+    background: rgba(248, 113, 113, 0.13);
+    color: #f87171;
+}
+
+.status-reversed {
+    background: rgba(168, 85, 247, 0.13);
+    color: #c084fc;
+}
+
+.status-default {
+    background: rgba(148, 163, 184, 0.12);
+    color: var(--pf-secondary);
+}
+
+
+/* ================================================================
+   DETAIL GRID
+================================================================ */
+
+.detail-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.4fr)
+        minmax(300px, 0.8fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+.detail-column {
+    min-width: 0;
+}
+
+
+/* ================================================================
+   DETAIL CARDS
+================================================================ */
+
+.detail-card {
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    background: var(--pf-surface);
+
+    border: 1px solid var(--pf-border);
+    border-radius: 16px;
+}
+
+.detail-card:last-child {
+    margin-bottom: 0;
+}
+
+.detail-card-header {
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--pf-border);
+}
+
+.detail-card-header h3 {
+    margin: 0;
+
+    color: var(--pf-text);
+
+    font-size: 16px;
+}
+
+.detail-card-header p {
+    margin: 5px 0 0;
+
+    color: var(--pf-muted);
+
+    font-size: 12px;
+}
+
+
+/* ================================================================
+   DETAIL ROWS
+================================================================ */
+
+.detail-list {
+    margin: 0;
+}
+
+.detail-row {
+    display: grid;
+
+    grid-template-columns: 190px minmax(0, 1fr);
+
+    gap: 20px;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid var(--pf-border);
+}
+
+.detail-row:last-child {
+    border-bottom: 0;
+}
+
+.detail-label {
+    color: var(--pf-muted);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.detail-value {
+    min-width: 0;
+
+    color: var(--pf-secondary);
+
+    font-size: 13px;
+
+    overflow-wrap: anywhere;
+}
+
+.detail-value strong {
+    color: var(--pf-text);
+}
+
+.detail-value small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--pf-muted);
+
+    font-size: 11px;
+}
+
+.detail-value code {
+    display: inline-block;
+
+    max-width: 100%;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: var(--pf-bg-soft);
+
+    color: var(--pf-secondary);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 11px;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ================================================================
+   WORKER PROFILE
+================================================================ */
+
+.worker-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 20px;
+}
+
+.worker-avatar {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pf-primary),
+            var(--pf-accent)
+        );
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.worker-profile strong {
+    display: block;
+
+    color: var(--pf-text);
+
+    font-size: 14px;
+}
+
+.worker-profile span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--pf-muted);
+
+    font-size: 11px;
+}
+
+
+/* ================================================================
+   FINANCIAL BREAKDOWN
+================================================================ */
+
+.money-card {
+    padding: 20px;
+}
+
+.money-main {
+    padding-bottom: 20px;
+    margin-bottom: 18px;
+
+    border-bottom: 1px solid var(--pf-border);
+}
+
+.money-main-label {
+    color: var(--pf-muted);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.money-main strong {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--pf-text);
+
+    font-size: 32px;
+    line-height: 1.1;
+}
+
+.money-breakdown {
+    display: grid;
+
+    gap: 13px;
+}
+
+.money-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    color: var(--pf-secondary);
+
+    font-size: 13px;
+}
+
+.money-line span:last-child {
+    color: var(--pf-text);
+
+    font-weight: 700;
+}
+
+.money-line.total {
+    padding-top: 13px;
+    margin-top: 3px;
+
+    border-top: 1px solid var(--pf-border);
+
+    color: var(--pf-text);
+
+    font-weight: 700;
+}
+
+.money-line.total span:last-child {
+    color: var(--pf-primary-hover);
+}
+
+
+/* ================================================================
+   TIMELINE
+================================================================ */
+
+.timeline {
+    padding: 20px;
+}
+
+.timeline-item {
+    position: relative;
+
+    padding-left: 24px;
+    padding-bottom: 20px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 5px;
+    left: 4px;
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--pf-primary);
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.timeline-item:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    top: 15px;
+    bottom: 0;
+    left: 8px;
+
+    width: 1px;
+
+    background: var(--pf-border);
+}
+
+.timeline-title {
+    color: var(--pf-text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.timeline-date {
+    margin-top: 3px;
+
+    color: var(--pf-muted);
+
+    font-size: 11px;
+}
+
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+
+@media (max-width: 900px) {
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .conversion-hero {
+        flex-direction: column;
+    }
+
+    .conversion-hero-right {
+        width: 100%;
+    }
+
+    .status-large {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .detail-row {
+        grid-template-columns: 1fr;
+
+        gap: 6px;
+    }
+
+    .money-main strong {
+        font-size: 28px;
+    }
+
+}
