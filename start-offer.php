@@ -123,19 +123,43 @@ if ($networkPayout <= 0) {
     );
 }
 
+
 /*
- * Run PoketFlow safety filters one more time.
+ * Run the raw OGAds safety filter one more time.
+ *
+ * This is a visitor-specific live OGAds offer,
+ * so we use isOgadsOfferSafe(), not the
+ * database campaign safety/status gate.
  */
-$campaignForFilter = [
-    'title' => $selectedOffer['title'] ?? '',
-    'description' => $selectedOffer['description'] ?? '',
-    'category' => $selectedOffer['category'] ?? '',
-    'instructions' => $selectedOffer['instructions'] ?? '',
+$ogadsOfferForSafety = [
+    'offerid' => $offerId,
+
+    'name_short' => (
+        $selectedOffer['title']
+        ?? ''
+    ),
+
+    'name' => (
+        $selectedOffer['title']
+        ?? ''
+    ),
+
+    'description' => (
+        $selectedOffer['description']
+        ?? ''
+    ),
+
+    'adcopy' => (
+        $selectedOffer['instructions']
+        ?? ''
+    ),
+
+    'link' => $networkOfferUrl,
 ];
 
-if (!isCampaignAllowed(
+if (!isOgadsOfferSafe(
     $pdo,
-    $campaignForFilter
+    $ogadsOfferForSafety
 )) {
     http_response_code(403);
 
