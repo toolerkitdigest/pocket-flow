@@ -564,27 +564,16 @@ function syncOgadsOffer(
     /*
      * Apply PoketFlow safety filters.
      */
-    $campaignForFilter = [
-
-        'title' => $title,
-
-        'description' => $description,
-
-        'category' => $category,
-
-        'instructions' => $instructions,
-
-    ];
-
-
-    if (!isCampaignAllowed(
-        $pdo,
-        $campaignForFilter
-    )) {
-
-        return null;
-    }
-
+    /*
+ * Apply PoketFlow safety filters to the
+ * original OGAds offer before saving it.
+ */
+if (!isOgadsOfferSafe(
+    $pdo,
+    $offer
+)) {
+    return null;
+}
 
     $rewards = calculateOgadsReward(
         $pdo,
