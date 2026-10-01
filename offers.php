@@ -197,26 +197,20 @@ try {
             continue;
         }
 
-
         // ----------------------------------------------
-        // Apply PoketFlow safety filters
-        // ----------------------------------------------
+       // Apply PoketFlow safety filters to the
+       // original OGAds offer BEFORE displaying it.
+       // ----------------------------------------------
 
-        $campaignForFilter = [
-            'title' => $title,
-            'description' => $description,
-            'category' => $category,
-            'instructions' => $instructions,
-        ];
-
-
-        if (!isCampaignAllowed(
-            $pdo,
-            $campaignForFilter
-        )) {
-            continue;
+       if (!isOgadsOfferSafe(
+           $pdo,
+           $offer
+       )) {
+           continue;
         }
 
+
+        
 
         // ----------------------------------------------
         // Calculate worker reward
