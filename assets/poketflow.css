@@ -188,6 +188,17 @@ input {
    MOBILE NAVIGATION
 ========================================= */
 
+@media (min-width: 1001px) {
+    .mobile-navigation {
+        display: none !important;
+    }
+
+    .mobile-menu-button {
+        display: none !important;
+    }
+}
+
+
 .mobile-navigation {
     display: none;
 
@@ -212,6 +223,10 @@ input {
 
     box-sizing: border-box;
 }
+
+
+
+
 
 
 /* Navigation container */
