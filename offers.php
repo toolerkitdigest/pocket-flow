@@ -55,17 +55,6 @@ $availableBalance = getUserBalance(
 
 // --------------------------------------------------
 // Fetch LIVE visitor-specific OGAds offers
-//
-// IMPORTANT:
-//
-// We do NOT synchronize these offers into the
-// global campaigns table here.
-//
-// OGAds returns inventory based on the visitor's
-// IP, device, language, etc.
-//
-// We keep the current eligible offers in the
-// session for the next step: start-offer.php.
 // --------------------------------------------------
 
 $campaigns = [];
@@ -103,6 +92,7 @@ try {
         50
     );
 
+
     // --------------------------------------------------
     // Process visitor-specific offers
     // --------------------------------------------------
@@ -113,10 +103,6 @@ try {
             (string) ($offer['offerid'] ?? '')
         );
 
-
-        // ----------------------------------------------
-        // Offer must have an ID
-        // ----------------------------------------------
 
         if ($externalOfferId === '') {
             continue;
@@ -185,27 +171,26 @@ try {
 
 
         // ----------------------------------------------
-        // Must have an actual participation URL
+        // Must have participation URL
         // ----------------------------------------------
 
         if ($networkOfferUrl === '') {
             continue;
         }
 
-        // ----------------------------------------------
-       // Apply PoketFlow safety filters to the
-       // original OGAds offer BEFORE displaying it.
-       // ----------------------------------------------
 
-       if (!isOgadsOfferSafe(
-           $pdo,
-           $offer
-       )) {
-           continue;
+        // ----------------------------------------------
+        // Apply PoketFlow safety filters
+        // BEFORE displaying the offer
+        // ----------------------------------------------
+
+        if (!isOgadsOfferSafe(
+            $pdo,
+            $offer
+        )) {
+            continue;
         }
 
-
-        
 
         // ----------------------------------------------
         // Calculate worker reward
@@ -223,12 +208,6 @@ try {
 
         $campaigns[] = [
 
-            /*
-             * Temporary identifier.
-             *
-             * This is the OGAds external offer ID,
-             * NOT a PoketFlow campaign ID.
-             */
             'id' => $externalOfferId,
 
             'source_type' => 'CPA_NETWORK',
@@ -274,10 +253,7 @@ try {
 
 
     // --------------------------------------------------
-    // Store the current visitor's eligible offers
-    // in the session.
-    //
-    // start-offer.php will use this in Stage 2.
+    // Store current visitor's eligible offers
     // --------------------------------------------------
 
     $_SESSION['ogads_offers'] = $campaigns;
@@ -287,13 +263,105 @@ try {
 
     $ogadsError = $e->getMessage();
 
-    /*
-     * Clear old visitor-specific offers if the
-     * current API request failed.
-     */
     $_SESSION['ogads_offers'] = [];
 
     $campaigns = [];
+}
+
+
+// ==================================================
+// UI HELPERS
+// ==================================================
+
+
+/**
+ * Create a short, clean description for the offer card.
+ *
+ * We intentionally do NOT display raw OGAds metadata.
+ */
+function getShortOfferDescription(
+    string $description,
+    string $title
+): string {
+
+    $description = trim($description);
+
+    // Remove everything after technical OGAds metadata.
+    $technicalMarkers = [
+        '/\bConversion\s*:/i',
+        '/\bofferwall_description\s*=/i',
+        '/\bofferwall_instructions\s*=/i',
+        '/\bofferwall_category\s*=/i',
+        '/\btracking_type\s*=/i',
+        '/\bofferwall_/i',
+    ];
+
+    foreach ($technicalMarkers as $pattern) {
+
+        $cleaned = preg_split(
+            $pattern,
+            $description,
+            2
+        );
+
+        if (
+            is_array($cleaned) &&
+            isset($cleaned[0])
+        ) {
+            $description = trim($cleaned[0]);
+        }
+    }
+
+
+    // Remove excessive whitespace.
+    $description = preg_replace(
+        '/\s+/u',
+        ' ',
+        $description
+    );
+
+    $description = trim(
+        (string) $description
+    );
+
+
+    // Remove unnecessary trailing punctuation.
+    $description = trim(
+        $description,
+        " \t\n\r\0\x0B.,;:-"
+    );
+
+
+    // If there is no useful description,
+    // use a simple generic message.
+    if ($description === '') {
+
+        return 'Complete this offer to earn your reward.';
+    }
+
+
+    // Limit visible description length.
+    if (
+        function_exists('mb_strlen') &&
+        mb_strlen($description) > 125
+    ) {
+
+        $description = mb_substr(
+            $description,
+            0,
+            125
+        );
+
+        $description = rtrim(
+            $description,
+            " \t\n\r\0\x0B.,;:-"
+        );
+
+        $description .= '...';
+    }
+
+
+    return $description;
 }
 
 
@@ -451,15 +519,86 @@ function getOfferCategory(array $campaign): string
     <div class="header-actions">
 
         <a
-            class="btn btn-primary"
+            class="btn btn-primary balance-button"
             href="withdraw.php"
         >
             Balance $<?= number_format($availableBalance, 2) ?>
         </a>
 
+
+        <!-- Mobile menu button -->
+
+        <button
+            type="button"
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobileNavigation"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
     </div>
 
 </header>
+
+
+<!-- ==================================================
+     MOBILE NAVIGATION
+================================================== -->
+
+<div
+    class="mobile-navigation"
+    id="mobileNavigation"
+    aria-hidden="true"
+>
+
+    <nav>
+
+        <a href="dashboard.php">
+            <span class="mobile-nav-icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+
+        <a
+            class="active"
+            href="offers.php"
+        >
+            <span class="mobile-nav-icon">▦</span>
+            <span>Earn Rewards</span>
+        </a>
+
+
+        <a href="history.php">
+            <span class="mobile-nav-icon">◷</span>
+            <span>History</span>
+        </a>
+
+
+        <a href="referrals.php">
+            <span class="mobile-nav-icon">♧</span>
+            <span>Refer & Earn</span>
+        </a>
+
+
+        <a href="withdraw.php">
+            <span class="mobile-nav-icon">▣</span>
+            <span>Withdraw</span>
+        </a>
+
+
+        <a href="logout.php">
+            <span class="mobile-nav-icon">↪</span>
+            <span>Log Out</span>
+        </a>
+
+    </nav>
+
+</div>
 
 
 <!-- ==================================================
@@ -478,13 +617,8 @@ function getOfferCategory(array $campaign): string
         <div class="sidebar-nav">
 
             <a href="dashboard.php">
-
                 ⌂
-
-                <span>
-                    Home
-                </span>
-
+                <span>Home</span>
             </a>
 
 
@@ -492,57 +626,32 @@ function getOfferCategory(array $campaign): string
                 class="active"
                 href="offers.php"
             >
-
                 ▦
-
-                <span>
-                    Offers
-                </span>
-
+                <span>Offers</span>
             </a>
 
 
             <a href="history.php">
-
                 ◷
-
-                <span>
-                    History
-                </span>
-
+                <span>History</span>
             </a>
 
 
             <a href="referrals.php">
-
                 ♧
-
-                <span>
-                    Refer & Earn
-                </span>
-
+                <span>Refer & Earn</span>
             </a>
 
 
             <a href="withdraw.php">
-
                 ▣
-
-                <span>
-                    Withdraw
-                </span>
-
+                <span>Withdraw</span>
             </a>
 
 
             <a href="logout.php">
-
                 ↪
-
-                <span>
-                    Log Out
-                </span>
-
+                <span>Log Out</span>
             </a>
 
         </div>
@@ -689,11 +798,7 @@ function getOfferCategory(array $campaign): string
                 <?php if (empty($campaigns)): ?>
 
 
-                    <!-- ==================================================
-                         NO OFFERS
-                    ================================================== -->
-
-                    <article class="offer-card">
+                    <article class="offer-card empty-offer-card">
 
                         <div class="offer-icon">
                             ◷
@@ -701,11 +806,6 @@ function getOfferCategory(array $campaign): string
 
 
                         <div class="offer-body">
-
-                            <span class="tag">
-                                No Offers
-                            </span>
-
 
                             <h3>
                                 No offers available right now
@@ -739,10 +839,6 @@ function getOfferCategory(array $campaign): string
 
                         <?php
 
-                        // ------------------------------------------
-                        // Offer information
-                        // ------------------------------------------
-
                         $category = getOfferCategory(
                             $campaign
                         );
@@ -766,11 +862,12 @@ function getOfferCategory(array $campaign): string
                         );
 
 
-                        $description = trim(
+                        $description = getShortOfferDescription(
                             (string) (
                                 $campaign['description']
                                 ?? ''
-                            )
+                            ),
+                            $title
                         );
 
 
@@ -791,7 +888,7 @@ function getOfferCategory(array $campaign): string
 
 
                         <!-- ==================================================
-                             REAL OFFER CARD
+                             CLEAN OFFER CARD
                         ================================================== -->
 
                         <article
@@ -800,23 +897,25 @@ function getOfferCategory(array $campaign): string
                         >
 
 
-                            <!-- Offer Image / Icon -->
+                            <!-- Offer Image -->
 
                             <div
-                                class="offer-icon <?= e($iconClass) ?>"
+                                class="offer-image <?= e($iconClass) ?>"
                             >
 
                                 <?php if ($imageUrl !== ''): ?>
 
                                     <img
                                         src="<?= e($imageUrl) ?>"
-                                        alt="<?= e($title) ?>"
+                                        alt=""
                                         loading="lazy"
                                     >
 
                                 <?php else: ?>
 
-                                    <?= e($icon) ?>
+                                    <div class="offer-fallback-icon">
+                                        <?= e($icon) ?>
+                                    </div>
 
                                 <?php endif; ?>
 
@@ -827,35 +926,19 @@ function getOfferCategory(array $campaign): string
 
                             <div class="offer-body">
 
-                                <span class="tag">
-                                    <?= e($category) ?>
-                                </span>
-
-
                                 <h3>
                                     <?= e($title) ?>
                                 </h3>
 
 
-                                <?php if ($description !== ''): ?>
-
-                                    <p>
-                                        <?= e($description) ?>
-                                    </p>
-
-                                <?php else: ?>
-
-                                    <p>
-                                        Complete this offer
-                                        to earn your reward.
-                                    </p>
-
-                                <?php endif; ?>
+                                <p>
+                                    <?= e($description) ?>
+                                </p>
 
                             </div>
 
 
-                            <!-- Offer Reward / Start -->
+                            <!-- Reward / Start -->
 
                             <div class="offer-bottom">
 
@@ -937,7 +1020,7 @@ function getOfferCategory(array $campaign): string
 
 
 <!-- ==================================================
-     OFFER FILTER JAVASCRIPT
+     OFFER FILTER + MOBILE MENU JAVASCRIPT
 ================================================== -->
 
 <script>
@@ -946,6 +1029,10 @@ document.addEventListener(
     'DOMContentLoaded',
     function () {
 
+
+        // ==================================================
+        // OFFER FILTER
+        // ==================================================
 
         const filterButtons =
             document.querySelectorAll(
@@ -962,19 +1049,13 @@ document.addEventListener(
         filterButtons.forEach(
             function (button) {
 
-
                 button.addEventListener(
                     'click',
                     function () {
 
-
                         const filter =
                             button.dataset.filter;
 
-
-                        // ------------------------------------------
-                        // Update selected button
-                        // ------------------------------------------
 
                         filterButtons.forEach(
                             function (item) {
@@ -992,13 +1073,8 @@ document.addEventListener(
                         );
 
 
-                        // ------------------------------------------
-                        // Filter cards
-                        // ------------------------------------------
-
                         offerCards.forEach(
                             function (card) {
-
 
                                 const category =
                                     (
@@ -1020,12 +1096,8 @@ document.addEventListener(
                                 if (filter === 'app') {
 
                                     show =
-                                        category.includes(
-                                            'app'
-                                        ) ||
-                                        category.includes(
-                                            'install'
-                                        );
+                                        category.includes('app') ||
+                                        category.includes('install');
 
                                 }
 
@@ -1033,9 +1105,7 @@ document.addEventListener(
                                 if (filter === 'survey') {
 
                                     show =
-                                        category.includes(
-                                            'survey'
-                                        );
+                                        category.includes('survey');
 
                                 }
 
@@ -1043,15 +1113,9 @@ document.addEventListener(
                                 if (filter === 'other') {
 
                                     show =
-                                        !category.includes(
-                                            'app'
-                                        ) &&
-                                        !category.includes(
-                                            'install'
-                                        ) &&
-                                        !category.includes(
-                                            'survey'
-                                        );
+                                        !category.includes('app') &&
+                                        !category.includes('install') &&
+                                        !category.includes('survey');
 
                                 }
 
@@ -1067,6 +1131,131 @@ document.addEventListener(
 
             }
         );
+
+
+        // ==================================================
+        // MOBILE NAVIGATION
+        // ==================================================
+
+        const menuButton =
+            document.getElementById(
+                'mobileMenuButton'
+            );
+
+
+        const mobileNavigation =
+            document.getElementById(
+                'mobileNavigation'
+            );
+
+
+        if (
+            menuButton &&
+            mobileNavigation
+        ) {
+
+            menuButton.addEventListener(
+                'click',
+                function () {
+
+                    const isOpen =
+                        menuButton.classList.toggle(
+                            'open'
+                        );
+
+
+                    mobileNavigation.classList.toggle(
+                        'open',
+                        isOpen
+                    );
+
+
+                    menuButton.setAttribute(
+                        'aria-expanded',
+                        isOpen ? 'true' : 'false'
+                    );
+
+
+                    mobileNavigation.setAttribute(
+                        'aria-hidden',
+                        isOpen ? 'false' : 'true'
+                    );
+
+                }
+            );
+
+
+            // Close menu after selecting a link.
+
+            mobileNavigation
+                .querySelectorAll('a')
+                .forEach(
+                    function (link) {
+
+                        link.addEventListener(
+                            'click',
+                            function () {
+
+                                menuButton.classList.remove(
+                                    'open'
+                                );
+
+                                mobileNavigation.classList.remove(
+                                    'open'
+                                );
+
+                                menuButton.setAttribute(
+                                    'aria-expanded',
+                                    'false'
+                                );
+
+                                mobileNavigation.setAttribute(
+                                    'aria-hidden',
+                                    'true'
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            // Close menu when tapping outside.
+
+            document.addEventListener(
+                'click',
+                function (event) {
+
+                    if (
+                        !mobileNavigation.contains(event.target) &&
+                        !menuButton.contains(event.target)
+                    ) {
+
+                        menuButton.classList.remove(
+                            'open'
+                        );
+
+                        mobileNavigation.classList.remove(
+                            'open'
+                        );
+
+                        menuButton.setAttribute(
+                            'aria-expanded',
+                            'false'
+                        );
+
+                        mobileNavigation.setAttribute(
+                            'aria-hidden',
+                            'true'
+                        );
+
+                    }
+
+                }
+            );
+
+        }
 
     }
 );
