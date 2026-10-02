@@ -1523,6 +1523,10 @@ input {
         padding: 0 14px;
     }
 
+    .mobile-navigation {
+    top: 64px;
+    }
+
 
     .header-actions {
         margin-left: auto;
