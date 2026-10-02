@@ -453,12 +453,10 @@ function getOfferCategory(array $campaign): string
         content="width=device-width, initial-scale=1"
     >
 
-    <title>Offers — PoketFlow</title>
+<title>Offers — PoketFlow</title>
 
-    <link
-        rel="stylesheet"
-        href="assets/poketflow.css"
-    >
+<link rel="stylesheet" href="assets/poketflow.css">
+<link rel="stylesheet" href="assets/offers.css">
 
 </head>
 
