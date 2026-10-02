@@ -1411,6 +1411,14 @@ input {
         display: none;
     }
 
+    .mobile-menu-button {
+        display: flex;
+    }
+
+    .mobile-navigation.open {
+        display: block;
+    }
+
     .app-shell {
         grid-template-columns: 75px 1fr;
     }
@@ -1444,6 +1452,25 @@ input {
     .app-header {
         height: 64px;
         padding: 0 14px;
+    }
+
+
+    .header-actions {
+        margin-left: auto;
+        gap: 8px;
+    }
+
+    .balance-button {
+        font-size: 11px;
+        padding: 8px 11px;
+    }
+
+    .mobile-menu-button {
+        display: flex;
+    }
+
+    .mobile-navigation.open {
+        display: block;
     }
 
     .header-actions .btn-ghost {
