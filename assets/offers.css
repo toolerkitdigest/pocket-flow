@@ -1,0 +1,947 @@
+/* =========================================================
+   POKETFLOW — OFFERS PAGE
+   assets/offers.css
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   APP HEADER
+   --------------------------------------------------------- */
+
+.app-header {
+    height: 72px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    background: rgba(8, 13, 26, 0.94);
+    border-bottom: 1px solid var(--pf-border);
+
+    position: sticky;
+    top: 0;
+    z-index: 200;
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.app-header .brand {
+    flex-shrink: 0;
+}
+
+/* Desktop header navigation */
+
+.app-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin: auto;
+}
+
+.app-header-nav a {
+    display: flex;
+    align-items: center;
+
+    height: 72px;
+    padding: 0;
+
+    color: #aab5ca;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    border-bottom: 2px solid transparent;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.app-header-nav a:hover {
+    color: #ffffff;
+}
+
+.app-header-nav a.active {
+    color: #ffffff;
+    border-bottom-color: var(--pf-primary2);
+}
+
+/* ---------------------------------------------------------
+   HEADER ACTIONS
+   --------------------------------------------------------- */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.balance-button {
+    white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   MOBILE MENU BUTTON
+   --------------------------------------------------------- */
+
+.mobile-menu-button {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 11px;
+
+    background: #0d1729;
+
+    cursor: pointer;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+
+    flex-shrink: 0;
+}
+
+.mobile-menu-button span {
+    width: 19px;
+    height: 2px;
+
+    border-radius: 2px;
+
+    background: #e8edff;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.mobile-menu-button.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-button.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-button.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---------------------------------------------------------
+   MOBILE NAVIGATION
+   --------------------------------------------------------- */
+
+.mobile-navigation {
+    display: none;
+
+    position: fixed;
+
+    top: 72px;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+
+    z-index: 190;
+
+    padding: 12px 14px 16px;
+
+    box-sizing: border-box;
+
+    background: rgba(8, 13, 26, 0.98);
+
+    border-bottom: 1px solid var(--pf-border);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+.mobile-navigation nav {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 5px;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+.mobile-navigation nav a {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 46px;
+
+    box-sizing: border-box;
+
+    gap: 13px;
+
+    padding: 12px 14px;
+    margin: 0;
+
+    border: 0;
+    border-radius: 11px;
+
+    background: transparent;
+
+    color: #8e9bb2;
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.mobile-navigation nav a:hover {
+    background: #111d34;
+    color: #ffffff;
+}
+
+.mobile-navigation nav a.active {
+    background: #111d34;
+    color: #ffffff;
+
+    box-shadow: inset 3px 0 var(--pf-primary2);
+}
+
+.mobile-navigation .mobile-nav-icon {
+    width: 24px;
+    min-width: 24px;
+
+    text-align: center;
+
+    color: #8c7cff;
+
+    font-size: 18px;
+    line-height: 1;
+}
+
+.mobile-navigation nav a.active .mobile-nav-icon {
+    color: #a49cff;
+}
+
+.mobile-navigation.open {
+    display: block;
+}
+
+/* ---------------------------------------------------------
+   APPLICATION SHELL
+   --------------------------------------------------------- */
+
+.app-shell {
+    width: 100%;
+    max-width: 1450px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 225px minmax(0, 1fr);
+
+    min-height: calc(100vh - 72px);
+}
+
+/* ---------------------------------------------------------
+   SIDEBAR
+   --------------------------------------------------------- */
+
+.sidebar {
+    min-width: 0;
+
+    padding: 25px 15px;
+
+    display: flex;
+    flex-direction: column;
+
+    border-right: 1px solid var(--pf-border);
+}
+
+.sidebar-nav {
+    display: grid;
+    gap: 5px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    color: #8391aa;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background: #111d34;
+    color: #ffffff;
+}
+
+.sidebar-nav a.active {
+    background: #111d34;
+    color: #ffffff;
+
+    box-shadow: inset 2px 0 #7770ff;
+}
+
+.sidebar-nav span {
+    margin-left: 10px;
+}
+
+/* ---------------------------------------------------------
+   SIDEBAR BALANCE
+   --------------------------------------------------------- */
+
+.side-balance {
+    margin-top: auto;
+
+    padding: 15px;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 13px;
+
+    background: #0d1628;
+}
+
+.side-balance-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--pf-muted);
+
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.side-balance strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+/* ---------------------------------------------------------
+   MAIN CONTENT
+   --------------------------------------------------------- */
+
+.app-content {
+    min-width: 0;
+
+    padding: 40px 42px;
+}
+
+/* ---------------------------------------------------------
+   PAGE TITLE
+   --------------------------------------------------------- */
+
+.page-title {
+    margin-bottom: 28px;
+}
+
+.page-title h1 {
+    margin: 0 0 7px;
+
+    color: var(--pf-text);
+
+    font-size: clamp(25px, 3vw, 34px);
+    line-height: 1.15;
+
+    letter-spacing: -0.7px;
+}
+
+.page-title p {
+    margin: 0;
+
+    max-width: 680px;
+
+    color: var(--pf-muted);
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ---------------------------------------------------------
+   OFFER TABS
+   --------------------------------------------------------- */
+
+.offer-tabs {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+}
+
+.offer-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.offer-tab {
+    flex: 0 0 auto;
+
+    padding: 9px 14px;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 9px;
+
+    background: #0d1628;
+
+    color: #8996ad;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.offer-tab:hover {
+    color: #ffffff;
+    border-color: #3a4760;
+}
+
+.offer-tab.active {
+    color: #ffffff;
+
+    background: #171f38;
+
+    border-color: #5f5bdc;
+}
+
+/* ---------------------------------------------------------
+   OFFER CONTENT GRID
+   --------------------------------------------------------- */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr) 280px;
+
+    gap: 24px;
+
+    align-items: start;
+}
+
+.offer-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+/* ---------------------------------------------------------
+   OFFER CARD
+   --------------------------------------------------------- */
+
+.offer-card {
+    position: relative;
+
+    min-width: 0;
+
+    padding: 20px;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 16px;
+
+    background: var(--pf-surface);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #35415a;
+
+    background: var(--pf-surface-2);
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+}
+
+.offer-card.hidden {
+    display: none;
+}
+
+/* ---------------------------------------------------------
+   OFFER ICON
+   --------------------------------------------------------- */
+
+.offer-icon {
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 13px;
+
+    background: #171f38;
+
+    color: #a49cff;
+
+    font-size: 20px;
+}
+
+.offer-icon.blue {
+    color: #67d7ff;
+}
+
+.offer-icon.green {
+    color: #4ade80;
+}
+
+.offer-icon.orange {
+    color: #fb923c;
+}
+
+.offer-icon.purple {
+    color: #c084fc;
+}
+
+/* ---------------------------------------------------------
+   OFFER CARD CONTENT
+   --------------------------------------------------------- */
+
+.offer-card h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+.offer-card p {
+    margin: 0 0 17px;
+
+    color: #8d99ae;
+
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* ---------------------------------------------------------
+   OFFER META
+   --------------------------------------------------------- */
+
+.offer-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.offer-category {
+    color: #71809a;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.offer-reward {
+    color: #4ade80;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   OFFER BUTTON
+   --------------------------------------------------------- */
+
+.offer-card .btn {
+    width: 100%;
+
+    justify-content: center;
+}
+
+/* ---------------------------------------------------------
+   INFORMATION CARD
+   --------------------------------------------------------- */
+
+.info-card {
+    padding: 22px;
+
+    border: 1px solid var(--pf-border);
+    border-radius: 16px;
+
+    background: var(--pf-surface);
+}
+
+.info-card h3 {
+    margin: 0 0 12px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+}
+
+.info-card p {
+    margin: 0 0 15px;
+
+    color: #8996ad;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.info-card ul {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.info-card li {
+    position: relative;
+
+    padding-left: 20px;
+    margin-bottom: 11px;
+
+    color: #8996ad;
+
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.info-card li::before {
+    content: "✓";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    color: #4ade80;
+
+    font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   ERROR / NOTICE
+   --------------------------------------------------------- */
+
+.offer-error,
+.alert-error {
+    margin-bottom: 22px;
+
+    padding: 14px 16px;
+
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 11px;
+
+    background: rgba(127, 29, 29, 0.18);
+
+    color: #fca5a5;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ---------------------------------------------------------
+   EMPTY STATE
+   --------------------------------------------------------- */
+
+.offer-empty {
+    grid-column: 1 / -1;
+
+    padding: 45px 25px;
+
+    text-align: center;
+
+    border: 1px dashed var(--pf-border);
+    border-radius: 16px;
+
+    background: rgba(17, 24, 39, 0.55);
+}
+
+.offer-empty h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+}
+
+.offer-empty p {
+    margin: 0;
+
+    color: var(--pf-muted);
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+
+    .app-header {
+        padding: 0 20px;
+    }
+
+    .app-header-nav {
+        gap: 18px;
+    }
+
+    .app-header-nav a {
+        font-size: 13px;
+    }
+
+    .app-shell {
+        grid-template-columns: 75px minmax(0, 1fr);
+    }
+
+    .sidebar {
+        padding: 20px 10px;
+    }
+
+    .sidebar-nav a {
+        justify-content: center;
+
+        padding: 12px 8px;
+
+        text-align: center;
+    }
+
+    .sidebar-nav a span {
+        display: none;
+    }
+
+    .side-balance {
+        display: none;
+    }
+
+    .app-content {
+        padding: 30px 25px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .info-card {
+        width: auto;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE / SMALL TABLET
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+    .app-header {
+        height: 64px;
+    }
+
+    .app-header-nav {
+        display: none;
+    }
+
+    .mobile-menu-button {
+        display: flex;
+    }
+
+    .mobile-navigation {
+        top: 64px;
+    }
+
+    .header-actions {
+        margin-left: auto;
+    }
+
+    .app-shell {
+        grid-template-columns: 1fr;
+
+        min-height: calc(100vh - 64px);
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .app-content {
+        padding: 28px 20px;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 680px) {
+
+    .app-header {
+        padding: 0 14px;
+
+        gap: 10px;
+    }
+
+    .app-header .brand {
+        font-size: 20px;
+    }
+
+    .app-header .brand-mark {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 10px;
+
+        font-size: 17px;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .balance-button {
+        padding: 8px 11px;
+
+        font-size: 11px;
+    }
+
+    .mobile-menu-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .app-content {
+        padding: 25px 17px;
+    }
+
+    .page-title {
+        margin-bottom: 22px;
+    }
+
+    .page-title h1 {
+        font-size: 26px;
+    }
+
+    .page-title p {
+        font-size: 13px;
+    }
+
+    .offer-tabs {
+        margin-bottom: 18px;
+    }
+
+    .dashboard-grid {
+        gap: 18px;
+    }
+
+    .offer-grid {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+    .offer-card {
+        padding: 18px;
+    }
+
+    .info-card {
+        padding: 19px;
+    }
+}
+
+/* ---------------------------------------------------------
+   VERY SMALL PHONES
+   --------------------------------------------------------- */
+
+@media (max-width: 400px) {
+
+    .app-header .brand {
+        font-size: 18px;
+    }
+
+    .app-header .brand-mark {
+        width: 30px;
+        height: 30px;
+    }
+
+    .balance-button {
+        padding: 7px 9px;
+
+        font-size: 10px;
+    }
+
+    .mobile-menu-button {
+        width: 38px;
+        height: 38px;
+    }
+
+    .app-content {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+
+/* ---------------------------------------------------------
+   DESKTOP ONLY
+   --------------------------------------------------------- */
+
+@media (min-width: 1001px) {
+
+    .mobile-navigation {
+        display: none !important;
+    }
+
+    .mobile-menu-button {
+        display: none !important;
+    }
+}
