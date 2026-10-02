@@ -488,7 +488,7 @@ function getOfferCategory(array $campaign): string
     </a>
 
 
-    <nav>
+<nav class="app-header-nav">
 
         <a href="dashboard.php">
             Home
