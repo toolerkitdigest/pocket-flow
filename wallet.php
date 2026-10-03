@@ -131,19 +131,24 @@ function formatWalletDate(string $date): string
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
+
 
     <title>Wallet — PoketFlow</title>
 
-    <link
-       rel="stylesheet" href="assets/wallet.css">
 
+    <title>Wallet — PoketFlow</title>
 
+<link
+    rel="stylesheet"
+    href="assets/wallet.css"
+>
 
+</head>
 
 <body>
 
+    
 <div class="app-shell">
 
     <!-- =========================================
