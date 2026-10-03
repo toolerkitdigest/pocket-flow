@@ -22,9 +22,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        <?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>
-    </title>
+    <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
 
     <meta
         name="description"
@@ -51,7 +49,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 <body>
 
-
 <div class="home-page">
 
 
@@ -62,7 +59,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
     <header class="home-header">
 
         <div class="home-container home-header-inner">
-
 
             <!-- BRAND -->
 
@@ -170,7 +166,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
             </button>
 
-
         </div>
 
 
@@ -183,21 +178,17 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
             <nav aria-label="Mobile navigation">
 
-
                 <a href="index.php">
                     Home
                 </a>
-
 
                 <a href="offers.php">
                     Earn Rewards
                 </a>
 
-
                 <a href="how-it-works.php">
                     How It Works
                 </a>
-
 
                 <a href="blog/">
                     Blog
@@ -242,7 +233,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                 </div>
 
-
             </nav>
 
         </div>
@@ -252,25 +242,37 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
     <!-- =====================================================
-         MAIN CONTENT
+         MAIN
     ====================================================== -->
 
     <main>
 
 
         <!-- =================================================
-             HERO INTRODUCTION
+             HERO
         ================================================== -->
 
         <section class="home-hero">
+
+            <div class="home-hero-glow home-hero-glow-one"></div>
+            <div class="home-hero-glow home-hero-glow-two"></div>
+
+            <div class="home-hero-grid"></div>
 
             <div class="home-container">
 
                 <div class="home-hero-content">
 
-
                     <div class="home-eyebrow">
-                        REAL OPPORTUNITIES • REAL REWARDS
+
+                        <span class="home-eyebrow-dot"></span>
+
+                        REAL OPPORTUNITIES
+                        
+                        <span class="home-eyebrow-divider">•</span>
+
+                        REAL REWARDS
+
                     </div>
 
 
@@ -285,17 +287,16 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                     </h1>
 
 
-                    <p>
+                    <p class="home-hero-description">
 
-                        Discover real opportunities, complete simple
-                        activities and build your reward balance —
-                        all from one PoketFlow account.
+                        Discover opportunities from trusted offer
+                        networks, complete simple activities and
+                        earn rewards when your activity is verified.
 
                     </p>
 
 
                     <div class="home-hero-actions">
-
 
                         <a
                             href="register.php"
@@ -304,7 +305,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                             Start Earning
 
-                            <span>
+                            <span class="home-btn-arrow">
                                 →
                             </span>
 
@@ -316,27 +317,31 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                             class="home-btn home-btn-outline home-btn-large"
                         >
 
-                            See How It Works
+                            How It Works
 
                         </a>
 
-
                     </div>
 
 
-                    <div class="home-hero-note">
+                    <div class="home-hero-trust">
 
-                        <span>✓</span>
-                        Free to join
+                        <span>
+                            <strong>✓</strong>
+                            Free to join
+                        </span>
 
-                        <span>✓</span>
-                        No subscription
+                        <span>
+                            <strong>✓</strong>
+                            No subscription
+                        </span>
 
-                        <span>✓</span>
-                        New opportunities regularly
+                        <span>
+                            <strong>✓</strong>
+                            Opportunities vary by location
+                        </span>
 
                     </div>
-
 
                 </div>
 
@@ -347,10 +352,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
         <!-- =================================================
-             REAL LIVE OFFERS
-             
-             2–3 real dynamically fetched network offers.
-             This is intentionally immediately after the hero.
+             LIVE NETWORK OFFERS
         ================================================== -->
 
         <?php
@@ -362,101 +364,11 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
         <!-- =================================================
-             PLATFORM ACTIVITY
-        ================================================== -->
-
-        <section class="pf-activity-stats">
-
-            <div class="home-container">
-
-
-                <div class="pf-activity-heading">
-
-                    <span class="home-kicker">
-                        THE POKETFLOW COMMUNITY
-                    </span>
-
-
-                    <h2>
-                        Rewards in motion.
-                    </h2>
-
-
-                    <p>
-                        PoketFlow brings opportunities and rewards
-                        together in one simple platform.
-                    </p>
-
-                </div>
-
-
-
-                <div class="pf-activity-grid">
-
-
-                    <!-- USERS -->
-
-                    <div class="pf-activity-card">
-
-                        <div class="pf-activity-icon">
-                            👥
-                        </div>
-
-
-                        <div
-                            class="pf-count-number"
-                            data-count-type="users"
-                        >
-                            0
-                        </div>
-
-
-                        <div class="pf-activity-label">
-                            Registered Users
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- REWARDS -->
-
-                    <div class="pf-activity-card">
-
-                        <div class="pf-activity-icon">
-                            💰
-                        </div>
-
-
-                        <div
-                            class="pf-count-number"
-                            data-count-type="rewards"
-                        >
-                            $0
-                        </div>
-
-
-                        <div class="pf-activity-label">
-                            Rewards Processed
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
              HOW IT WORKS
         ================================================== -->
 
         <section
-            class="home-section"
+            class="home-section home-how"
             id="how-it-works"
         >
 
@@ -469,20 +381,18 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                         HOW IT WORKS
                     </span>
 
-
                     <h2>
-                        Start earning in three simple steps.
+                        Three simple steps.
+                        <span>One rewarding journey.</span>
                     </h2>
 
-
                     <p>
-                        No complicated setup. Create your account,
-                        choose an opportunity and complete the
-                        required activity.
+                        PoketFlow keeps the process simple. Create
+                        your account, choose an opportunity and
+                        complete the required activity.
                     </p>
 
                 </div>
-
 
 
                 <div class="home-steps">
@@ -492,13 +402,19 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                     <article class="home-step-card">
 
-                        <div class="home-step-number">
-                            01
+                        <div class="home-step-top">
+
+                            <span class="home-step-number">
+                                01
+                            </span>
+
+                            <span class="home-step-line"></span>
+
                         </div>
 
 
                         <div class="home-step-icon">
-                            👤
+                            <span>+</span>
                         </div>
 
 
@@ -508,8 +424,8 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
                         <p>
-                            Join PoketFlow for free and create your
-                            personal rewards account.
+                            Join PoketFlow for free and create
+                            your personal rewards account.
                         </p>
 
                     </article>
@@ -520,24 +436,31 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                     <article class="home-step-card">
 
-                        <div class="home-step-number">
-                            02
+                        <div class="home-step-top">
+
+                            <span class="home-step-number">
+                                02
+                            </span>
+
+                            <span class="home-step-line"></span>
+
                         </div>
 
 
                         <div class="home-step-icon">
-                            🔎
+                            <span>⌕</span>
                         </div>
 
 
                         <h3>
-                            Choose an Opportunity
+                            Find an Opportunity
                         </h3>
 
 
                         <p>
-                            Browse available offers and select an
-                            opportunity that interests you.
+                            Browse available opportunities and
+                            choose one that fits your interests
+                            and eligibility.
                         </p>
 
                     </article>
@@ -548,13 +471,19 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                     <article class="home-step-card">
 
-                        <div class="home-step-number">
-                            03
+                        <div class="home-step-top">
+
+                            <span class="home-step-number">
+                                03
+                            </span>
+
+                            <span class="home-step-line"></span>
+
                         </div>
 
 
                         <div class="home-step-icon">
-                            🎁
+                            <span>✓</span>
                         </div>
 
 
@@ -564,8 +493,9 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
                         <p>
-                            Follow the offer requirements and receive
-                            your reward after the activity is verified.
+                            Follow the requirements and receive
+                            your applicable reward after the
+                            activity is verified.
                         </p>
 
                     </article>
@@ -581,8 +511,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
         <!-- =================================================
              FEATURED OPPORTUNITIES
-             
-             Larger dynamic offer section.
         ================================================== -->
 
         <?php
@@ -597,9 +525,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
              BENEFITS
         ================================================== -->
 
-        <section
-            class="home-section home-benefits"
-        >
+        <section class="home-section home-benefits">
 
             <div class="home-container">
 
@@ -610,110 +536,92 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                         WHY POKETFLOW
                     </span>
 
-
                     <h2>
-                        A simpler way to discover rewards.
+                        Everything you need to
+                        <span>discover opportunities.</span>
                     </h2>
 
-
                     <p>
-                        PoketFlow is designed to make discovering
-                        and completing reward opportunities simple.
+                        A straightforward rewards experience built
+                        around discovery, clarity and convenience.
                     </p>
 
                 </div>
 
 
-
                 <div class="home-benefits-grid">
 
-
-                    <!-- BENEFIT 1 -->
 
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
-                            ⚡
+                            <span>↗</span>
                         </div>
-
 
                         <h3>
                             Fresh Opportunities
                         </h3>
 
-
                         <p>
-                            Discover available opportunities from
-                            our connected offer networks.
+                            Explore available opportunities from
+                            connected offer networks.
                         </p>
 
                     </article>
 
 
 
-                    <!-- BENEFIT 2 -->
-
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
-                            💎
+                            <span>$</span>
                         </div>
-
 
                         <h3>
                             Clear Rewards
                         </h3>
 
-
                         <p>
-                            See the reward associated with an offer
-                            before deciding which opportunity to explore.
+                            See the applicable reward before you
+                            decide which opportunity to explore.
                         </p>
 
                     </article>
 
 
 
-                    <!-- BENEFIT 3 -->
-
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
-                            🛡️
+                            <span>✓</span>
                         </div>
-
 
                         <h3>
                             One Account
                         </h3>
 
-
                         <p>
-                            Keep your opportunities, rewards and
-                            account activity together in one place.
+                            Keep your opportunities, activity and
+                            reward history together in one place.
                         </p>
 
                     </article>
 
 
 
-                    <!-- BENEFIT 4 -->
-
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
-                            📱
+                            <span>⌁</span>
                         </div>
-
 
                         <h3>
                             Built for Mobile
                         </h3>
 
-
                         <p>
                             Discover and complete opportunities
-                            conveniently from your phone or computer.
+                            comfortably from your phone or desktop.
                         </p>
 
                     </article>
@@ -728,24 +636,25 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
         <!-- =================================================
-             FINAL CTA
+             CTA
         ================================================== -->
 
         <section class="home-cta">
+
+            <div class="home-cta-glow"></div>
 
             <div class="home-container">
 
                 <div class="home-cta-inner">
 
-
-                    <span class="home-kicker">
-                        READY TO GET STARTED?
-                    </span>
+                    <div class="home-cta-badge">
+                        READY WHEN YOU ARE
+                    </div>
 
 
                     <h2>
                         Your next opportunity
-                        could be waiting.
+                        <span>could be waiting.</span>
                     </h2>
 
 
@@ -757,7 +666,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                     <div class="home-hero-actions">
 
-
                         <a
                             href="register.php"
                             class="home-btn home-btn-primary home-btn-large"
@@ -765,7 +673,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                             Create Free Account
 
-                            <span>
+                            <span class="home-btn-arrow">
                                 →
                             </span>
 
@@ -781,9 +689,7 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
                         </a>
 
-
                     </div>
-
 
                 </div>
 
@@ -811,90 +717,115 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                         FAQ
                     </span>
 
-
                     <h2>
-                        Frequently asked questions.
+                        Questions, answered.
                     </h2>
 
-                </div>
+                    <p>
+                        A few things you may want to know before
+                        getting started.
+                    </p>
 
+                </div>
 
 
                 <div class="home-faq-list">
 
 
-                    <!-- FAQ 1 -->
-
                     <details class="home-faq-item">
 
                         <summary>
-                            What is PoketFlow?
-                        </summary>
 
+                            <span>
+                                What is PoketFlow?
+                            </span>
+
+                            <span class="home-faq-plus">
+                                +
+                            </span>
+
+                        </summary>
 
                         <p>
                             PoketFlow is a rewards platform where
-                            members can discover available opportunities,
-                            complete qualifying activities and receive
-                            rewards when those activities are verified.
+                            members can discover available
+                            opportunities, complete qualifying
+                            activities and receive applicable rewards
+                            when those activities are verified.
                         </p>
 
                     </details>
 
 
 
-                    <!-- FAQ 2 -->
-
                     <details class="home-faq-item">
 
                         <summary>
-                            Is it free to join?
-                        </summary>
 
+                            <span>
+                                Is it free to join?
+                            </span>
+
+                            <span class="home-faq-plus">
+                                +
+                            </span>
+
+                        </summary>
 
                         <p>
                             Yes. Creating a PoketFlow account is free.
-                            You can browse available opportunities and
-                            choose the ones you want to explore.
+                            You can explore available opportunities
+                            and choose the ones you want to complete.
                         </p>
 
                     </details>
 
 
 
-                    <!-- FAQ 3 -->
-
                     <details class="home-faq-item">
 
                         <summary>
-                            How do rewards work?
-                        </summary>
 
+                            <span>
+                                How do rewards work?
+                            </span>
+
+                            <span class="home-faq-plus">
+                                +
+                            </span>
+
+                        </summary>
 
                         <p>
                             Each opportunity has its own requirements.
-                            When you complete the required activity and
-                            the network confirms the conversion, the
-                            applicable reward can be credited to your
-                            PoketFlow account.
+                            When you complete the required activity
+                            and the connected network confirms the
+                            conversion, the applicable reward can be
+                            credited to your PoketFlow account.
                         </p>
 
                     </details>
 
 
 
-                    <!-- FAQ 4 -->
-
                     <details class="home-faq-item">
 
                         <summary>
-                            Can I use PoketFlow on my phone?
-                        </summary>
 
+                            <span>
+                                Can I use PoketFlow on my phone?
+                            </span>
+
+                            <span class="home-faq-plus">
+                                +
+                            </span>
+
+                        </summary>
 
                         <p>
                             Yes. PoketFlow is designed to work across
-                            modern phones, tablets and desktop devices.
+                            modern smartphones, tablets and desktop
+                            devices.
                         </p>
 
                     </details>
@@ -923,8 +854,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
             <div class="home-footer-grid">
 
 
-                <!-- BRAND -->
-
                 <div class="home-footer-brand">
 
                     <a
@@ -935,7 +864,6 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
                         <span class="home-brand-mark">
                             P
                         </span>
-
 
                         <span class="home-brand-name">
                             Poket<span>Flow</span>
@@ -954,29 +882,23 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
 
-                <!-- PLATFORM -->
-
                 <div class="home-footer-column">
 
                     <h4>
                         Platform
                     </h4>
 
-
                     <a href="offers.php">
                         Earn Rewards
                     </a>
-
 
                     <a href="how-it-works.php">
                         How It Works
                     </a>
 
-
                     <a href="register.php">
                         Create Account
                     </a>
-
 
                     <a href="login.php">
                         Login
@@ -986,24 +908,19 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
 
-                <!-- RESOURCES -->
-
                 <div class="home-footer-column">
 
                     <h4>
                         Resources
                     </h4>
 
-
                     <a href="blog/">
                         Blog
                     </a>
 
-
                     <a href="#how-it-works">
                         Getting Started
                     </a>
-
 
                     <a href="#faq">
                         FAQ
@@ -1013,24 +930,19 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
 
-                <!-- LEGAL -->
-
                 <div class="home-footer-column">
 
                     <h4>
                         Legal
                     </h4>
 
-
                     <a href="privacy.php">
                         Privacy Policy
                     </a>
 
-
                     <a href="terms.php">
                         Terms of Service
                     </a>
-
 
                     <a href="contact.php">
                         Contact
@@ -1042,16 +954,12 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
             </div>
 
 
-
-            <!-- FOOTER BOTTOM -->
-
             <div class="home-footer-bottom">
 
                 <p>
                     © <?= date('Y') ?> PoketFlow.
                     All rights reserved.
                 </p>
-
 
                 <p>
                     Opportunities may vary by location,
@@ -1060,11 +968,9 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
             </div>
 
-
         </div>
 
     </footer>
-
 
 
 </div>
@@ -1072,17 +978,15 @@ $pageDescription = 'Discover real opportunities, complete simple activities and 
 
 
 <!-- =====================================================
-     MOBILE MENU JAVASCRIPT
+     MOBILE NAVIGATION
 ====================================================== -->
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
     const menuButton =
         document.getElementById('mobileMenuButton');
-
 
     const mobileNavigation =
         document.getElementById('mobile-navigation');
@@ -1091,7 +995,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!menuButton || !mobileNavigation) {
         return;
     }
-
 
 
     function closeMobileMenu() {
@@ -1112,7 +1015,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
     function openMobileMenu() {
 
         menuButton.classList.add(
@@ -1131,7 +1033,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
     menuButton.addEventListener(
         'click',
         function () {
@@ -1141,20 +1042,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     'is-open'
                 );
 
-
             if (isOpen) {
-
                 closeMobileMenu();
-
             } else {
-
                 openMobileMenu();
-
             }
 
         }
     );
-
 
 
     mobileNavigation
@@ -1169,20 +1064,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-
     document.addEventListener(
         'keydown',
         function (event) {
 
             if (event.key === 'Escape') {
-
                 closeMobileMenu();
-
             }
 
         }
     );
-
 
 
     window.addEventListener(
@@ -1190,14 +1081,11 @@ document.addEventListener('DOMContentLoaded', function () {
         function () {
 
             if (window.innerWidth > 850) {
-
                 closeMobileMenu();
-
             }
 
         }
     );
-
 
 });
 
@@ -1205,5 +1093,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </body>
-
 </html>
