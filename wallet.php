@@ -136,15 +136,10 @@ function formatWalletDate(string $date): string
 
     <title>Wallet — PoketFlow</title>
 
-    <link
-        rel="stylesheet"
-        href="assets/poketflow.css"
-    >
 
     <link
         rel="stylesheet"
-        href="assets/wallet.css"
-    >
+        href="assets/wallet.css">
 
 </head>
 
