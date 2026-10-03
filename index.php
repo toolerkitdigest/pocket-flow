@@ -20,6 +20,93 @@
     content="Discover offers and activities, complete requirements, earn rewards, and cash out when you reach the minimum balance."
   >
 
+<!-- ==================================================
+     OPEN GRAPH / SOCIAL SHARING
+================================================== -->
+
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  property="og:title"
+  content="PoketFlow — Turn Your Free Time Into Rewards"
+>
+
+<meta
+  property="og:description"
+  content="Discover available offers and activities, complete the requirements, earn rewards, and cash out when eligible."
+>
+
+<meta
+  property="og:url"
+  content="https://poketflow.com/"
+>
+
+<meta
+  property="og:site_name"
+  content="PoketFlow"
+>
+
+<meta
+  property="og:image"
+  content="https://poketflow.com/assets/og-image.png"
+>
+
+<meta
+  property="og:image:alt"
+  content="PoketFlow — Turn Your Free Time Into Rewards"
+>
+
+<meta
+  property="og:image:type"
+  content="image/png"
+>
+
+<meta
+  property="og:image:width"
+  content="1200"
+>
+
+<meta
+  property="og:image:height"
+  content="630"
+>
+
+
+<!-- ==================================================
+     TWITTER / X CARD
+================================================== -->
+
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+>
+
+<meta
+  name="twitter:title"
+  content="PoketFlow — Turn Your Free Time Into Rewards"
+>
+
+<meta
+  name="twitter:description"
+  content="Discover offers, complete activities, earn rewards, and cash out when eligible."
+>
+
+<meta
+  name="twitter:image"
+  content="https://poketflow.com/assets/og-image.png"
+>
+
+
+<link
+  rel="canonical"
+  href="https://poketflow.com/"
+>
+  
+  
+
   <link
     rel="stylesheet"
     href="assets/poketflow.css"
