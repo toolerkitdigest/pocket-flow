@@ -107,10 +107,7 @@
   
   
 
-  <link
-    rel="stylesheet"
-    href="assets/poketflow.css"
-  >
+  <link rel="stylesheet" href="assets/poketflow.css">
 
 </head>
 
@@ -242,87 +239,7 @@
 </header>
 
 
-<!-- ==================================================
-     MOBILE NAVIGATION
-================================================== -->
 
-<div
-  class="mobile-navigation"
-  id="mobileNavigation"
-  aria-hidden="true"
->
-
-  <nav aria-label="Mobile navigation">
-
-    <a
-      class="active"
-      href="index.php"
-    >
-      <span class="mobile-nav-icon">⌂</span>
-      <span>Home</span>
-    </a>
-
-
-    <a href="offers.php">
-      <span class="mobile-nav-icon">◎</span>
-      <span>Earn Rewards</span>
-    </a>
-
-
-    <a href="#how-it-works">
-      <span class="mobile-nav-icon">01</span>
-      <span>How It Works</span>
-    </a>
-
-
-    <a href="about.php">
-      <span class="mobile-nav-icon">◇</span>
-      <span>About</span>
-    </a>
-
-
-    <a
-      href="https://blog.poketflow.com"
-      target="_blank"
-      rel="noopener"
-    >
-      <span class="mobile-nav-icon">▤</span>
-      <span>Blog</span>
-    </a>
-
-
-    <a href="#faq">
-      <span class="mobile-nav-icon">?</span>
-      <span>FAQ</span>
-    </a>
-
-
-    <a href="contact.php">
-      <span class="mobile-nav-icon">✉</span>
-      <span>Contact</span>
-    </a>
-
-
-    <div class="mobile-nav-divider"></div>
-
-
-    <a href="login.php">
-      <span class="mobile-nav-icon">↪</span>
-      <span>Sign In</span>
-    </a>
-
-
-    <a
-      class="mobile-nav-cta"
-      href="register.php"
-    >
-      <span class="mobile-nav-icon">+</span>
-      <span>Get Started</span>
-    </a>
-
-  </nav>
-
-</div>
 
 
 <!-- ==================================================
