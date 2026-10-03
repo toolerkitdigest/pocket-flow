@@ -1,6 +1,7 @@
 /* =========================================================
    POKETFLOW HOME PAGE
    Standalone Homepage CSS
+   Fully Responsive / Header + Mobile Navigation Fixed
 ========================================================= */
 
 
@@ -45,10 +46,10 @@
    RESET
 ========================================================= */
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 
@@ -57,9 +58,19 @@ html {
 }
 
 
+html,
+body {
+    width: 100%;
+    min-width: 0;
+}
+
+
 body {
 
     min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
 
     background:
         radial-gradient(
@@ -92,13 +103,9 @@ body {
 }
 
 
-body.menu-open {
-    overflow: hidden;
-}
-
-
 img {
     max-width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -129,20 +136,30 @@ section {
 
 /* =========================================================
    HEADER
+   IMPORTANT:
+   Header is deliberately isolated from generic site styles.
 ========================================================= */
 
 .site-header {
 
-    position: sticky;
+    position: sticky !important;
 
-    top: 0;
+    top: 0 !important;
+    left: 0;
+    right: 0;
 
-    z-index: 1000;
+    z-index: 9999 !important;
 
-    width: 100%;
+    display: block;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0;
+    padding: 0;
 
     background:
-        rgba(8,13,26,.88);
+        rgba(8,13,26,.96);
 
     border-bottom:
         1px solid var(--home-border);
@@ -156,16 +173,34 @@ section {
 }
 
 
-.header-inner {
+.site-header *,
+.site-header *::before,
+.site-header *::after {
+    box-sizing: border-box;
+}
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+
+/* =========================================================
+   HEADER INNER
+========================================================= */
+
+.site-header .header-inner {
+
+    position: relative;
+
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        ) !important;
+
+    max-width:
+        var(--home-container) !important;
 
     min-height: 74px;
 
-    margin: 0 auto;
+    margin: 0 auto !important;
+    padding: 0;
 
     display: flex;
 
@@ -180,7 +215,11 @@ section {
    BRAND
 ========================================================= */
 
-.brand {
+.site-header .brand {
+
+    min-width: 0;
+
+    flex: 0 0 auto;
 
     display: inline-flex;
 
@@ -188,16 +227,20 @@ section {
 
     gap: 10px;
 
-    flex-shrink: 0;
+    white-space: nowrap;
 
 }
 
 
-.brand-logo {
+.site-header .brand-logo {
 
     width: 38px;
-
     height: 38px;
+
+    min-width: 38px;
+    min-height: 38px;
+
+    flex: 0 0 38px;
 
     border-radius: 11px;
 
@@ -220,29 +263,40 @@ section {
 }
 
 
-.brand-logo img {
+.site-header .brand-logo img {
 
     width: 100%;
-
     height: 100%;
+
+    max-width: none;
 
     object-fit: cover;
 
 }
 
 
-.brand-name {
+.site-header .brand-name {
+
+    display: inline-block;
+
+    min-width: 0;
+
+    color: var(--home-text);
 
     font-size: 20px;
 
     font-weight: 800;
 
+    line-height: 1;
+
     letter-spacing: -.5px;
+
+    white-space: nowrap;
 
 }
 
 
-.brand-name span {
+.site-header .brand-name span {
 
     color: var(--home-accent);
 
@@ -253,32 +307,50 @@ section {
    DESKTOP NAV
 ========================================================= */
 
-.desktop-nav {
+.site-header .desktop-nav {
+
+    min-width: 0;
+
+    flex: 1 1 auto;
 
     display: flex;
 
     align-items: center;
 
-    gap: 5px;
+    justify-content: center;
+
+    gap: 3px;
 
     margin-left: auto;
 
 }
 
 
-.desktop-nav a {
+.site-header .desktop-nav a {
 
     position: relative;
 
-    padding: 9px 11px;
+    flex: 0 0 auto;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 9px 10px;
 
     color: var(--home-secondary);
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 600;
 
+    line-height: 1.2;
+
     border-radius: 9px;
+
+    white-space: nowrap;
 
     transition:
         color .2s ease,
@@ -287,7 +359,7 @@ section {
 }
 
 
-.desktop-nav a:hover {
+.site-header .desktop-nav a:hover {
 
     color: var(--home-text);
 
@@ -297,22 +369,21 @@ section {
 }
 
 
-.desktop-nav a.active {
+.site-header .desktop-nav a.active {
 
     color: var(--home-text);
 
 }
 
 
-.desktop-nav a.active::after {
+.site-header .desktop-nav a.active::after {
 
     content: "";
 
     position: absolute;
 
-    left: 11px;
-
-    right: 11px;
+    left: 10px;
+    right: 10px;
 
     bottom: 3px;
 
@@ -330,13 +401,19 @@ section {
    HEADER ACTIONS
 ========================================================= */
 
-.header-actions {
+.site-header .header-actions {
+
+    flex: 0 0 auto;
 
     display: flex;
 
     align-items: center;
 
-    gap: 9px;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-left: auto;
 
 }
 
@@ -345,6 +422,7 @@ section {
    BUTTONS
 ========================================================= */
 
+.site-header .btn,
 .btn {
 
     min-height: 42px;
@@ -365,7 +443,11 @@ section {
 
     font-weight: 700;
 
+    line-height: 1;
+
     cursor: pointer;
+
+    white-space: nowrap;
 
     transition:
         transform .2s ease,
@@ -376,6 +458,7 @@ section {
 }
 
 
+.site-header .btn:hover,
 .btn:hover {
 
     transform: translateY(-1px);
@@ -383,6 +466,7 @@ section {
 }
 
 
+.site-header .btn-primary,
 .btn-primary {
 
     color: white;
@@ -400,6 +484,7 @@ section {
 }
 
 
+.site-header .btn-primary:hover,
 .btn-primary:hover {
 
     background:
@@ -412,6 +497,7 @@ section {
 }
 
 
+.site-header .btn-ghost,
 .btn-ghost {
 
     color: var(--home-secondary);
@@ -419,6 +505,7 @@ section {
 }
 
 
+.site-header .btn-ghost:hover,
 .btn-ghost:hover {
 
     color: var(--home-text);
@@ -468,15 +555,24 @@ section {
    MOBILE MENU BUTTON
 ========================================================= */
 
-.menu-toggle {
+.site-header .menu-toggle {
 
     display: none;
 
-    width: 44px;
+    position: relative;
 
+    z-index: 10001;
+
+    flex: 0 0 44px;
+
+    width: 44px;
     height: 44px;
 
+    min-width: 44px;
+    min-height: 44px;
+
     margin-left: auto;
+    padding: 0;
 
     border-radius: 10px;
 
@@ -496,20 +592,49 @@ section {
 
     gap: 5px;
 
+    -webkit-tap-highlight-color: transparent;
+
 }
 
 
-.menu-toggle span {
+.site-header .menu-toggle:hover {
+
+    background:
+        rgba(255,255,255,.09);
+
+    border-color:
+        rgba(129,140,248,.35);
+
+}
+
+
+.site-header .menu-toggle:focus-visible {
+
+    outline:
+        2px solid var(--home-primary-hover);
+
+    outline-offset: 2px;
+
+}
+
+
+.site-header .menu-toggle span {
 
     display: block;
 
     width: 19px;
-
     height: 2px;
+
+    flex: 0 0 2px;
+
+    margin: 0;
+
+    padding: 0;
 
     border-radius: 10px;
 
-    background: var(--home-text);
+    background:
+        var(--home-text);
 
     transition:
         transform .2s ease,
@@ -518,7 +643,7 @@ section {
 }
 
 
-.menu-toggle.active span:nth-child(1) {
+.site-header .menu-toggle.active span:nth-child(1) {
 
     transform:
         translateY(7px)
@@ -527,14 +652,14 @@ section {
 }
 
 
-.menu-toggle.active span:nth-child(2) {
+.site-header .menu-toggle.active span:nth-child(2) {
 
     opacity: 0;
 
 }
 
 
-.menu-toggle.active span:nth-child(3) {
+.site-header .menu-toggle.active span:nth-child(3) {
 
     transform:
         translateY(-7px)
@@ -545,39 +670,107 @@ section {
 
 /* =========================================================
    MOBILE NAVIGATION
+   Kept independent of page content.
 ========================================================= */
 
-.mobile-navigation {
+.site-header .mobile-navigation {
 
     display: none;
 
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        rgba(8,13,26,.98);
+
+    border-top:
+        1px solid transparent;
+
+    box-shadow:
+        0 20px 35px rgba(0,0,0,.30);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(-8px);
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease,
+        transform .22s ease;
+
 }
 
 
-.mobile-nav-inner {
+.site-header .mobile-navigation.open {
 
-    width: min(
-        calc(100% - 32px),
-        560px
-    );
+    opacity: 1;
 
-    margin: 0 auto;
+    visibility: visible;
 
-    padding: 16px 0 22px;
+    transform:
+        translateY(0);
+
+    border-top-color:
+        var(--home-border);
 
 }
 
 
-.mobile-nav-links {
+.site-header .mobile-nav-inner {
+
+    width:
+        min(
+            calc(100% - 32px),
+            560px
+        ) !important;
+
+    max-width:
+        560px !important;
+
+    margin: 0 auto !important;
+
+    padding:
+        16px 0 22px;
+
+}
+
+
+.site-header .mobile-nav-links {
+
+    width: 100%;
 
     display: grid;
+
+    grid-template-columns: 1fr;
 
     gap: 4px;
 
 }
 
 
-.mobile-nav-links a {
+.site-header .mobile-nav-links a {
+
+    width: 100% !important;
 
     min-height: 48px;
 
@@ -589,6 +782,8 @@ section {
 
     padding: 0 14px;
 
+    margin: 0;
+
     border-radius: 11px;
 
     color: var(--home-secondary);
@@ -597,14 +792,17 @@ section {
 
     font-weight: 600;
 
+    line-height: 1.2;
+
 }
 
 
-.mobile-nav-links a span {
+.site-header .mobile-nav-links a span {
 
     width: 27px;
-
     height: 27px;
+
+    min-width: 27px;
 
     display: grid;
 
@@ -623,8 +821,8 @@ section {
 }
 
 
-.mobile-nav-links a:hover,
-.mobile-nav-links a.active {
+.site-header .mobile-nav-links a:hover,
+.site-header .mobile-nav-links a.active {
 
     color: var(--home-text);
 
@@ -634,7 +832,9 @@ section {
 }
 
 
-.mobile-nav-actions {
+.site-header .mobile-nav-actions {
+
+    width: 100%;
 
     display: grid;
 
@@ -652,9 +852,9 @@ section {
 }
 
 
-.mobile-btn {
+.site-header .mobile-btn {
 
-    width: 100%;
+    width: 100% !important;
 
 }
 
@@ -665,10 +865,11 @@ section {
 
 .hero {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     min-height: 650px;
 
@@ -730,7 +931,6 @@ section {
 .dot {
 
     width: 7px;
-
     height: 7px;
 
     border-radius: 50%;
@@ -866,14 +1066,12 @@ section {
 .glow-one {
 
     width: 260px;
-
     height: 260px;
 
     background:
         rgba(99,102,241,.19);
 
     top: 50px;
-
     right: 30px;
 
 }
@@ -882,14 +1080,12 @@ section {
 .glow-two {
 
     width: 220px;
-
     height: 220px;
 
     background:
         rgba(34,211,238,.10);
 
     bottom: 45px;
-
     left: 40px;
 
 }
@@ -953,7 +1149,6 @@ section {
 .mini-logo {
 
     width: 28px;
-
     height: 28px;
 
     display: grid;
@@ -1114,7 +1309,6 @@ section {
 .phone-item-icon {
 
     width: 32px;
-
     height: 32px;
 
     display: grid;
@@ -1203,7 +1397,6 @@ section {
 .float-one {
 
     top: 100px;
-
     left: 0;
 
 }
@@ -1212,7 +1405,6 @@ section {
 .float-two {
 
     right: 0;
-
     bottom: 110px;
 
 }
@@ -1243,7 +1435,6 @@ section {
 .float-icon {
 
     width: 30px;
-
     height: 30px;
 
     display: grid;
@@ -1285,10 +1476,11 @@ section {
 
 .trust-strip {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     margin: 0 auto;
 
@@ -1328,7 +1520,6 @@ section {
 .trust-strip .icon {
 
     width: 35px;
-
     height: 35px;
 
     display: grid;
@@ -1383,10 +1574,11 @@ section {
 
 .section {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     margin: 0 auto;
 
@@ -1537,7 +1729,6 @@ section {
 .step > span {
 
     width: 38px;
-
     height: 38px;
 
     display: grid;
@@ -1652,13 +1843,6 @@ section {
 }
 
 
-/*
-   These are temporary visual placeholders.
-   Replace them later with real images by changing
-   the background-image declarations.
-*/
-
-
 .offer-image-app {
 
     background:
@@ -1736,11 +1920,9 @@ section {
     position: absolute;
 
     width: 130px;
-
     height: 130px;
 
     top: -35px;
-
     right: -25px;
 
     border-radius: 50%;
@@ -1759,11 +1941,9 @@ section {
     position: absolute;
 
     width: 90px;
-
     height: 90px;
 
     bottom: 25px;
-
     right: 35px;
 
     border-radius: 25px;
@@ -1783,7 +1963,6 @@ section {
     position: absolute;
 
     top: 15px;
-
     left: 15px;
 
     z-index: 2;
@@ -1826,7 +2005,6 @@ section {
 .image-icon {
 
     width: 40px;
-
     height: 40px;
 
     display: grid;
@@ -1887,7 +2065,8 @@ section {
 
 .offer-body {
 
-    padding: 21px 20px 17px;
+    padding:
+        21px 20px 17px;
 
 }
 
@@ -2069,7 +2248,6 @@ section {
 .about-stat > span {
 
     width: 39px;
-
     height: 39px;
 
     display: grid;
@@ -2122,17 +2300,17 @@ section {
 
 .cta-section {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     margin:
         70px auto
         40px;
 
-    padding:
-        42px;
+    padding: 42px;
 
     display: flex;
 
@@ -2255,7 +2433,6 @@ section {
     position: absolute;
 
     right: 5px;
-
     top: 17px;
 
     color:
@@ -2298,16 +2475,16 @@ section {
 
 .contact-section {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     margin:
         0 auto 80px;
 
-    padding:
-        40px;
+    padding: 40px;
 
     display: flex;
 
@@ -2355,10 +2532,11 @@ section {
 
 .footer {
 
-    width: min(
-        calc(100% - 40px),
-        var(--home-container)
-    );
+    width:
+        min(
+            calc(100% - 40px),
+            var(--home-container)
+        );
 
     margin: 0 auto;
 
@@ -2438,29 +2616,27 @@ section {
 
 @media (max-width: 1100px) {
 
-
-    .desktop-nav {
-
+    .site-header .desktop-nav {
         gap: 0;
-
     }
 
-
-    .desktop-nav a {
-
-        padding-left: 8px;
-
-        padding-right: 8px;
-
-        font-size: 13px;
-
+    .site-header .desktop-nav a {
+        padding-left: 7px;
+        padding-right: 7px;
+        font-size: 12px;
     }
 
+    .site-header .header-inner {
+        gap: 15px;
+    }
 
-    .header-actions {
-
+    .site-header .header-actions {
         gap: 4px;
+    }
 
+    .site-header .header-actions .btn {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
 
@@ -2494,61 +2670,89 @@ section {
 
 
 /* =========================================================
-   MOBILE NAV BREAKPOINT
+   MOBILE NAVIGATION
 ========================================================= */
 
 @media (max-width: 980px) {
 
+    /*
+       Header becomes a simple:
+       LOGO ---------------- HAMBURGER
+    */
 
-    .header-inner {
+    .site-header .header-inner {
+
+        width:
+            calc(100% - 32px) !important;
+
+        max-width:
+            none !important;
 
         min-height: 66px;
 
-    }
-
-
-    .desktop-nav,
-    .header-actions {
-
-        display: none;
+        gap: 0;
 
     }
 
 
-    .menu-toggle {
+    .site-header .brand {
 
-        display: flex;
+        min-width: 0;
 
-    }
-
-
-    .mobile-navigation {
-
-        display: block;
-
-        max-height: 0;
+        max-width:
+            calc(100% - 58px);
 
         overflow: hidden;
 
-        background:
-            rgba(8,13,26,.97);
+    }
 
-        border-top:
-            1px solid transparent;
 
-        transition:
-            max-height .28s ease,
-            border-color .28s ease;
+    .site-header .brand-name {
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
 
     }
 
 
-    .mobile-navigation.open {
+    .site-header .desktop-nav,
+    .site-header .header-actions {
 
-        max-height: 700px;
+        display: none !important;
 
-        border-top-color:
-            var(--home-border);
+    }
+
+
+    .site-header .menu-toggle {
+
+        display: flex !important;
+
+        margin-left: auto;
+
+    }
+
+
+    /*
+       Mobile dropdown.
+       Absolute positioning prevents it from being
+       squeezed/cropped by the page layout.
+    */
+
+    .site-header .mobile-navigation {
+
+        display: block !important;
+
+    }
+
+
+    .site-header .mobile-nav-inner {
+
+        width:
+            calc(100% - 32px) !important;
+
+        max-width:
+            560px !important;
 
     }
 
@@ -2643,11 +2847,18 @@ section {
 
 @media (max-width: 700px) {
 
-
-    .header-inner {
+    .site-header .header-inner {
 
         width:
-            calc(100% - 28px);
+            calc(100% - 24px) !important;
+
+    }
+
+
+    .site-header .mobile-nav-inner {
+
+        width:
+            calc(100% - 24px) !important;
 
     }
 
@@ -2696,7 +2907,8 @@ section {
 
         display: grid;
 
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+            1fr 1fr;
 
     }
 
@@ -2726,7 +2938,6 @@ section {
     .float-one {
 
         left: -2px;
-
         top: 55px;
 
     }
@@ -2735,7 +2946,6 @@ section {
     .float-two {
 
         right: -2px;
-
         bottom: 65px;
 
     }
@@ -2863,34 +3073,70 @@ section {
 
 @media (max-width: 480px) {
 
+    .site-header .header-inner {
 
-    .brand-logo {
+        width:
+            calc(100% - 20px) !important;
+
+        min-height: 62px;
+
+    }
+
+
+    .site-header .brand-logo {
 
         width: 35px;
-
         height: 35px;
+
+        min-width: 35px;
+        min-height: 35px;
+
+        flex-basis: 35px;
 
         border-radius: 9px;
 
     }
 
 
-    .brand-name {
+    .site-header .brand-name {
 
         font-size: 18px;
 
     }
 
 
-    .mobile-nav-inner {
+    .site-header .menu-toggle {
 
-        width:
-            calc(100% - 28px);
+        width: 42px;
+        height: 42px;
+
+        min-width: 42px;
+        min-height: 42px;
+
+        flex-basis: 42px;
 
     }
 
 
-    .mobile-nav-actions {
+    .site-header .mobile-nav-inner {
+
+        width:
+            calc(100% - 20px) !important;
+
+    }
+
+
+    .site-header .mobile-nav-links a {
+
+        min-height: 46px;
+
+        padding-left: 12px;
+        padding-right: 12px;
+
+    }
+
+
+    .site-header .mobile-nav-actions {
 
         grid-template-columns: 1fr;
 
@@ -2953,7 +3199,8 @@ section {
 
     .float-card {
 
-        padding: 8px 10px;
+        padding:
+            8px 10px;
 
     }
 
@@ -2961,7 +3208,6 @@ section {
     .float-one {
 
         left: -9px;
-
         top: 45px;
 
     }
@@ -2970,7 +3216,6 @@ section {
     .float-two {
 
         right: -9px;
-
         bottom: 50px;
 
     }
@@ -3034,6 +3279,28 @@ section {
 ========================================================= */
 
 @media (max-width: 360px) {
+
+    .site-header .header-inner {
+
+        width:
+            calc(100% - 16px) !important;
+
+    }
+
+
+    .site-header .mobile-nav-inner {
+
+        width:
+            calc(100% - 16px) !important;
+
+    }
+
+
+    .site-header .brand-name {
+
+        font-size: 17px;
+
+    }
 
 
     .hero h1 {
