@@ -1,857 +1,1178 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|--------------------------------------------------------------------------
+| PoketFlow Homepage
+|--------------------------------------------------------------------------
+| Premium dynamic homepage.
+| Real featured offers are loaded through:
+| includes/featured-offers.php
+|--------------------------------------------------------------------------
+*/
+
+require_once __DIR__ . '/includes/auth.php';
+
+?>
 <!doctype html>
 
 <html lang="en">
 
 <head>
 
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
-  <title>
-    PoketFlow — Turn Your Free Time Into Rewards
-  </title>
+    <title>
+        PoketFlow — Turn Your Free Time Into Rewards
+    </title>
 
-  <meta
-    name="description"
-    content="Discover offers and activities, complete requirements, earn rewards, and cash out when you reach the minimum balance."
-  >
+    <meta
+        name="description"
+        content="Discover real offers and online activities, complete requirements, earn rewards, and cash out when eligible."
+    >
 
-  <link
-    rel="stylesheet"
-    href="assets/poketflow.css"
-  >
+    <meta
+        name="theme-color"
+        content="#080d1a"
+    >
+
+    <!--
+    |--------------------------------------------------------------------------
+    | Homepage CSS
+    |--------------------------------------------------------------------------
+    -->
+
+    <link
+        rel="stylesheet"
+        href="assets/home.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/featured-offers.css"
+    >
 
 </head>
 
 
-<body>
+<body class="home-page">
 
 
-<!-- ==================================================
+<!-- =========================================================
      HEADER
-================================================== -->
+========================================================= -->
 
-<header class="site-header">
+<header class="home-header">
 
+    <div class="home-container home-header-inner">
 
-  <a
-    class="brand"
-    href="index.php"
-  >
 
-    <span class="brand-mark">
-      P
-    </span>
+        <!-- =================================================
+             BRAND
+        ================================================== -->
 
-    <span>
-      Poket<span>Flow</span>
-    </span>
+        <a
+            class="home-brand"
+            href="index.php"
+            aria-label="PoketFlow Home"
+        >
 
-  </a>
+            <span class="home-brand-mark">
+                P
+            </span>
 
+            <span class="home-brand-name">
+                Poket<span>Flow</span>
+            </span>
 
-  <nav class="desktop-nav">
+        </a>
 
-    <a
-      class="active"
-      href="index.php"
-    >
-      Home
-    </a>
 
-    <a href="offers.php">
-      Earn
-    </a>
+        <!-- =================================================
+             DESKTOP NAVIGATION
+        ================================================== -->
 
-    <a href="#how-it-works">
-      How It Works
-    </a>
+        <nav
+            class="home-desktop-nav"
+            aria-label="Main navigation"
+        >
 
-    <a href="#rewards">
-      Rewards
-    </a>
+            <a
+                class="active"
+                href="index.php"
+            >
+                Home
+            </a>
 
-    <a href="#faq">
-      FAQ
-    </a>
+            <a href="offers.php">
+                Earn
+            </a>
 
-  </nav>
+            <a href="#how-it-works">
+                How It Works
+            </a>
 
+            <a href="#featured-offers">
+                Opportunities
+            </a>
 
-  <div class="header-actions">
+            <a href="#faq">
+                FAQ
+            </a>
 
-    <a
-      class="btn btn-ghost"
-      href="login.php"
-    >
-      Sign In
-    </a>
+        </nav>
 
 
-    <a
-      class="btn btn-primary"
-      href="register.php"
-    >
-      Get Started
-      <span>→</span>
-    </a>
+        <!-- =================================================
+             DESKTOP ACTIONS
+        ================================================== -->
 
-  </div>
+        <div class="home-header-actions">
 
-</header>
+            <a
+                class="home-btn home-btn-ghost"
+                href="login.php"
+            >
+                Sign In
+            </a>
 
+            <a
+                class="home-btn home-btn-primary"
+                href="register.php"
+            >
+                Get Started
 
-<!-- ==================================================
-     MAIN
-================================================== -->
+                <span aria-hidden="true">
+                    →
+                </span>
 
-<main>
-
-
-<!-- ==================================================
-     HERO
-================================================== -->
-
-<section class="hero">
-
-
-  <div class="hero-copy">
-
-
-    <div class="eyebrow">
-
-      <span class="dot"></span>
-
-      Real offers • Real rewards • No hidden fees
-
-    </div>
-
-
-    <h1>
-      Turn Your Free Time Into
-      <span>Rewards</span>
-    </h1>
-
-
-    <p>
-      Discover available offers, surveys and online activities.
-      Complete the requirements, earn rewards, and cash out
-      when you reach the minimum balance.
-    </p>
-
-
-    <div class="hero-actions">
-
-      <a
-        class="btn btn-primary btn-large"
-        href="register.php"
-      >
-        Start Earning
-        <span>→</span>
-      </a>
-
-
-      <a
-        class="btn btn-outline btn-large"
-        href="#how-it-works"
-      >
-        How It Works
-      </a>
-
-    </div>
-
-
-    <div class="hero-note">
-      Free to join · No subscription required
-    </div>
-
-
-  </div>
-
-
-  <!-- ==================================================
-       HERO VISUAL
-  ================================================== -->
-
-  <div class="hero-visual">
-
-
-    <div class="glow glow-one"></div>
-
-    <div class="glow glow-two"></div>
-
-
-    <div class="phone">
-
-
-      <div class="phone-top">
-
-        <span class="mini-logo">
-          P
-        </span>
-
-        <strong>
-          PoketFlow
-        </strong>
-
-        <span>
-          ⌁
-        </span>
-
-      </div>
-
-
-      <div class="balance-card">
-
-        <small>
-          Your Balance
-        </small>
-
-
-        <strong>
-          $8.75
-        </strong>
-
-
-        <div class="balance-row">
-
-          <span>
-            Available
-            <b>
-              $5.20
-            </b>
-          </span>
-
-
-          <span>
-            Pending
-            <b>
-              $3.55
-            </b>
-          </span>
+            </a>
 
         </div>
 
 
-        <button>
-          Cash Out
+        <!-- =================================================
+             MOBILE MENU BUTTON
+        ================================================== -->
+
+        <button
+            class="home-mobile-menu-button"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-navigation"
+            id="mobileMenuButton"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
         </button>
 
-      </div>
-
-
-      <h4>
-        Ways to Earn
-      </h4>
-
-
-      <div class="phone-item">
-
-        ▣
-
-        <span>
-          Surveys
-          <small>
-            Share your opinions
-          </small>
-        </span>
-
-        ›
-
-      </div>
-
-
-      <div class="phone-item">
-
-        ▯
-
-        <span>
-          App Installs
-          <small>
-            Try new apps & games
-          </small>
-        </span>
-
-        ›
-
-      </div>
-
-
-      <div class="phone-item">
-
-        ◈
-
-        <span>
-          Special Offers
-          <small>
-            Complete and earn
-          </small>
-        </span>
-
-        ›
-
-      </div>
-
-
     </div>
 
 
-    <div class="float-card float-one">
+    <!-- =====================================================
+         MOBILE NAVIGATION
+    ====================================================== -->
 
-      ✓
+    <div
+        class="home-mobile-navigation"
+        id="mobile-navigation"
+        aria-hidden="true"
+    >
 
-      <span>
+        <div class="home-container home-mobile-navigation-inner">
 
-        <b>
-          Complete Offers
-        </b>
 
-        <small>
-          Earn rewards
-        </small>
+            <nav
+                class="home-mobile-nav"
+                aria-label="Mobile navigation"
+            >
 
-      </span>
+                <a
+                    class="active"
+                    href="index.php"
+                >
+                    <span>⌂</span>
+                    Home
+                </a>
+
+                <a href="offers.php">
+                    <span>◎</span>
+                    Earn
+                </a>
+
+                <a href="#how-it-works">
+                    <span>01</span>
+                    How It Works
+                </a>
+
+                <a href="#featured-offers">
+                    <span>✦</span>
+                    Opportunities
+                </a>
+
+                <a href="#faq">
+                    <span>?</span>
+                    FAQ
+                </a>
+
+            </nav>
+
+
+            <div class="home-mobile-actions">
+
+                <a
+                    class="home-btn home-btn-outline"
+                    href="login.php"
+                >
+                    Sign In
+                </a>
+
+                <a
+                    class="home-btn home-btn-primary"
+                    href="register.php"
+                >
+                    Get Started
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
+</header>
 
-    <div class="float-card float-two">
 
-      ϟ
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-      <span>
+<main>
 
-        <b>
-          Fast & Secure
-        </b>
 
-        <small>
-          Cash out
-        </small>
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-      </span>
+<section class="home-hero">
+
+    <div class="home-container home-hero-grid">
+
+
+        <!-- =================================================
+             HERO CONTENT
+        ================================================== -->
+
+        <div class="home-hero-content">
+
+
+            <div class="home-eyebrow">
+
+                <span class="home-eyebrow-dot"></span>
+
+                REAL OFFERS
+                <span>•</span>
+                REAL REWARDS
+                <span>•</span>
+                FREE TO JOIN
+
+            </div>
+
+
+            <h1>
+
+                Turn Your Free Time
+                <span>Into Rewards.</span>
+
+            </h1>
+
+
+            <p class="home-hero-description">
+
+                Discover available offers, surveys and online
+                activities matched to you. Complete the listed
+                requirements and earn rewards when your activity
+                is approved.
+
+            </p>
+
+
+            <div class="home-hero-actions">
+
+                <a
+                    class="home-btn home-btn-primary home-btn-large"
+                    href="register.php"
+                >
+
+                    Start Earning
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    class="home-btn home-btn-outline home-btn-large"
+                    href="#how-it-works"
+                >
+
+                    See How It Works
+
+                </a>
+
+            </div>
+
+
+            <div class="home-hero-note">
+
+                <span>✓</span>
+                Free account
+
+                <span>✓</span>
+                No subscription
+
+                <span>✓</span>
+                Browse available offers
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             HERO VISUAL
+        ================================================== -->
+
+        <div class="home-hero-visual">
+
+
+            <div class="home-hero-glow home-glow-one"></div>
+
+            <div class="home-hero-glow home-glow-two"></div>
+
+
+            <!-- Main dashboard preview -->
+
+            <div class="home-dashboard-preview">
+
+
+                <!-- Dashboard header -->
+
+                <div class="home-dashboard-top">
+
+                    <div class="home-mini-brand">
+
+                        <span>
+                            P
+                        </span>
+
+                        <strong>
+                            PoketFlow
+                        </strong>
+
+                    </div>
+
+                    <div class="home-dashboard-menu">
+                        •••
+                    </div>
+
+                </div>
+
+
+                <!-- Balance -->
+
+                <div class="home-balance-card">
+
+                    <div class="home-balance-top">
+
+                        <span>
+                            Available Balance
+                        </span>
+
+                        <span>
+                            ● LIVE
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        $8.75
+                    </strong>
+
+
+                    <div class="home-balance-details">
+
+                        <span>
+                            Available
+                            <b>
+                                $5.20
+                            </b>
+                        </span>
+
+                        <span>
+                            Pending
+                            <b>
+                                $3.55
+                            </b>
+                        </span>
+
+                    </div>
+
+
+                    <div class="home-balance-progress">
+
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Dashboard heading -->
+
+                <div class="home-preview-heading">
+
+                    <div>
+
+                        <small>
+                            OPPORTUNITIES
+                        </small>
+
+                        <strong>
+                            Ways to earn
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        View all →
+                    </span>
+
+                </div>
+
+
+                <!-- Mini offer -->
+
+                <div class="home-preview-offer">
+
+                    <div class="home-preview-icon purple">
+                        ◎
+                    </div>
+
+                    <div class="home-preview-offer-info">
+
+                        <strong>
+                            App Offer
+                        </strong>
+
+                        <small>
+                            Complete the listed steps
+                        </small>
+
+                    </div>
+
+                    <b>
+                        +$2.40
+                    </b>
+
+                </div>
+
+
+                <div class="home-preview-offer">
+
+                    <div class="home-preview-icon cyan">
+                        ◇
+                    </div>
+
+                    <div class="home-preview-offer-info">
+
+                        <strong>
+                            Survey
+                        </strong>
+
+                        <small>
+                            Share your opinion
+                        </small>
+
+                    </div>
+
+                    <b>
+                        +$1.85
+                    </b>
+
+                </div>
+
+
+                <div class="home-preview-offer">
+
+                    <div class="home-preview-icon green">
+                        ✓
+                    </div>
+
+                    <div class="home-preview-offer-info">
+
+                        <strong>
+                            Special Offer
+                        </strong>
+
+                        <small>
+                            Follow offer requirements
+                        </small>
+
+                    </div>
+
+                    <b>
+                        +$3.10
+                    </b>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Floating card -->
+
+            <div class="home-floating-card home-floating-one">
+
+                <div class="home-floating-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Offer Completed
+                    </strong>
+
+                    <small>
+                        Reward pending approval
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="home-floating-card home-floating-two">
+
+                <div class="home-floating-icon cyan">
+                    $
+                </div>
+
+                <div>
+
+                    <strong>
+                        Rewards
+                    </strong>
+
+                    <small>
+                        Build your balance
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
 
     </div>
-
-
-  </div>
 
 </section>
 
 
-<!-- ==================================================
-     TRUST STRIP
-================================================== -->
+<!-- =========================================================
+     TRUST / STATS
+========================================================= -->
 
-<section class="trust-strip">
+<section class="home-trust">
 
-
-  <div>
-
-    <span class="icon">
-      ♙
-    </span>
-
-    <p>
-
-      <b>
-        Free to join
-      </b>
-
-      <small>
-        Create your account in seconds
-      </small>
-
-    </p>
-
-  </div>
+    <div class="home-container home-trust-grid">
 
 
-  <div>
+        <div class="home-trust-item">
 
-    <span class="icon">
-      ♢
-    </span>
+            <span class="home-trust-icon">
+                +
+            </span>
 
-    <p>
+            <div>
 
-      <b>
-        Multiple ways to earn
-      </b>
+                <strong>
+                    Free to Join
+                </strong>
 
-      <small>
-        Offers, surveys & more
-      </small>
+                <small>
+                    Create your account in seconds
+                </small>
 
-    </p>
+            </div>
 
-  </div>
-
-
-  <div>
-
-    <span class="icon">
-      ✓
-    </span>
-
-    <p>
-
-      <b>
-        Secure & reliable
-      </b>
-
-      <small>
-        Your account stays protected
-      </small>
-
-    </p>
-
-  </div>
+        </div>
 
 
-  <div>
+        <div class="home-trust-item">
 
-    <span class="icon">
-      ϟ
-    </span>
+            <span class="home-trust-icon">
+                ◎
+            </span>
 
-    <p>
+            <div>
 
-      <b>
-        Fast rewards
-      </b>
+                <strong>
+                    Multiple Opportunities
+                </strong>
 
-      <small>
-        Cash out when eligible
-      </small>
+                <small>
+                    Explore available offers
+                </small>
 
-    </p>
+            </div>
 
-  </div>
+        </div>
 
+
+        <div class="home-trust-item">
+
+            <span class="home-trust-icon">
+                ✓
+            </span>
+
+            <div>
+
+                <strong>
+                    Clear Requirements
+                </strong>
+
+                <small>
+                    Know what each offer requires
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="home-trust-item">
+
+            <span class="home-trust-icon">
+                $
+            </span>
+
+            <div>
+
+                <strong>
+                    Track Your Rewards
+                </strong>
+
+                <small>
+                    Monitor your account balance
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
 
 </section>
 
 
-<!-- ==================================================
+<!-- =========================================================
      HOW IT WORKS
-================================================== -->
+========================================================= -->
 
 <section
-  class="section"
-  id="how-it-works"
+    class="home-section"
+    id="how-it-works"
 >
 
+    <div class="home-container">
 
-  <div class="section-heading">
+
+        <div class="home-section-heading">
+
+            <div>
+
+                <span class="home-kicker">
+                    HOW IT WORKS
+                </span>
+
+                <h2>
+                    From Sign Up to Rewards
+                </h2>
+
+                <p>
+                    PoketFlow keeps the process simple. Create an
+                    account, discover available opportunities,
+                    complete the requirements and track your rewards.
+                </p>
+
+            </div>
 
 
-    <div>
+            <a
+                class="home-section-link"
+                href="register.php"
+            >
+                Create your account →
+            </a>
 
-      <span class="kicker">
-        HOW IT WORKS
-      </span>
+        </div>
 
-      <h2>
-        It’s Simple to Get Started
-      </h2>
+
+        <div class="home-steps">
+
+
+            <article class="home-step">
+
+                <span class="home-step-number">
+                    01
+                </span>
+
+                <div class="home-step-icon">
+                    +
+                </div>
+
+                <h3>
+                    Create an Account
+                </h3>
+
+                <p>
+                    Sign up for a free PoketFlow account and
+                    access the earning area.
+                </p>
+
+            </article>
+
+
+            <article class="home-step">
+
+                <span class="home-step-number">
+                    02
+                </span>
+
+                <div class="home-step-icon">
+                    ◎
+                </div>
+
+                <h3>
+                    Discover Offers
+                </h3>
+
+                <p>
+                    Browse the opportunities currently available
+                    for your account.
+                </p>
+
+            </article>
+
+
+            <article class="home-step">
+
+                <span class="home-step-number">
+                    03
+                </span>
+
+                <div class="home-step-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Complete the Requirements
+                </h3>
+
+                <p>
+                    Follow the instructions provided with the
+                    selected offer.
+                </p>
+
+            </article>
+
+
+            <article class="home-step">
+
+                <span class="home-step-number">
+                    04
+                </span>
+
+                <div class="home-step-icon">
+                    $
+                </div>
+
+                <h3>
+                    Earn Your Reward
+                </h3>
+
+                <p>
+                    Once the activity is approved, the applicable
+                    reward can be reflected in your account.
+                </p>
+
+            </article>
+
+
+        </div>
 
     </div>
-
-
-    <a href="offers.php">
-      Explore offers →
-    </a>
-
-
-  </div>
-
-
-  <div class="steps">
-
-
-    <div class="step">
-
-      <b>01</b>
-
-      <span>
-        ♙
-      </span>
-
-      <h3>
-        Create Account
-      </h3>
-
-      <p>
-        Sign up for free in seconds.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <b>02</b>
-
-      <span>
-        ◎
-      </span>
-
-      <h3>
-        Find Offers
-      </h3>
-
-      <p>
-        Browse available activities.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <b>03</b>
-
-      <span>
-        ✓
-      </span>
-
-      <h3>
-        Complete
-      </h3>
-
-      <p>
-        Follow the offer requirements.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <b>04</b>
-
-      <span>
-        ◈
-      </span>
-
-      <h3>
-        Earn Rewards
-      </h3>
-
-      <p>
-        Your balance updates after approval.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <b>05</b>
-
-      <span>
-        ▣
-      </span>
-
-      <h3>
-        Cash Out
-      </h3>
-
-      <p>
-        Request rewards when eligible.
-      </p>
-
-    </div>
-
-
-  </div>
 
 </section>
 
 
-<!-- ==================================================
-     WAYS TO EARN
-================================================== -->
+<!-- =========================================================
+     REAL DYNAMIC FEATURED OFFERS
+========================================================= -->
 
-<section
-  class="section offers-section"
-  id="rewards"
->
+<?php
 
+require_once __DIR__ . '/includes/featured-offers.php';
 
-  <div class="section-heading">
+?>
 
 
-    <div>
+<!-- =========================================================
+     WHY POKETFLOW
+========================================================= -->
 
-      <span class="kicker">
-        AVAILABLE OPPORTUNITIES
-      </span>
+<section class="home-section home-benefits-section">
 
-      <h2>
-        Ways to Earn
-      </h2>
+    <div class="home-container">
+
+
+        <div class="home-section-heading centered">
+
+            <div>
+
+                <span class="home-kicker">
+                    WHY POKETFLOW
+                </span>
+
+                <h2>
+                    Built Around Simple Reward Discovery
+                </h2>
+
+                <p>
+                    A clean place to discover available opportunities
+                    without unnecessary complexity.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="home-benefits-grid">
+
+
+            <article class="home-benefit-card">
+
+                <div class="home-benefit-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    Live Opportunities
+                </h3>
+
+                <p>
+                    Featured opportunities can be refreshed from
+                    our connected offer sources so you can discover
+                    what is currently available.
+                </p>
+
+            </article>
+
+
+            <article class="home-benefit-card">
+
+                <div class="home-benefit-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Clear Reward Information
+                </h3>
+
+                <p>
+                    See the applicable reward information before
+                    deciding which available activity you want
+                    to explore.
+                </p>
+
+            </article>
+
+
+            <article class="home-benefit-card">
+
+                <div class="home-benefit-icon">
+                    ◈
+                </div>
+
+                <h3>
+                    One Simple Dashboard
+                </h3>
+
+                <p>
+                    Keep your activities, rewards and account
+                    information together in one place.
+                </p>
+
+            </article>
+
+
+            <article class="home-benefit-card">
+
+                <div class="home-benefit-icon">
+                    $
+                </div>
+
+                <h3>
+                    Track Your Progress
+                </h3>
+
+                <p>
+                    Monitor your balance and eligible rewards as
+                    you complete available activities.
+                </p>
+
+            </article>
+
+
+        </div>
 
     </div>
-
-
-    <a href="offers.php">
-      View all offers →
-    </a>
-
-
-  </div>
-
-
-  <div class="offer-grid">
-
-
-    <article class="offer-card">
-
-
-      <div class="offer-icon">
-        ◎
-      </div>
-
-
-      <div class="offer-body">
-
-        <span class="tag">
-          App Install
-        </span>
-
-        <h3>
-          Discover new apps
-        </h3>
-
-        <p>
-          Explore an available app offer and follow
-          its listed requirements.
-        </p>
-
-      </div>
-
-
-      <div class="offer-bottom">
-
-        <strong>
-          Earn rewards
-        </strong>
-
-        <a href="offers.php">
-          Start →
-        </a>
-
-      </div>
-
-
-    </article>
-
-
-    <article class="offer-card">
-
-
-      <div class="offer-icon orange">
-        ▤
-      </div>
-
-
-      <div class="offer-body">
-
-        <span class="tag">
-          Survey
-        </span>
-
-        <h3>
-          Share your opinion
-        </h3>
-
-        <p>
-          Answer an available survey and complete
-          the required steps.
-        </p>
-
-      </div>
-
-
-      <div class="offer-bottom">
-
-        <strong>
-          Earn rewards
-        </strong>
-
-        <a href="offers.php">
-          Start →
-        </a>
-
-      </div>
-
-
-    </article>
-
-
-    <article class="offer-card">
-
-
-      <div class="offer-icon cyan">
-        ◇
-      </div>
-
-
-      <div class="offer-body">
-
-        <span class="tag">
-          Special Offer
-        </span>
-
-        <h3>
-          Explore opportunities
-        </h3>
-
-        <p>
-          Browse additional offers available
-          for your account.
-        </p>
-
-      </div>
-
-
-      <div class="offer-bottom">
-
-        <strong>
-          Earn rewards
-        </strong>
-
-        <a href="offers.php">
-          Start →
-        </a>
-
-      </div>
-
-
-    </article>
-
-
-  </div>
 
 </section>
 
 
-<!-- ==================================================
+<!-- =========================================================
      CTA
-================================================== -->
+========================================================= -->
 
-<section class="cta-section">
+<section class="home-final-cta">
 
+    <div class="home-container">
 
-  <div>
-
-    <span class="kicker">
-      READY WHEN YOU ARE
-    </span>
+        <div class="home-final-cta-inner">
 
 
-    <h2>
-      Start discovering available rewards.
-    </h2>
+            <div>
+
+                <span class="home-kicker">
+                    READY WHEN YOU ARE
+                </span>
 
 
-    <p>
-      Create your PoketFlow account and explore
-      the earning opportunities available to you.
-    </p>
-
-  </div>
+                <h2>
+                    Your next reward could start with one click.
+                </h2>
 
 
-  <a
-    class="btn btn-primary btn-large"
-    href="register.php"
-  >
-    Get Started →
-  </a>
+                <p>
+                    Create your free PoketFlow account and explore
+                    the opportunities currently available to you.
+                </p>
 
+            </div>
+
+
+            <a
+                class="home-btn home-btn-primary home-btn-large"
+                href="register.php"
+            >
+
+                Get Started
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </div>
 
 </section>
 
 
-<!-- ==================================================
+<!-- =========================================================
      FAQ
-================================================== -->
+========================================================= -->
 
 <section
-  class="section faq"
-  id="faq"
+    class="home-section home-faq-section"
+    id="faq"
 >
 
+    <div class="home-container">
 
-  <div class="section-heading">
+
+        <div class="home-section-heading centered">
+
+            <div>
+
+                <span class="home-kicker">
+                    FAQ
+                </span>
+
+                <h2>
+                    Common Questions
+                </h2>
+
+                <p>
+                    A few things you may want to know before getting started.
+                </p>
+
+            </div>
+
+        </div>
 
 
-    <div>
+        <div class="home-faq-list">
 
-      <span class="kicker">
-        FAQ
-      </span>
 
-      <h2>
-        Common Questions
-      </h2>
+            <details>
+
+                <summary>
+
+                    <span>
+                        Is PoketFlow free to join?
+                    </span>
+
+                    <b>
+                        +
+                    </b>
+
+                </summary>
+
+                <p>
+                    Yes. Creating a PoketFlow account does not require
+                    a subscription.
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+
+                    <span>
+                        How do I earn rewards?
+                    </span>
+
+                    <b>
+                        +
+                    </b>
+
+                </summary>
+
+                <p>
+                    Browse available opportunities, select an offer,
+                    read its requirements carefully and complete the
+                    required activity. Rewards may be subject to
+                    completion approval.
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+
+                    <span>
+                        Are all offers available to everyone?
+                    </span>
+
+                    <b>
+                        +
+                    </b>
+
+                </summary>
+
+                <p>
+                    Availability can vary based on factors such as
+                    location, device, eligibility and the current
+                    offer inventory.
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+
+                    <span>
+                        When can I cash out?
+                    </span>
+
+                    <b>
+                        +
+                    </b>
+
+                </summary>
+
+                <p>
+                    Cash-out eligibility depends on your available
+                    balance, PoketFlow's minimum cash-out requirement,
+                    payment method and any applicable verification
+                    requirements.
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+
+                    <span>
+                        Where do the offers come from?
+                    </span>
+
+                    <b>
+                        +
+                    </b>
+
+                </summary>
+
+                <p>
+                    PoketFlow can display opportunities supplied by
+                    connected offer networks and approved advertising
+                    partners. Availability may change over time.
+                </p>
+
+            </details>
+
+
+        </div>
 
     </div>
-
-
-  </div>
-
-
-  <details>
-
-    <summary>
-      Is PoketFlow free to join?
-    </summary>
-
-    <p>
-      Yes. Creating an account does not require
-      a subscription.
-    </p>
-
-  </details>
-
-
-  <details>
-
-    <summary>
-      How do rewards work?
-    </summary>
-
-    <p>
-      Available offers show their requirements and
-      reward information. Follow the listed requirements
-      and wait for completion approval where applicable.
-    </p>
-
-  </details>
-
-
-  <details>
-
-    <summary>
-      When can I cash out?
-    </summary>
-
-    <p>
-      Cash-out eligibility depends on your available
-      balance, the site's minimum cashout, and any
-      applicable payment or verification requirements.
-    </p>
-
-  </details>
-
 
 </section>
 
@@ -859,67 +1180,267 @@
 </main>
 
 
-<!-- ==================================================
+<!-- =========================================================
      FOOTER
-================================================== -->
+========================================================= -->
 
-<footer class="footer">
+<footer class="home-footer">
 
-
-  <div class="footer-brand">
-
-
-    <a
-      class="brand"
-      href="index.html"
-    >
-
-      <span class="brand-mark">
-        P
-      </span>
-
-      <span>
-        Poket<span>Flow</span>
-      </span>
-
-    </a>
+    <div class="home-container">
 
 
-    <p>
-      A modern rewards discovery platform.
-    </p>
+        <div class="home-footer-main">
 
 
-  </div>
+            <div class="home-footer-brand">
+
+                <a
+                    class="home-brand"
+                    href="index.php"
+                >
+
+                    <span class="home-brand-mark">
+                        P
+                    </span>
+
+                    <span class="home-brand-name">
+                        Poket<span>Flow</span>
+                    </span>
+
+                </a>
 
 
-  <div class="footer-links">
+                <p>
+                    Discover available online opportunities,
+                    complete activities and track your rewards.
+                </p>
 
-    <a href="#faq">
-      FAQ
-    </a>
-
-    <a href="#">
-      Terms
-    </a>
-
-    <a href="#">
-      Privacy
-    </a>
-
-    <a href="#">
-      Contact
-    </a>
-
-  </div>
+            </div>
 
 
-  <small>
-    © 2026 PoketFlow. All rights reserved.
-  </small>
+            <div class="home-footer-column">
 
+                <h4>
+                    Platform
+                </h4>
+
+                <a href="offers.php">
+                    Earn Rewards
+                </a>
+
+                <a href="register.php">
+                    Create Account
+                </a>
+
+                <a href="login.php">
+                    Sign In
+                </a>
+
+                <a href="#how-it-works">
+                    How It Works
+                </a>
+
+            </div>
+
+
+            <div class="home-footer-column">
+
+                <h4>
+                    Information
+                </h4>
+
+                <a href="#faq">
+                    FAQ
+                </a>
+
+                <a href="#">
+                    Terms
+                </a>
+
+                <a href="#">
+                    Privacy
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="home-footer-bottom">
+
+            <span>
+                © 2026 PoketFlow. All rights reserved.
+            </span>
+
+            <span>
+                Built for simple reward discovery.
+            </span>
+
+        </div>
+
+
+    </div>
 
 </footer>
+
+
+<!-- =========================================================
+     MOBILE MENU JAVASCRIPT
+========================================================= -->
+
+<script>
+
+(function () {
+
+    'use strict';
+
+
+    const menuButton =
+        document.getElementById('mobileMenuButton');
+
+
+    const mobileNavigation =
+        document.getElementById('mobile-navigation');
+
+
+    if (!menuButton || !mobileNavigation) {
+
+        return;
+
+    }
+
+
+    const mobileLinks =
+        mobileNavigation.querySelectorAll('a');
+
+
+    function openMenu() {
+
+        document.body.classList.add(
+            'mobile-menu-open'
+        );
+
+        menuButton.classList.add(
+            'is-open'
+        );
+
+        mobileNavigation.classList.add(
+            'is-open'
+        );
+
+        menuButton.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        mobileNavigation.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+
+    }
+
+
+    function closeMenu() {
+
+        document.body.classList.remove(
+            'mobile-menu-open'
+        );
+
+        menuButton.classList.remove(
+            'is-open'
+        );
+
+        mobileNavigation.classList.remove(
+            'is-open'
+        );
+
+        menuButton.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        mobileNavigation.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
+    }
+
+
+    function toggleMenu() {
+
+        const isOpen =
+            menuButton.getAttribute(
+                'aria-expanded'
+            ) === 'true';
+
+
+        if (isOpen) {
+
+            closeMenu();
+
+        } else {
+
+            openMenu();
+
+        }
+
+    }
+
+
+    menuButton.addEventListener(
+        'click',
+        toggleMenu
+    );
+
+
+    mobileLinks.forEach(function (link) {
+
+        link.addEventListener(
+            'click',
+            closeMenu
+        );
+
+    });
+
+
+    document.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (event.key === 'Escape') {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        'resize',
+        function () {
+
+            if (window.innerWidth > 850) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+
+})();
+
+</script>
 
 
 </body>
