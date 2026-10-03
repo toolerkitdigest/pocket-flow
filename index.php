@@ -945,24 +945,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
-
-One small correction before we test
-
-There is one anchor mismatch in the FAQ section: the footer currently points to "#faq", but the FAQ section doesn't yet have that ID. Change:
-
-<section class="home-section home-faq">
-
-to:
-
-<section
-    class="home-section home-faq"
-    id="faq"
->
-
-Everything else is intentionally structured around the new offers-first homepage.
-
-The important visual order is now:
-
-Hero → REAL OGAds offers → activity counters → How It Works → more real offers → benefits → CTA → FAQ.
-
-No "$8.75", "$5.20", "$3.55", "$2.40", "$1.85", "$3.10", fake balance, or dashboard mockup remains.
