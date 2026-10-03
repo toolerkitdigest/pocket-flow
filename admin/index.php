@@ -246,11 +246,7 @@ $recentWithdrawals = $stmt->fetchAll();
                 <span>Campaigns</span>
             </a>
 
-            <a href="wallet.php">
-                💰
-                <span>Wallet</span>
-            </a>
-
+            
             <a href="settings.php">
                 ⚙
                 <span>Settings</span>
