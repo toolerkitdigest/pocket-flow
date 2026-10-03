@@ -271,15 +271,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <?= e($pageTitle) ?> - PoketFlow Admin
     </title>
 
-    <link
-        rel="stylesheet"
-        href="assets/admin.css"
-    >
+
 
     <link
         rel="stylesheet"
-        href="assets/conversions.css"
-    >
+        href="assets/conversions.css">
 
 </head>
 
