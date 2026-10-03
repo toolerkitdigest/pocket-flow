@@ -35,74 +35,207 @@
      HEADER
 ================================================== -->
 
+<!-- ==================================================
+     PUBLIC WEBSITE HEADER
+================================================== -->
+
 <header class="site-header">
 
+  <div class="site-header-inner">
 
-  <a
-    class="brand"
-    href="index.php"
-  >
+    <!-- LOGO -->
+    <a
+      class="brand"
+      href="index.php"
+      aria-label="PoketFlow Home"
+    >
 
-    <span class="brand-mark">
-      P
-    </span>
+      <span class="brand-logo">
 
-    <span>
-      Poket<span>Flow</span>
-    </span>
+        <!-- Replace logo.png with your final logo later -->
+        <img
+          src="assets/logo.png"
+          alt="PoketFlow"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+        >
 
-  </a>
+        <span class="brand-logo-placeholder">
+          P
+        </span>
+
+      </span>
+
+      <span class="brand-name">
+        Poket<span>Flow</span>
+      </span>
+
+    </a>
 
 
-  <nav class="desktop-nav">
+    <!-- DESKTOP NAVIGATION -->
+    <nav
+      class="desktop-nav"
+      aria-label="Main navigation"
+    >
+
+      <a
+        class="active"
+        href="index.php"
+      >
+        Home
+      </a>
+
+      <a href="offers.php">
+        Earn Rewards
+      </a>
+
+      <a href="#how-it-works">
+        How It Works
+      </a>
+
+      <a href="about.php">
+        About
+      </a>
+
+      <a
+        href="https://blog.poketflow.com"
+        target="_blank"
+        rel="noopener"
+      >
+        Blog
+      </a>
+
+      <a href="#faq">
+        FAQ
+      </a>
+
+    </nav>
+
+
+    <!-- DESKTOP ACTIONS + MOBILE MENU BUTTON -->
+    <div class="header-actions">
+
+      <a
+        class="btn btn-ghost header-signin"
+        href="login.php"
+      >
+        Sign In
+      </a>
+
+
+      <a
+        class="btn btn-primary header-start"
+        href="register.php"
+      >
+        Get Started
+        <span>→</span>
+      </a>
+
+
+      <!-- MOBILE HAMBURGER -->
+      <button
+        type="button"
+        class="mobile-menu-button"
+        id="mobileMenuButton"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobileNavigation"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ==================================================
+     MOBILE NAVIGATION
+================================================== -->
+
+<div
+  class="mobile-navigation"
+  id="mobileNavigation"
+  aria-hidden="true"
+>
+
+  <nav aria-label="Mobile navigation">
 
     <a
       class="active"
       href="index.php"
     >
-      Home
+      <span class="mobile-nav-icon">⌂</span>
+      <span>Home</span>
     </a>
+
 
     <a href="offers.php">
-      Earn
+      <span class="mobile-nav-icon">◎</span>
+      <span>Earn Rewards</span>
     </a>
+
 
     <a href="#how-it-works">
-      How It Works
+      <span class="mobile-nav-icon">01</span>
+      <span>How It Works</span>
     </a>
 
-    <a href="#rewards">
-      Rewards
+
+    <a href="about.php">
+      <span class="mobile-nav-icon">◇</span>
+      <span>About</span>
     </a>
+
+
+    <a
+      href="https://blog.poketflow.com"
+      target="_blank"
+      rel="noopener"
+    >
+      <span class="mobile-nav-icon">▤</span>
+      <span>Blog</span>
+    </a>
+
 
     <a href="#faq">
-      FAQ
+      <span class="mobile-nav-icon">?</span>
+      <span>FAQ</span>
+    </a>
+
+
+    <a href="contact.php">
+      <span class="mobile-nav-icon">✉</span>
+      <span>Contact</span>
+    </a>
+
+
+    <div class="mobile-nav-divider"></div>
+
+
+    <a href="login.php">
+      <span class="mobile-nav-icon">↪</span>
+      <span>Sign In</span>
+    </a>
+
+
+    <a
+      class="mobile-nav-cta"
+      href="register.php"
+    >
+      <span class="mobile-nav-icon">+</span>
+      <span>Get Started</span>
     </a>
 
   </nav>
 
-
-  <div class="header-actions">
-
-    <a
-      class="btn btn-ghost"
-      href="login.php"
-    >
-      Sign In
-    </a>
-
-
-    <a
-      class="btn btn-primary"
-      href="register.php"
-    >
-      Get Started
-      <span>→</span>
-    </a>
-
-  </div>
-
-</header>
+</div>
 
 
 <!-- ==================================================
