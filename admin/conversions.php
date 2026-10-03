@@ -281,7 +281,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <body>
 
-<div class="admin-layout">
 
     <!-- Sidebar -->
 
