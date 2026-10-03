@@ -269,14 +269,14 @@ require_once __DIR__ . '/includes/auth.php';
      HERO
 ========================================================= -->
 
+<!-- =========================================================
+     PREMIUM HERO
+========================================================= -->
+
 <section class="home-hero">
 
-    <div class="home-container home-hero-grid">
+    <div class="home-container">
 
-
-        <!-- =================================================
-             HERO CONTENT
-        ================================================== -->
 
         <div class="home-hero-content">
 
@@ -285,11 +285,9 @@ require_once __DIR__ . '/includes/auth.php';
 
                 <span class="home-eyebrow-dot"></span>
 
-                REAL OFFERS
+                REAL OPPORTUNITIES
                 <span>•</span>
                 REAL REWARDS
-                <span>•</span>
-                FREE TO JOIN
 
             </div>
 
@@ -304,10 +302,9 @@ require_once __DIR__ . '/includes/auth.php';
 
             <p class="home-hero-description">
 
-                Discover available offers, surveys and online
-                activities matched to you. Complete the listed
-                requirements and earn rewards when your activity
-                is approved.
+                Discover real opportunities, complete simple
+                activities and build your reward balance —
+                all from one PoketFlow account.
 
             </p>
 
@@ -321,7 +318,7 @@ require_once __DIR__ . '/includes/auth.php';
 
                     Start Earning
 
-                    <span aria-hidden="true">
+                    <span>
                         →
                     </span>
 
@@ -343,13 +340,13 @@ require_once __DIR__ . '/includes/auth.php';
             <div class="home-hero-note">
 
                 <span>✓</span>
-                Free account
+                Free to join
 
                 <span>✓</span>
                 No subscription
 
                 <span>✓</span>
-                Browse available offers
+                New opportunities regularly
 
             </div>
 
@@ -357,6 +354,114 @@ require_once __DIR__ . '/includes/auth.php';
         </div>
 
 
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     REAL LIVE HERO OFFERS
+========================================================= -->
+
+<?php
+
+require_once __DIR__ . '/includes/hero-offers.php';
+
+?>
+
+
+<!-- =========================================================
+     PLATFORM ACTIVITY
+========================================================= -->
+
+<section class="pf-activity-stats">
+
+    <div class="home-container">
+
+
+        <div class="pf-activity-heading">
+
+            <span class="home-kicker">
+                POKETFLOW ACTIVITY
+            </span>
+
+            <h2>
+                A growing rewards community
+            </h2>
+
+        </div>
+
+
+        <div class="pf-activity-grid">
+
+
+            <!-- Users -->
+
+            <div class="pf-activity-card">
+
+                <div class="pf-activity-icon">
+                    +
+                </div>
+
+                <div class="pf-activity-content">
+
+                    <small>
+                        PEOPLE ON POKETFLOW
+                    </small>
+
+                    <strong
+                        class="pf-count-number"
+                        data-count-type="users"
+                        data-count-value="0"
+                    >
+                        +0
+                    </strong>
+
+                    <p>
+                        Accounts created on the platform
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Payouts -->
+
+            <div class="pf-activity-card payout">
+
+                <div class="pf-activity-icon">
+                    $
+                </div>
+
+                <div class="pf-activity-content">
+
+                    <small>
+                        REWARDS PROCESSED
+                    </small>
+
+                    <strong
+                        class="pf-count-number"
+                        data-count-type="payout"
+                        data-count-value="0"
+                    >
+                        +$0
+                    </strong>
+
+                    <p>
+                        Rewards recorded by PoketFlow
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
         <!-- =================================================
              HERO VISUAL
         ================================================== -->
