@@ -137,8 +137,7 @@ function formatWalletDate(string $date): string
     <title>Wallet — PoketFlow</title>
 
     <link
-    rel="stylesheet"
-    href="assets/wallet.css">
+       rel="stylesheet" href="assets/wallet.css">
 
 
 
