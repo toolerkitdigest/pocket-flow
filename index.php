@@ -9,24 +9,72 @@ $isLoggedIn = isLoggedIn();
 $pageTitle = 'PoketFlow — Turn Your Free Time Into Rewards';
 $pageDescription = 'Discover real opportunities, complete simple activities and earn rewards with PoketFlow.';
 
-require_once __DIR__ . '/includes/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
-<link rel="stylesheet" href="assets/home.css">
-<link rel="stylesheet" href="assets/featured-offers.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        <?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>
+    </title>
+
+    <meta
+        name="description"
+        content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>"
+    >
+
+    <meta
+        name="theme-color"
+        content="#080d1a"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/home.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/featured-offers.css"
+    >
+
+</head>
+
+
+<body>
+
 
 <div class="home-page">
+
 
     <!-- =====================================================
          HEADER
     ====================================================== -->
+
     <header class="home-header">
 
         <div class="home-container home-header-inner">
 
-            <a href="index.php" class="home-brand" aria-label="PoketFlow Home">
 
-                <span class="home-brand-mark">P</span>
+            <!-- BRAND -->
+
+            <a
+                href="index.php"
+                class="home-brand"
+                aria-label="PoketFlow Home"
+            >
+
+                <span class="home-brand-mark">
+                    P
+                </span>
 
                 <span class="home-brand-name">
                     Poket<span>Flow</span>
@@ -36,9 +84,16 @@ require_once __DIR__ . '/includes/header.php';
 
 
             <!-- DESKTOP NAVIGATION -->
-            <nav class="home-desktop-nav" aria-label="Main navigation">
 
-                <a href="index.php" class="active">
+            <nav
+                class="home-desktop-nav"
+                aria-label="Main navigation"
+            >
+
+                <a
+                    href="index.php"
+                    class="active"
+                >
                     Home
                 </a>
 
@@ -58,6 +113,7 @@ require_once __DIR__ . '/includes/header.php';
 
 
             <!-- DESKTOP ACTIONS -->
+
             <div class="home-header-actions">
 
                 <?php if ($isLoggedIn): ?>
@@ -98,6 +154,7 @@ require_once __DIR__ . '/includes/header.php';
 
 
             <!-- MOBILE MENU BUTTON -->
+
             <button
                 type="button"
                 class="home-mobile-menu-button"
@@ -106,15 +163,19 @@ require_once __DIR__ . '/includes/header.php';
                 aria-expanded="false"
                 aria-controls="mobile-navigation"
             >
+
                 <span></span>
                 <span></span>
                 <span></span>
+
             </button>
+
 
         </div>
 
 
         <!-- MOBILE NAVIGATION -->
+
         <div
             class="home-mobile-navigation"
             id="mobile-navigation"
@@ -122,21 +183,26 @@ require_once __DIR__ . '/includes/header.php';
 
             <nav aria-label="Mobile navigation">
 
+
                 <a href="index.php">
                     Home
                 </a>
+
 
                 <a href="offers.php">
                     Earn Rewards
                 </a>
 
+
                 <a href="how-it-works.php">
                     How It Works
                 </a>
 
+
                 <a href="blog/">
                     Blog
                 </a>
+
 
                 <div class="home-mobile-actions">
 
@@ -176,6 +242,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 </div>
 
+
             </nav>
 
         </div>
@@ -183,17 +250,24 @@ require_once __DIR__ . '/includes/header.php';
     </header>
 
 
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
     <main>
 
 
         <!-- =================================================
-             HERO
+             HERO INTRODUCTION
         ================================================== -->
+
         <section class="home-hero">
 
             <div class="home-container">
 
                 <div class="home-hero-content">
+
 
                     <div class="home-eyebrow">
                         REAL OPPORTUNITIES • REAL REWARDS
@@ -201,26 +275,39 @@ require_once __DIR__ . '/includes/header.php';
 
 
                     <h1>
+
                         Turn Your Free Time
-                        <span>Into Rewards.</span>
+
+                        <span>
+                            Into Rewards.
+                        </span>
+
                     </h1>
 
 
                     <p>
+
                         Discover real opportunities, complete simple
                         activities and build your reward balance —
                         all from one PoketFlow account.
+
                     </p>
 
 
                     <div class="home-hero-actions">
 
+
                         <a
                             href="register.php"
                             class="home-btn home-btn-primary home-btn-large"
                         >
+
                             Start Earning
-                            <span>→</span>
+
+                            <span>
+                                →
+                            </span>
+
                         </a>
 
 
@@ -228,30 +315,28 @@ require_once __DIR__ . '/includes/header.php';
                             href="#how-it-works"
                             class="home-btn home-btn-outline home-btn-large"
                         >
+
                             See How It Works
+
                         </a>
+
 
                     </div>
 
 
                     <div class="home-hero-note">
 
-                        <span>
-                            ✓
-                        </span>
+                        <span>✓</span>
                         Free to join
 
-                        <span>
-                            ✓
-                        </span>
+                        <span>✓</span>
                         No subscription
 
-                        <span>
-                            ✓
-                        </span>
+                        <span>✓</span>
                         New opportunities regularly
 
                     </div>
+
 
                 </div>
 
@@ -260,14 +345,20 @@ require_once __DIR__ . '/includes/header.php';
         </section>
 
 
+
         <!-- =================================================
              REAL LIVE OFFERS
-             THIS APPEARS IMMEDIATELY AFTER HERO
+             
+             2–3 real dynamically fetched network offers.
+             This is intentionally immediately after the hero.
         ================================================== -->
 
         <?php
+
         require_once __DIR__ . '/includes/hero-offers.php';
+
         ?>
+
 
 
         <!-- =================================================
@@ -278,15 +369,18 @@ require_once __DIR__ . '/includes/header.php';
 
             <div class="home-container">
 
+
                 <div class="pf-activity-heading">
 
                     <span class="home-kicker">
                         THE POKETFLOW COMMUNITY
                     </span>
 
+
                     <h2>
                         Rewards in motion.
                     </h2>
+
 
                     <p>
                         PoketFlow brings opportunities and rewards
@@ -296,7 +390,11 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
                 <div class="pf-activity-grid">
+
+
+                    <!-- USERS -->
 
                     <div class="pf-activity-card">
 
@@ -304,9 +402,14 @@ require_once __DIR__ . '/includes/header.php';
                             👥
                         </div>
 
-                        <div class="pf-count-number" data-count-type="users">
+
+                        <div
+                            class="pf-count-number"
+                            data-count-type="users"
+                        >
                             0
                         </div>
+
 
                         <div class="pf-activity-label">
                             Registered Users
@@ -315,15 +418,23 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
 
 
+
+                    <!-- REWARDS -->
+
                     <div class="pf-activity-card">
 
                         <div class="pf-activity-icon">
                             💰
                         </div>
 
-                        <div class="pf-count-number" data-count-type="rewards">
+
+                        <div
+                            class="pf-count-number"
+                            data-count-type="rewards"
+                        >
                             $0
                         </div>
+
 
                         <div class="pf-activity-label">
                             Rewards Processed
@@ -331,11 +442,13 @@ require_once __DIR__ . '/includes/header.php';
 
                     </div>
 
+
                 </div>
 
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -349,15 +462,18 @@ require_once __DIR__ . '/includes/header.php';
 
             <div class="home-container">
 
+
                 <div class="home-section-heading">
 
                     <span class="home-kicker">
                         HOW IT WORKS
                     </span>
 
+
                     <h2>
                         Start earning in three simple steps.
                     </h2>
+
 
                     <p>
                         No complicated setup. Create your account,
@@ -368,8 +484,11 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
                 <div class="home-steps">
 
+
+                    <!-- STEP 1 -->
 
                     <article class="home-step-card">
 
@@ -377,13 +496,16 @@ require_once __DIR__ . '/includes/header.php';
                             01
                         </div>
 
+
                         <div class="home-step-icon">
                             👤
                         </div>
 
+
                         <h3>
                             Create Your Account
                         </h3>
+
 
                         <p>
                             Join PoketFlow for free and create your
@@ -393,19 +515,25 @@ require_once __DIR__ . '/includes/header.php';
                     </article>
 
 
+
+                    <!-- STEP 2 -->
+
                     <article class="home-step-card">
 
                         <div class="home-step-number">
                             02
                         </div>
 
+
                         <div class="home-step-icon">
                             🔎
                         </div>
 
+
                         <h3>
                             Choose an Opportunity
                         </h3>
+
 
                         <p>
                             Browse available offers and select an
@@ -415,19 +543,25 @@ require_once __DIR__ . '/includes/header.php';
                     </article>
 
 
+
+                    <!-- STEP 3 -->
+
                     <article class="home-step-card">
 
                         <div class="home-step-number">
                             03
                         </div>
 
+
                         <div class="home-step-icon">
                             🎁
                         </div>
 
+
                         <h3>
                             Complete & Earn
                         </h3>
+
 
                         <p>
                             Follow the offer requirements and receive
@@ -444,22 +578,31 @@ require_once __DIR__ . '/includes/header.php';
         </section>
 
 
+
         <!-- =================================================
              FEATURED OPPORTUNITIES
+             
+             Larger dynamic offer section.
         ================================================== -->
 
         <?php
+
         require_once __DIR__ . '/includes/featured-offers.php';
+
         ?>
+
 
 
         <!-- =================================================
              BENEFITS
         ================================================== -->
 
-        <section class="home-section home-benefits">
+        <section
+            class="home-section home-benefits"
+        >
 
             <div class="home-container">
+
 
                 <div class="home-section-heading">
 
@@ -467,9 +610,11 @@ require_once __DIR__ . '/includes/header.php';
                         WHY POKETFLOW
                     </span>
 
+
                     <h2>
                         A simpler way to discover rewards.
                     </h2>
+
 
                     <p>
                         PoketFlow is designed to make discovering
@@ -479,8 +624,11 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
                 <div class="home-benefits-grid">
 
+
+                    <!-- BENEFIT 1 -->
 
                     <article class="home-benefit-card">
 
@@ -488,9 +636,11 @@ require_once __DIR__ . '/includes/header.php';
                             ⚡
                         </div>
 
+
                         <h3>
                             Fresh Opportunities
                         </h3>
+
 
                         <p>
                             Discover available opportunities from
@@ -500,15 +650,20 @@ require_once __DIR__ . '/includes/header.php';
                     </article>
 
 
+
+                    <!-- BENEFIT 2 -->
+
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
                             💎
                         </div>
 
+
                         <h3>
                             Clear Rewards
                         </h3>
+
 
                         <p>
                             See the reward associated with an offer
@@ -518,15 +673,20 @@ require_once __DIR__ . '/includes/header.php';
                     </article>
 
 
+
+                    <!-- BENEFIT 3 -->
+
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
                             🛡️
                         </div>
 
+
                         <h3>
                             One Account
                         </h3>
+
 
                         <p>
                             Keep your opportunities, rewards and
@@ -536,15 +696,20 @@ require_once __DIR__ . '/includes/header.php';
                     </article>
 
 
+
+                    <!-- BENEFIT 4 -->
+
                     <article class="home-benefit-card">
 
                         <div class="home-benefit-icon">
                             📱
                         </div>
 
+
                         <h3>
                             Built for Mobile
                         </h3>
+
 
                         <p>
                             Discover and complete opportunities
@@ -561,6 +726,7 @@ require_once __DIR__ . '/includes/header.php';
         </section>
 
 
+
         <!-- =================================================
              FINAL CTA
         ================================================== -->
@@ -571,14 +737,17 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div class="home-cta-inner">
 
+
                     <span class="home-kicker">
                         READY TO GET STARTED?
                     </span>
+
 
                     <h2>
                         Your next opportunity
                         could be waiting.
                     </h2>
+
 
                     <p>
                         Create your free PoketFlow account and
@@ -588,22 +757,33 @@ require_once __DIR__ . '/includes/header.php';
 
                     <div class="home-hero-actions">
 
+
                         <a
                             href="register.php"
                             class="home-btn home-btn-primary home-btn-large"
                         >
+
                             Create Free Account
-                            <span>→</span>
+
+                            <span>
+                                →
+                            </span>
+
                         </a>
+
 
                         <a
                             href="offers.php"
                             class="home-btn home-btn-outline home-btn-large"
                         >
+
                             Browse Opportunities
+
                         </a>
 
+
                     </div>
+
 
                 </div>
 
@@ -612,19 +792,25 @@ require_once __DIR__ . '/includes/header.php';
         </section>
 
 
+
         <!-- =================================================
              FAQ
         ================================================== -->
 
-        <section class="home-section home-faq">
+        <section
+            class="home-section home-faq"
+            id="faq"
+        >
 
             <div class="home-container">
+
 
                 <div class="home-section-heading">
 
                     <span class="home-kicker">
                         FAQ
                     </span>
+
 
                     <h2>
                         Frequently asked questions.
@@ -633,14 +819,18 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
                 <div class="home-faq-list">
 
+
+                    <!-- FAQ 1 -->
 
                     <details class="home-faq-item">
 
                         <summary>
                             What is PoketFlow?
                         </summary>
+
 
                         <p>
                             PoketFlow is a rewards platform where
@@ -652,11 +842,15 @@ require_once __DIR__ . '/includes/header.php';
                     </details>
 
 
+
+                    <!-- FAQ 2 -->
+
                     <details class="home-faq-item">
 
                         <summary>
                             Is it free to join?
                         </summary>
+
 
                         <p>
                             Yes. Creating a PoketFlow account is free.
@@ -667,11 +861,15 @@ require_once __DIR__ . '/includes/header.php';
                     </details>
 
 
+
+                    <!-- FAQ 3 -->
+
                     <details class="home-faq-item">
 
                         <summary>
                             How do rewards work?
                         </summary>
+
 
                         <p>
                             Each opportunity has its own requirements.
@@ -684,11 +882,15 @@ require_once __DIR__ . '/includes/header.php';
                     </details>
 
 
+
+                    <!-- FAQ 4 -->
+
                     <details class="home-faq-item">
 
                         <summary>
                             Can I use PoketFlow on my phone?
                         </summary>
+
 
                         <p>
                             Yes. PoketFlow is designed to work across
@@ -708,6 +910,7 @@ require_once __DIR__ . '/includes/header.php';
     </main>
 
 
+
     <!-- =====================================================
          FOOTER
     ====================================================== -->
@@ -716,8 +919,11 @@ require_once __DIR__ . '/includes/header.php';
 
         <div class="home-container">
 
+
             <div class="home-footer-grid">
 
+
+                <!-- BRAND -->
 
                 <div class="home-footer-brand">
 
@@ -729,6 +935,7 @@ require_once __DIR__ . '/includes/header.php';
                         <span class="home-brand-mark">
                             P
                         </span>
+
 
                         <span class="home-brand-name">
                             Poket<span>Flow</span>
@@ -746,23 +953,30 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
+                <!-- PLATFORM -->
+
                 <div class="home-footer-column">
 
                     <h4>
                         Platform
                     </h4>
 
+
                     <a href="offers.php">
                         Earn Rewards
                     </a>
+
 
                     <a href="how-it-works.php">
                         How It Works
                     </a>
 
+
                     <a href="register.php">
                         Create Account
                     </a>
+
 
                     <a href="login.php">
                         Login
@@ -771,19 +985,25 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
+                <!-- RESOURCES -->
+
                 <div class="home-footer-column">
 
                     <h4>
                         Resources
                     </h4>
 
+
                     <a href="blog/">
                         Blog
                     </a>
 
+
                     <a href="#how-it-works">
                         Getting Started
                     </a>
+
 
                     <a href="#faq">
                         FAQ
@@ -792,19 +1012,25 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
 
+
+                <!-- LEGAL -->
+
                 <div class="home-footer-column">
 
                     <h4>
                         Legal
                     </h4>
 
+
                     <a href="privacy.php">
                         Privacy Policy
                     </a>
 
+
                     <a href="terms.php">
                         Terms of Service
                     </a>
+
 
                     <a href="contact.php">
                         Contact
@@ -816,12 +1042,16 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
 
+
+            <!-- FOOTER BOTTOM -->
+
             <div class="home-footer-bottom">
 
                 <p>
                     © <?= date('Y') ?> PoketFlow.
                     All rights reserved.
                 </p>
+
 
                 <p>
                     Opportunities may vary by location,
@@ -830,24 +1060,29 @@ require_once __DIR__ . '/includes/header.php';
 
             </div>
 
+
         </div>
 
     </footer>
 
 
+
 </div>
 
 
+
 <!-- =====================================================
-     MOBILE MENU SCRIPT
+     MOBILE MENU JAVASCRIPT
 ====================================================== -->
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
 
+
     const menuButton =
         document.getElementById('mobileMenuButton');
+
 
     const mobileNavigation =
         document.getElementById('mobile-navigation');
@@ -858,11 +1093,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     function closeMobileMenu() {
 
-        menuButton.classList.remove('mobile-menu-open');
+        menuButton.classList.remove(
+            'mobile-menu-open'
+        );
 
-        mobileNavigation.classList.remove('is-open');
+        mobileNavigation.classList.remove(
+            'is-open'
+        );
 
         menuButton.setAttribute(
             'aria-expanded',
@@ -872,11 +1112,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     function openMobileMenu() {
 
-        menuButton.classList.add('mobile-menu-open');
+        menuButton.classList.add(
+            'mobile-menu-open'
+        );
 
-        mobileNavigation.classList.add('is-open');
+        mobileNavigation.classList.add(
+            'is-open'
+        );
 
         menuButton.setAttribute(
             'aria-expanded',
@@ -886,12 +1131,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     menuButton.addEventListener(
         'click',
         function () {
 
             const isOpen =
-                mobileNavigation.classList.contains('is-open');
+                mobileNavigation.classList.contains(
+                    'is-open'
+                );
+
 
             if (isOpen) {
 
@@ -907,6 +1156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
 
+
     mobileNavigation
         .querySelectorAll('a')
         .forEach(function (link) {
@@ -919,16 +1169,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
+
     document.addEventListener(
         'keydown',
         function (event) {
 
             if (event.key === 'Escape') {
+
                 closeMobileMenu();
+
             }
 
         }
     );
+
 
 
     window.addEventListener(
@@ -936,12 +1190,20 @@ document.addEventListener('DOMContentLoaded', function () {
         function () {
 
             if (window.innerWidth > 850) {
+
                 closeMobileMenu();
+
             }
 
         }
     );
 
+
 });
 
 </script>
+
+
+</body>
+
+</html>
