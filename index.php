@@ -40,7 +40,7 @@
 
   <a
     class="brand"
-    href="index.html"
+    href="index.php"
   >
 
     <span class="brand-mark">
@@ -58,7 +58,7 @@
 
     <a
       class="active"
-      href="index.html"
+      href="index.php"
     >
       Home
     </a>
