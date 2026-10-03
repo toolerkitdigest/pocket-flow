@@ -1111,7 +1111,7 @@
 
     <a
       class="brand"
-      href="index.html"
+      href="index.php"
     >
 
       <span class="brand-mark">
