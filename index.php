@@ -115,52 +115,119 @@
 <body>
 
 
-<!-- ==================================================
-     HEADER
-================================================== -->
 
-<!-- ==================================================
-     PUBLIC WEBSITE HEADER
+  <!-- ==================================================
+     HEADER
 ================================================== -->
 
 <header class="site-header">
 
-  <div class="site-header-inner">
 
-    <!-- LOGO -->
+  <a
+    class="brand"
+    href="index.php"
+  >
+
+    <span class="brand-mark">
+      P
+    </span>
+
+    <span>
+      Poket<span>Flow</span>
+    </span>
+
+  </a>
+
+
+  <!-- ==================================================
+       DESKTOP NAVIGATION
+  ================================================== -->
+
+  <nav class="desktop-nav">
+
     <a
-      class="brand"
+      class="active"
       href="index.php"
-      aria-label="PoketFlow Home"
     >
+      Home
+    </a>
 
-      <span class="brand-logo">
+    <a href="offers.php">
+      Earn
+    </a>
 
-        <!-- Replace logo.png with your final logo later -->
-        <img
-          src="assets/logo.png"
-          alt="PoketFlow"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
-        >
+    <a href="#how-it-works">
+      How It Works
+    </a>
 
-        <span class="brand-logo-placeholder">
-          P
-        </span>
+    <a href="#rewards">
+      Rewards
+    </a>
 
-      </span>
+    <a href="#faq">
+      FAQ
+    </a>
 
-      <span class="brand-name">
-        Poket<span>Flow</span>
-      </span>
+  </nav>
 
+
+  <!-- ==================================================
+       DESKTOP ACTIONS
+  ================================================== -->
+
+  <div class="header-actions">
+
+    <a
+      class="btn btn-ghost"
+      href="login.php"
+    >
+      Sign In
     </a>
 
 
-    <!-- DESKTOP NAVIGATION -->
-    <nav
-      class="desktop-nav"
-      aria-label="Main navigation"
+    <a
+      class="btn btn-primary"
+      href="register.php"
     >
+      Get Started
+      <span>→</span>
+    </a>
+
+  </div>
+
+
+  <!-- ==================================================
+       MOBILE MENU BUTTON
+  ================================================== -->
+
+  <button
+    class="mobile-menu-toggle"
+    id="mobileMenuToggle"
+    type="button"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+    aria-controls="mobileMenu"
+  >
+
+    <span class="menu-icon">
+      ☰
+    </span>
+
+  </button>
+
+
+  <!-- ==================================================
+       MOBILE NAVIGATION
+  ================================================== -->
+
+  <nav
+    class="mobile-menu"
+    id="mobileMenu"
+    aria-hidden="true"
+  >
+
+    <div class="mobile-menu-links">
+
 
       <a
         class="active"
@@ -169,31 +236,59 @@
         Home
       </a>
 
+
       <a href="offers.php">
-        Earn Rewards
+        Earn
       </a>
+
 
       <a href="#how-it-works">
         How It Works
       </a>
 
-      <a href="about.php">
-        About
+
+      <a href="#rewards">
+        Rewards
       </a>
 
-      <a
-        href="https://blog.poketflow.com"
-        target="_blank"
-        rel="noopener"
-      >
-        Blog
-      </a>
 
       <a href="#faq">
         FAQ
       </a>
 
-    </nav>
+
+    </div>
+
+
+    <div class="mobile-menu-actions">
+
+
+      <a
+        class="btn btn-ghost"
+        href="login.php"
+      >
+        Sign In
+      </a>
+
+
+      <a
+        class="btn btn-primary"
+        href="register.php"
+      >
+        Get Started
+        <span>→</span>
+      </a>
+
+
+    </div>
+
+  </nav>
+
+
+</header>
+
+
+
 
 
     <!-- DESKTOP ACTIONS + MOBILE MENU BUTTON -->
