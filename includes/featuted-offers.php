@@ -2,739 +2,716 @@
 
 declare(strict_types=1);
 
-/**
- * =========================================================
- * POKETFLOW — FEATURED OFFERS
- * =========================================================
- *
- * Public homepage component.
- *
- * This file:
- * - Fetches visitor-specific OGAds offers
- * - Applies PoketFlow safety filters
- * - Calculates the worker reward
- * - Displays a limited number of featured offers
- *
- * It does NOT expose the raw OGAds participation URL.
- *
- * Visitor:
- *     register.php
- *
- * Logged-in user:
- *     start-offer.php
- * =========================================================
- */
+/*
+|--------------------------------------------------------------------------
+| PoketFlow — Dynamic Featured Offers
+|--------------------------------------------------------------------------
+| This component:
+| - Fetches real OGAds offers for the current visitor
+| - Uses the existing OGAds safety filters
+| - Uses the existing reward calculation
+| - Shows only valid offers
+| - Sends guests to register.php
+| - Sends logged-in users to start-offer.php
+|--------------------------------------------------------------------------
+*/
 
-
-// =========================================================
-// REQUIRED FILES
-// =========================================================
-
-require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/ogads.php';
 
 
-// =========================================================
-// CONFIGURATION
-// =========================================================
+/*
+|--------------------------------------------------------------------------
+| Visitor information
+|--------------------------------------------------------------------------
+*/
 
-$featuredOffers = [];
+$featuredIp = $_SERVER['REMOTE_ADDR'] ?? '';
 
-$featuredOffersError = null;
+$featuredUserAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-$featuredOfferLimit = 6;
+$featuredLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '';
+
+$featuredScheme =
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        ? 'https'
+        : 'http';
+
+$featuredHost =
+    $_SERVER['HTTP_HOST']
+        ?? 'poketflow.com';
+
+$featuredSite =
+    $featuredScheme
+    . '://'
+    . $featuredHost
+    . '/';
 
 
-// =========================================================
-// FETCH LIVE VISITOR-SPECIFIC OFFERS
-// =========================================================
+/*
+|--------------------------------------------------------------------------
+| Fetch live OGAds offers
+|--------------------------------------------------------------------------
+*/
+
+$featuredRawOffers = [];
 
 try {
 
-    /*
-     * Visitor information used by OGAds
-     * to return relevant inventory.
-     */
-
-    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-
-    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '';
-
-
-    /*
-     * Determine current request scheme.
-     */
-
-    $scheme = (
-        !empty($_SERVER['HTTPS']) &&
-        $_SERVER['HTTPS'] !== 'off'
-    ) ? 'https' : 'http';
-
-
-    /*
-     * Build the current homepage URL.
-     *
-     * We intentionally use the homepage rather
-     * than offers.php because this is a public
-     * featured-offers request.
-     */
-
-    $site = $scheme . '://' . (
-        $_SERVER['HTTP_HOST'] ?? 'poketflow.com'
-    ) . '/';
-
-
-    // =====================================================
-    // ASK OGADS FOR LIVE INVENTORY
-    // =====================================================
-
-    $ogadsOffers = fetchOgadsOffers(
-        $ip,
-        $userAgent,
-        $language,
-        $site,
+    $featuredRawOffers = fetchOgadsOffers(
+        $featuredIp,
+        $featuredUserAgent,
+        $featuredLanguage,
+        $featuredSite,
         0,
-        50
+        20
     );
-
-
-    // =====================================================
-    // PROCESS OFFERS
-    // =====================================================
-
-    foreach ($ogadsOffers as $offer) {
-
-        // -------------------------------------------------
-        // External OGAds offer ID
-        // -------------------------------------------------
-
-        $externalOfferId = trim(
-            (string) ($offer['offerid'] ?? '')
-        );
-
-
-        if ($externalOfferId === '') {
-            continue;
-        }
-
-
-        // -------------------------------------------------
-        // Clean basic information
-        // -------------------------------------------------
-
-        $title = cleanOgadsText(
-            $offer['name_short']
-                ?? $offer['name']
-                ?? 'Available Offer'
-        );
-
-
-        $description = cleanOgadsText(
-            $offer['description'] ?? ''
-        );
-
-
-        $category = getOgadsOfferCategory(
-            $offer
-        );
-
-
-        $networkOfferUrl = trim(
-            (string) ($offer['link'] ?? '')
-        );
-
-
-        $imageUrl = trim(
-            (string) ($offer['picture'] ?? '')
-        );
-
-
-        $networkPayout = round(
-            (float) ($offer['payout'] ?? 0),
-            2
-        );
-
-
-        // -------------------------------------------------
-        // Basic validation
-        // -------------------------------------------------
-
-        if ($networkPayout <= 0) {
-            continue;
-        }
-
-
-        if ($networkOfferUrl === '') {
-            continue;
-        }
-
-
-        // -------------------------------------------------
-        // Safety filtering
-        // -------------------------------------------------
-
-        if (!isOgadsOfferSafe(
-            $pdo,
-            $offer
-        )) {
-            continue;
-        }
-
-
-        // -------------------------------------------------
-        // Calculate worker reward
-        // -------------------------------------------------
-
-        $rewards = calculateOgadsReward(
-            $pdo,
-            $networkPayout
-        );
-
-
-        // -------------------------------------------------
-        // Build featured offer
-        // -------------------------------------------------
-
-        $featuredOffers[] = [
-
-            'id' => $externalOfferId,
-
-            'external_offer_id' => $externalOfferId,
-
-            'title' => $title,
-
-            'description' => $description,
-
-            'category' => $category,
-
-            'image_url' => $imageUrl,
-
-            'network_payout' => $networkPayout,
-
-            'worker_reward' => $rewards['worker_reward'],
-
-        ];
-
-
-        // -------------------------------------------------
-        // Stop once we have enough featured offers
-        // -------------------------------------------------
-
-        if (
-            count($featuredOffers)
-            >= $featuredOfferLimit
-        ) {
-            break;
-        }
-    }
-
 
 } catch (Throwable $e) {
 
-    /*
-     * Do not expose API errors to visitors.
-     */
+    $featuredRawOffers = [];
 
-    $featuredOffersError =
-        'Featured offers are temporarily unavailable.';
-
-    $featuredOffers = [];
 }
 
 
-// =========================================================
-// HELPER: SHORT DESCRIPTION
-// =========================================================
+/*
+|--------------------------------------------------------------------------
+| Prepare offers for homepage
+|--------------------------------------------------------------------------
+*/
 
-function getFeaturedOfferDescription(
-    string $description
-): string {
+$featuredOffers = [];
 
-    $description = trim($description);
+foreach ($featuredRawOffers as $offer) {
+
+    if (!is_array($offer)) {
+        continue;
+    }
 
 
     /*
-     * Remove technical OGAds metadata.
-     */
+    |--------------------------------------------------------------------------
+    | Offer ID
+    |--------------------------------------------------------------------------
+    */
 
-    $technicalMarkers = [
+    $externalOfferId = trim(
+        (string) (
+            $offer['offerid']
+            ?? $offer['offer_id']
+            ?? $offer['id']
+            ?? ''
+        )
+    );
 
-        '/\bConversion\s*:/i',
+    if ($externalOfferId === '') {
+        continue;
+    }
 
-        '/\bofferwall_description\s*=/i',
 
-        '/\bofferwall_instructions\s*=/i',
+    /*
+    |--------------------------------------------------------------------------
+    | Basic offer information
+    |--------------------------------------------------------------------------
+    */
 
-        '/\bofferwall_category\s*=/i',
+    $title = trim(
+        (string) (
+            $offer['name_short']
+            ?? $offer['name']
+            ?? 'Special Offer'
+        )
+    );
 
-        '/\btracking_type\s*=/i',
+    $description = cleanOgadsText(
+        (string) (
+            $offer['description']
+            ?? $offer['adcopy']
+            ?? ''
+        )
+    );
 
-        '/\bofferwall_/i',
+    $category = getOgadsOfferCategory($offer);
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Network payout
+    |--------------------------------------------------------------------------
+    */
+
+    $networkPayout = (float) (
+        $offer['payout']
+        ?? $offer['amount']
+        ?? 0
+    );
+
+    if ($networkPayout <= 0) {
+        continue;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Offer URL
+    |--------------------------------------------------------------------------
+    */
+
+    $offerUrl = trim(
+        (string) (
+            $offer['link']
+            ?? $offer['url']
+            ?? ''
+        )
+    );
+
+    if ($offerUrl === '') {
+        continue;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Safety filtering
+    |--------------------------------------------------------------------------
+    */
+
+    if (!isOgadsOfferSafe($pdo, $offer)) {
+        continue;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate worker reward
+    |--------------------------------------------------------------------------
+    */
+
+    $rewardData = calculateOgadsReward(
+        $pdo,
+        $networkPayout
+    );
+
+    $workerReward = (float) (
+        $rewardData['worker_reward']
+        ?? $rewardData['workerReward']
+        ?? 0
+    );
+
+    $platformMargin = (float) (
+        $rewardData['platform_margin']
+        ?? $rewardData['platformMargin']
+        ?? 0
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image
+    |--------------------------------------------------------------------------
+    */
+
+    $imageUrl = trim(
+        (string) (
+            $offer['picture']
+            ?? $offer['image']
+            ?? $offer['thumbnail']
+            ?? ''
+        )
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Country
+    |--------------------------------------------------------------------------
+    */
+
+    $countries = trim(
+        (string) (
+            $offer['country']
+            ?? $offer['countries']
+            ?? ''
+        )
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Device
+    |--------------------------------------------------------------------------
+    */
+
+    $devices = trim(
+        (string) (
+            $offer['device']
+            ?? $offer['devices']
+            ?? ''
+        )
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build homepage offer
+    |--------------------------------------------------------------------------
+    */
+
+    $featuredOffers[] = [
+        'id' => $externalOfferId,
+
+        'title' => $title,
+
+        'description' => $description,
+
+        'category' => $category,
+
+        'network_payout' => $networkPayout,
+
+        'worker_reward' => $workerReward,
+
+        'platform_margin' => $platformMargin,
+
+        'countries' => $countries,
+
+        'devices' => $devices,
+
+        'image' => $imageUrl,
+
+        'url' => $offerUrl,
     ];
 
 
-    foreach ($technicalMarkers as $pattern) {
+    /*
+    |--------------------------------------------------------------------------
+    | Homepage limit
+    |--------------------------------------------------------------------------
+    */
 
-        $cleaned = preg_split(
-            $pattern,
-            $description,
-            2
-        );
+    if (count($featuredOffers) >= 6) {
+        break;
+    }
+}
 
 
-        if (
-            is_array($cleaned) &&
-            isset($cleaned[0])
-        ) {
+/*
+|--------------------------------------------------------------------------
+| Helper functions
+|--------------------------------------------------------------------------
+*/
 
-            $description = trim(
-                $cleaned[0]
-            );
+if (!function_exists('featuredOfferInitial')) {
+
+    function featuredOfferInitial(string $title): string
+    {
+        $title = trim($title);
+
+        if ($title === '') {
+            return 'P';
         }
-    }
 
-
-    /*
-     * Normalize whitespace.
-     */
-
-    $description = preg_replace(
-        '/\s+/u',
-        ' ',
-        $description
-    );
-
-
-    $description = trim(
-        (string) $description
-    );
-
-
-    /*
-     * Fallback description.
-     */
-
-    if ($description === '') {
-
-        return 'Complete this offer to earn your reward.';
-    }
-
-
-    /*
-     * Keep homepage cards compact.
-     */
-
-    if (
-        function_exists('mb_strlen') &&
-        mb_strlen($description) > 115
-    ) {
-
-        $description = mb_substr(
-            $description,
-            0,
-            115
+        return strtoupper(
+            function_exists('mb_substr')
+                ? mb_substr($title, 0, 1)
+                : substr($title, 0, 1)
         );
-
-
-        $description = rtrim(
-            $description,
-            " \t\n\r\0\x0B.,;:-"
-        );
-
-
-        $description .= '...';
     }
-
-
-    return $description;
 }
 
 
-// =========================================================
-// HELPER: OFFER ICON
-// =========================================================
+if (!function_exists('featuredOfferDescription')) {
 
-function getFeaturedOfferIcon(
-    string $category
-): string {
+    function featuredOfferDescription(
+        string $description,
+        int $limit = 105
+    ): string {
 
-    $category = strtolower(
-        trim($category)
-    );
+        $description = cleanOgadsText($description);
 
+        if ($description === '') {
+            return 'Complete this offer and receive your reward.';
+        }
 
-    return match (true) {
+        if (function_exists('mb_strlen')) {
 
-        str_contains($category, 'app'),
-        str_contains($category, 'install')
-            => '◎',
+            if (mb_strlen($description) <= $limit) {
+                return $description;
+            }
 
-        str_contains($category, 'survey')
-            => '▤',
+            return rtrim(
+                mb_substr($description, 0, $limit - 3)
+            ) . '...';
+        }
 
-        str_contains($category, 'signup')
-            => '◇',
+        if (strlen($description) <= $limit) {
+            return $description;
+        }
 
-        default
-            => '◆',
-    };
+        return rtrim(
+            substr($description, 0, $limit - 3)
+        ) . '...';
+    }
 }
 
 
-// =========================================================
-// HELPER: OFFER CATEGORY LABEL
-// =========================================================
+if (!function_exists('featuredOfferMoney')) {
 
-function getFeaturedOfferCategory(
-    string $category
-): string {
-
-    $category = trim($category);
-
-
-    if ($category === '') {
-        return 'Special Offer';
+    function featuredOfferMoney(float $amount): string
+    {
+        return '$' . number_format($amount, 2);
     }
+}
 
 
-    return $category;
+if (!function_exists('featuredOfferLink')) {
+
+    function featuredOfferLink(string $offerId): string
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Guests must register first.
+        |--------------------------------------------------------------------------
+        */
+
+        if (!function_exists('isLoggedIn') || !isLoggedIn()) {
+
+            return 'register.php';
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Logged-in users can start the offer.
+        |--------------------------------------------------------------------------
+        */
+
+        return 'start-offer.php?offer_id='
+            . rawurlencode($offerId);
+    }
 }
 
 ?>
 
-
-<!-- =====================================================
-     FEATURED OFFERS SECTION
-====================================================== -->
-
 <section
-    class="home-section featured-offers-section"
+    class="pf-featured-offers"
     id="featured-offers"
 >
 
-
-    <!-- =================================================
-         SECTION HEADER
-    ================================================== -->
-
-    <div class="home-section-heading">
-
-        <div>
-
-            <span class="home-kicker">
-                LIVE OPPORTUNITIES
-            </span>
+    <div class="pf-featured-container">
 
 
-            <h2>
-                Featured Offers
-            </h2>
+        <!-- =====================================================
+             SECTION HEADER
+        ====================================================== -->
 
-
-            <p>
-                Discover selected opportunities available
-                for visitors in your location.
-            </p>
-
-        </div>
-
-
-        <a
-            href="offers.php"
-            class="home-section-link"
-        >
-            View all offers
-            <span>→</span>
-        </a>
-
-    </div>
-
-
-    <!-- =================================================
-         ERROR STATE
-    ================================================== -->
-
-    <?php if ($featuredOffersError !== null): ?>
-
-        <div class="featured-offers-status">
-
-            <div class="featured-status-icon">
-                ◷
-            </div>
-
+        <div class="pf-featured-header">
 
             <div>
 
-                <strong>
-                    Featured offers are temporarily unavailable
-                </strong>
+                <span class="pf-featured-eyebrow">
+                    LIVE OPPORTUNITIES
+                </span>
 
+                <h2>
+                    Earn From Real Offers
+                </h2>
 
                 <p>
-                    Please check back shortly for available
-                    earning opportunities.
+                    Discover available offers matched to your
+                    device and location. Complete an offer and
+                    receive the reward shown.
                 </p>
 
             </div>
 
-        </div>
 
-
-    <?php elseif (empty($featuredOffers)): ?>
-
-
-        <!-- =============================================
-             EMPTY STATE
-        ============================================== -->
-
-        <div class="featured-offers-status">
-
-            <div class="featured-status-icon">
-                ◷
-            </div>
-
-
-            <div>
-
-                <strong>
-                    New opportunities are coming
-                </strong>
-
-
-                <p>
-                    There are no featured offers available
-                    for your location right now.
-                </p>
-
-            </div>
-
-        </div>
-
-
-    <?php else: ?>
-
-
-        <!-- =============================================
-             FEATURED OFFER GRID
-        ============================================== -->
-
-        <div class="featured-offers-grid">
-
-
-            <?php foreach ($featuredOffers as $offer): ?>
-
-
-                <?php
-
-                $category =
-                    getFeaturedOfferCategory(
-                        (string) (
-                            $offer['category'] ?? ''
-                        )
-                    );
-
-
-                $title = trim(
-                    (string) (
-                        $offer['title']
-                        ?? 'Available Offer'
-                    )
-                );
-
-
-                $description =
-                    getFeaturedOfferDescription(
-                        (string) (
-                            $offer['description']
-                            ?? ''
-                        )
-                    );
-
-
-                $reward = (float) (
-                    $offer['worker_reward']
-                    ?? 0
-                );
-
-
-                $imageUrl = trim(
-                    (string) (
-                        $offer['image_url']
-                        ?? ''
-                    )
-                );
-
-
-                $icon =
-                    getFeaturedOfferIcon(
-                        $category
-                    );
-
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * We deliberately do NOT use
-                 * $offer['network_offer_url']
-                 * as the visitor-facing link.
-                 *
-                 * The offer must pass through
-                 * PoketFlow's account/start flow.
-                 */
-
-                if (isLoggedIn()) {
-
-                    $offerUrl =
-                        'start-offer.php?offer_id='
-                        . rawurlencode(
-                            (string) $offer[
-                                'external_offer_id'
-                            ]
-                        );
-
-                } else {
-
-                    $offerUrl =
-                        'register.php';
-
-                }
-
-                ?>
-
-
-                <article class="featured-offer-card">
-
-
-                    <!-- =================================
-                         OFFER IMAGE
-                    ================================== -->
-
-                    <div class="featured-offer-image">
-
-
-                        <?php if ($imageUrl !== ''): ?>
-
-                            <img
-                                src="<?= e($imageUrl) ?>"
-                                alt=""
-                                loading="lazy"
-                            >
-
-
-                        <?php else: ?>
-
-                            <span>
-                                <?= e($icon) ?>
-                            </span>
-
-                        <?php endif; ?>
-
-
-                        <span class="featured-offer-category">
-                            <?= e($category) ?>
-                        </span>
-
-                    </div>
-
-
-                    <!-- =================================
-                         OFFER BODY
-                    ================================== -->
-
-                    <div class="featured-offer-body">
-
-
-                        <h3>
-                            <?= e($title) ?>
-                        </h3>
-
-
-                        <p>
-                            <?= e($description) ?>
-                        </p>
-
-
-                    </div>
-
-
-                    <!-- =================================
-                         OFFER FOOTER
-                    ================================== -->
-
-                    <div class="featured-offer-footer">
-
-
-                        <div class="featured-reward">
-
-                            <small>
-                                Earn
-                            </small>
-
-
-                            <strong>
-                                $<?= number_format(
-                                    $reward,
-                                    2
-                                ) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <a
-                            href="<?= e($offerUrl) ?>"
-                            class="featured-offer-button"
-                        >
-
-                            <?= isLoggedIn()
-                                ? 'Start Offer'
-                                : 'Get Started'
-                            ?>
-
-                            <span>
-                                →
-                            </span>
-
-                        </a>
-
-
-                    </div>
-
-
-                </article>
-
-
-            <?php endforeach; ?>
-
-
-        </div>
-
-
-        <!-- =============================================
-             BOTTOM LINK
-        ============================================== -->
-
-        <div class="featured-offers-bottom">
-
-            <p>
-                More opportunities may be available
-                after you create your account.
-            </p>
-
-
-            <a href="offers.php">
-                Explore all available offers →
+            <a
+                href="offers.php"
+                class="pf-featured-view-all"
+            >
+                View all offers
+                <span aria-hidden="true">→</span>
             </a>
 
         </div>
 
 
-    <?php endif; ?>
+        <!-- =====================================================
+             OFFER GRID
+        ====================================================== -->
 
+        <?php if (!empty($featuredOffers)): ?>
+
+            <div class="pf-featured-grid">
+
+                <?php foreach ($featuredOffers as $featuredOffer): ?>
+
+                    <?php
+
+                    $offerTitle =
+                        htmlspecialchars(
+                            $featuredOffer['title'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $offerDescription =
+                        htmlspecialchars(
+                            featuredOfferDescription(
+                                $featuredOffer['description']
+                            ),
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $offerCategory =
+                        htmlspecialchars(
+                            $featuredOffer['category'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $offerImage =
+                        htmlspecialchars(
+                            $featuredOffer['image'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $offerId =
+                        htmlspecialchars(
+                            $featuredOffer['id'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $offerLink =
+                        htmlspecialchars(
+                            featuredOfferLink(
+                                $featuredOffer['id']
+                            ),
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $countries =
+                        htmlspecialchars(
+                            $featuredOffer['countries'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    $devices =
+                        htmlspecialchars(
+                            $featuredOffer['devices'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                    ?>
+
+                    <article
+                        class="pf-featured-card"
+                    >
+
+                        <!-- Offer top -->
+
+                        <div class="pf-featured-card-top">
+
+                            <div class="pf-featured-image">
+
+                                <?php if ($offerImage !== ''): ?>
+
+                                    <img
+                                        src="<?= $offerImage ?>"
+                                        alt=""
+                                        loading="lazy"
+                                        onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"
+                                    >
+
+                                    <span
+                                        class="pf-featured-fallback"
+                                        style="display:none;"
+                                    >
+                                        <?= htmlspecialchars(
+                                            featuredOfferInitial(
+                                                $featuredOffer['title']
+                                            ),
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ) ?>
+                                    </span>
+
+                                <?php else: ?>
+
+                                    <span
+                                        class="pf-featured-fallback"
+                                    >
+                                        <?= htmlspecialchars(
+                                            featuredOfferInitial(
+                                                $featuredOffer['title']
+                                            ),
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ) ?>
+                                    </span>
+
+                                <?php endif; ?>
+
+                            </div>
+
+
+                            <div class="pf-featured-heading">
+
+                                <span class="pf-featured-category">
+                                    <?= $offerCategory ?>
+                                </span>
+
+                                <h3>
+                                    <?= $offerTitle ?>
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <p class="pf-featured-description">
+                            <?= $offerDescription ?>
+                        </p>
+
+
+                        <!-- Details -->
+
+                        <div class="pf-featured-tags">
+
+                            <?php if ($countries !== ''): ?>
+
+                                <span>
+                                    🌍 <?= $countries ?>
+                                </span>
+
+                            <?php endif; ?>
+
+
+                            <?php if ($devices !== ''): ?>
+
+                                <span>
+                                    📱 <?= $devices ?>
+                                </span>
+
+                            <?php endif; ?>
+
+                        </div>
+
+
+                        <!-- Bottom -->
+
+                        <div class="pf-featured-bottom">
+
+                            <div>
+
+                                <span
+                                    class="pf-featured-reward-label"
+                                >
+                                    You can earn
+
+                                </span>
+
+                                <strong
+                                    class="pf-featured-reward"
+                                >
+                                    <?= featuredOfferMoney(
+                                        (float) $featuredOffer['worker_reward']
+                                    ) ?>
+                                </strong>
+
+                            </div>
+
+
+                            <a
+                                href="<?= $offerLink ?>"
+                                class="pf-featured-button"
+                            >
+
+                                <?= (
+                                    function_exists('isLoggedIn')
+                                    && isLoggedIn()
+                                )
+                                    ? 'Start Offer'
+                                    : 'Get Started'
+                                ?>
+
+                                <span aria-hidden="true">
+                                    →
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                <?php endforeach; ?>
+
+            </div>
+
+
+            <!-- =================================================
+                 VIEW ALL
+            ================================================== -->
+
+            <div class="pf-featured-footer">
+
+                <a href="offers.php">
+
+                    Explore all available offers
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        <?php else: ?>
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="pf-featured-empty">
+
+                <div class="pf-featured-empty-icon">
+                    ✨
+                </div>
+
+                <h3>
+                    New offers are arriving
+                </h3>
+
+                <p>
+                    We couldn't find suitable offers for your
+                    current device or location right now.
+                    Please check again shortly.
+                </p>
+
+                <a
+                    href="register.php"
+                    class="pf-featured-empty-button"
+                >
+                    Create Your Free Account
+                </a>
+
+            </div>
+
+        <?php endif; ?>
+
+    </div>
 
 </section>
