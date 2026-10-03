@@ -833,129 +833,156 @@
 
     <article class="offer-card">
 
+  <div class="offer-feature-image app-placeholder">
 
-      <div class="offer-icon">
-        ◎
-      </div>
+    <!--
+      Real image will go here later.
 
+      Suggested file:
+      assets/images/offer-apps.png
+    -->
 
-      <div class="offer-body">
+    <img
+      src="assets/images/offer-apps.png"
+      alt="Discover new apps and earn rewards"
+      onerror="this.style.display='none';"
+    >
 
-        <span class="tag">
-          App Install
-        </span>
+  </div>
 
-        <h3>
-          Discover new apps
-        </h3>
+  <div class="offer-body">
 
-        <p>
-          Explore an available app offer and follow
-          its listed requirements.
-        </p>
+    <span class="tag">
+      App Install
+    </span>
 
-      </div>
+    <h3>
+      Discover new apps
+    </h3>
 
+    <p>
+      Explore an available app offer and follow
+      its listed requirements.
+    </p>
 
-      <div class="offer-bottom">
+  </div>
 
-        <strong>
-          Earn rewards
-        </strong>
+  <div class="offer-bottom">
 
-        <a href="offers.php">
-          Start →
-        </a>
+    <strong>
+      Earn rewards
+    </strong>
 
-      </div>
+    <a href="offers.php">
+      Start →
+    </a>
 
+  </div>
 
-    </article>
+</article>
+    
+    
+    <article class="offer-card">
+<article class="offer-card">
 
+  <div class="offer-feature-image survey-placeholder">
+
+    <!--
+      Real image will go here later.
+
+      Suggested file:
+      assets/images/offer-surveys.png
+    -->
+
+    <img
+      src="assets/images/offer-surveys.png"
+      alt="Share your opinion through surveys"
+      onerror="this.style.display='none';"
+    >
+
+  </div>
+
+  <div class="offer-body">
+
+    <span class="tag">
+      Survey
+    </span>
+
+    <h3>
+      Share your opinion
+    </h3>
+
+    <p>
+      Answer an available survey and complete
+      the required steps.
+    </p>
+
+  </div>
+
+  <div class="offer-bottom">
+
+    <strong>
+      Earn rewards
+    </strong>
+
+    <a href="offers.php">
+      Start →
+    </a>
+
+  </div>
+
+</article>
 
     <article class="offer-card">
+<article class="offer-card">
 
+  <div class="offer-feature-image special-placeholder">
 
-      <div class="offer-icon orange">
-        ▤
-      </div>
+    <!--
+      Real image will go here later.
 
+      Suggested file:
+      assets/images/offer-special.png
+    -->
 
-      <div class="offer-body">
+    <img
+      src="assets/images/offer-special.png"
+      alt="Explore special reward opportunities"
+      onerror="this.style.display='none';"
+    >
 
-        <span class="tag">
-          Survey
-        </span>
+  </div>
 
-        <h3>
-          Share your opinion
-        </h3>
+  <div class="offer-body">
 
-        <p>
-          Answer an available survey and complete
-          the required steps.
-        </p>
+    <span class="tag">
+      Special Offer
+    </span>
 
-      </div>
+    <h3>
+      Explore opportunities
+    </h3>
 
+    <p>
+      Browse additional offers available
+      for your account.
+    </p>
 
-      <div class="offer-bottom">
+  </div>
 
-        <strong>
-          Earn rewards
-        </strong>
+  <div class="offer-bottom">
 
-        <a href="offers.php">
-          Start →
-        </a>
+    <strong>
+      Earn rewards
+    </strong>
 
-      </div>
+    <a href="offers.php">
+      Start →
+    </a>
 
+  </div>
 
-    </article>
-
-
-    <article class="offer-card">
-
-
-      <div class="offer-icon cyan">
-        ◇
-      </div>
-
-
-      <div class="offer-body">
-
-        <span class="tag">
-          Special Offer
-        </span>
-
-        <h3>
-          Explore opportunities
-        </h3>
-
-        <p>
-          Browse additional offers available
-          for your account.
-        </p>
-
-      </div>
-
-
-      <div class="offer-bottom">
-
-        <strong>
-          Earn rewards
-        </strong>
-
-        <a href="offers.php">
-          Start →
-        </a>
-
-      </div>
-
-
-    </article>
-
+</article>
 
   </div>
 
