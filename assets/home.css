@@ -2090,6 +2090,634 @@
 
 
 /* =========================================================
+   PREMIUM HERO OFFER RAIL
+========================================================= */
+
+.pf-hero-offers {
+    position: relative;
+    padding: 20px 0 70px;
+    overflow: hidden;
+}
+
+.pf-hero-offers-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 28px;
+}
+
+.pf-hero-offers-heading h2 {
+    margin: 7px 0 8px;
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.pf-hero-offers-heading p {
+    max-width: 600px;
+    margin: 0;
+    color: var(--home-secondary, #a7b1c2);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.pf-live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 13px;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    border-radius: 999px;
+    background: rgba(52, 211, 153, 0.07);
+    color: #34d399;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+}
+
+.pf-live-indicator i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.8);
+    animation: pfLivePulse 1.8s infinite;
+}
+
+@keyframes pfLivePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.7);
+    }
+
+}
+
+
+/* =========================================================
+   OFFER WINDOW
+========================================================= */
+
+.pf-hero-offer-window {
+    position: relative;
+    overflow: hidden;
+    padding: 5px 0 12px;
+}
+
+.pf-hero-offer-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================================
+   HERO OFFER CARD
+========================================================= */
+
+.pf-hero-offer-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-radius: 22px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(21, 30, 49, 0.98),
+            rgba(12, 19, 36, 0.98)
+        );
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.pf-hero-offer-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(99, 102, 241, 0.38);
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.34),
+        0 0 35px rgba(99, 102, 241, 0.08);
+}
+
+
+/* =========================================================
+   OFFER IMAGE
+========================================================= */
+
+.pf-hero-offer-image {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(99, 102, 241, 0.28),
+            transparent 55%
+        ),
+        #0c1324;
+}
+
+.pf-hero-offer-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.55s ease;
+}
+
+.pf-hero-offer-card:hover .pf-hero-offer-image img {
+    transform: scale(1.06);
+}
+
+.pf-hero-offer-image > span:first-child {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    font-weight: 900;
+    color: #818cf8;
+}
+
+.pf-hero-offer-image-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(8, 13, 26, 0.02) 20%,
+            rgba(8, 13, 26, 0.2) 55%,
+            rgba(8, 13, 26, 0.88) 100%
+        );
+    pointer-events: none;
+}
+
+.pf-hero-offer-category {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    width: auto !important;
+    height: auto !important;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(8, 13, 26, 0.72);
+    color: #f8fafc !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+}
+
+
+/* =========================================================
+   OFFER CONTENT
+========================================================= */
+
+.pf-hero-offer-content {
+    padding: 20px;
+}
+
+.pf-hero-offer-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.pf-hero-offer-topline span {
+    color: #718096;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.pf-hero-offer-topline b {
+    color: #34d399;
+    font-size: 9px;
+}
+
+.pf-hero-offer-content h3 {
+    min-height: 48px;
+    margin: 0 0 9px;
+    color: #f8fafc;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.pf-hero-offer-content > p {
+    min-height: 48px;
+    margin: 0 0 15px;
+    color: #a7b1c2;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.pf-hero-offer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-height: 27px;
+    margin-bottom: 17px;
+}
+
+.pf-hero-offer-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.025);
+    color: #718096;
+    font-size: 10px;
+}
+
+.pf-hero-offer-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pf-hero-reward {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pf-hero-reward small {
+    color: #718096;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.pf-hero-reward strong {
+    color: #34d399;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.pf-hero-offer-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 10px;
+    background: #6366f1;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.pf-hero-offer-button:hover {
+    background: #818cf8;
+    transform: translateX(2px);
+}
+
+
+/* =========================================================
+   CAROUSEL MOTION
+========================================================= */
+
+@media (min-width: 851px) {
+
+    .pf-hero-offer-track {
+        animation: pfHeroOfferDrift 20s ease-in-out infinite;
+    }
+
+    .pf-hero-offer-track:hover {
+        animation-play-state: paused;
+    }
+
+}
+
+@keyframes pfHeroOfferDrift {
+
+    0%,
+    20% {
+        transform: translateX(0);
+    }
+
+    35%,
+    55% {
+        transform: translateX(-2%);
+    }
+
+    70%,
+    90% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================================================
+   CAROUSEL NOTE
+========================================================= */
+
+.pf-hero-carousel-note {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-top: 17px;
+    color: #718096;
+    font-size: 11px;
+    text-align: center;
+}
+
+.pf-hero-carousel-note span {
+    color: #6366f1;
+}
+
+
+/* =========================================================
+   HERO EMPTY STATE
+========================================================= */
+
+.pf-hero-offers-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    padding: 40px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    background: #111827;
+    text-align: center;
+}
+
+.pf-hero-offers-empty > div {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border-radius: 17px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #818cf8;
+    font-size: 25px;
+}
+
+.pf-hero-offers-empty strong {
+    color: #f8fafc;
+    font-size: 19px;
+}
+
+.pf-hero-offers-empty p {
+    max-width: 450px;
+    margin: 9px 0 20px;
+    color: #a7b1c2;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ACTIVITY / COUNTER SECTION
+========================================================= */
+
+.pf-activity-stats {
+    padding: 25px 0 85px;
+}
+
+.pf-activity-heading {
+    margin-bottom: 22px;
+}
+
+.pf-activity-heading h2 {
+    margin: 7px 0 0;
+    color: #f8fafc;
+    font-size: clamp(24px, 3vw, 34px);
+    letter-spacing: -0.03em;
+}
+
+.pf-activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.pf-activity-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 180px;
+    padding: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 22px;
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(99, 102, 241, 0.13),
+            transparent 45%
+        ),
+        #111827;
+}
+
+.pf-activity-card.payout {
+    border-color: rgba(34, 211, 238, 0.13);
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(34, 211, 238, 0.11),
+            transparent 45%
+        ),
+        #111827;
+}
+
+.pf-activity-icon {
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 17px;
+    background: rgba(99, 102, 241, 0.1);
+    color: #818cf8;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.pf-activity-card.payout .pf-activity-icon {
+    border-color: rgba(34, 211, 238, 0.18);
+    background: rgba(34, 211, 238, 0.08);
+    color: #22d3ee;
+}
+
+.pf-activity-content {
+    min-width: 0;
+}
+
+.pf-activity-content small {
+    display: block;
+    margin-bottom: 7px;
+    color: #718096;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.pf-count-number {
+    display: block;
+    color: #f8fafc;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.pf-activity-card.payout .pf-count-number {
+    color: #34d399;
+}
+
+.pf-activity-content p {
+    margin: 8px 0 0;
+    color: #a7b1c2;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .pf-hero-offer-track {
+        grid-template-columns: repeat(3, minmax(270px, 1fr));
+    }
+
+}
+
+@media (max-width: 850px) {
+
+    .pf-hero-offers {
+        padding-top: 5px;
+    }
+
+    .pf-hero-offers-heading {
+        align-items: flex-start;
+    }
+
+    .pf-hero-offer-window {
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+    }
+
+    .pf-hero-offer-window::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pf-hero-offer-track {
+        display: flex;
+        width: max-content;
+        animation: none;
+    }
+
+    .pf-hero-offer-card {
+        width: min(78vw, 340px);
+        flex: 0 0 min(78vw, 340px);
+        scroll-snap-align: start;
+    }
+
+    .pf-activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .pf-hero-offers-heading {
+        flex-direction: column;
+        gap: 13px;
+        margin-bottom: 20px;
+    }
+
+    .pf-hero-offers-heading h2 {
+        font-size: 28px;
+    }
+
+    .pf-hero-offer-image {
+        height: 175px;
+    }
+
+    .pf-hero-offer-content {
+        padding: 17px;
+    }
+
+    .pf-hero-offer-content h3 {
+        min-height: auto;
+    }
+
+    .pf-hero-offer-content > p {
+        min-height: auto;
+    }
+
+    .pf-activity-card {
+        min-height: 155px;
+        padding: 22px;
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .pf-hero-offer-card {
+        width: 86vw;
+        flex-basis: 86vw;
+    }
+
+    .pf-activity-card {
+        gap: 14px;
+    }
+
+    .pf-activity-icon {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+    }
+
+}
+
+
+
+/* =========================================================
    ACCESSIBILITY
 ========================================================= */
 
