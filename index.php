@@ -1142,6 +1142,127 @@
 </footer>
 
 
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const button = document.getElementById('mobileMenuButton');
+    const menu = document.getElementById('mobileNavigation');
+
+    if (!button || !menu) {
+        return;
+    }
+
+    function closeMenu() {
+
+        button.classList.remove('open');
+
+        button.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        button.setAttribute(
+            'aria-label',
+            'Open navigation menu'
+        );
+
+        menu.classList.remove('open');
+
+        menu.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+    }
+
+    function toggleMenu() {
+
+        const isOpen =
+            menu.classList.toggle('open');
+
+        button.classList.toggle(
+            'open',
+            isOpen
+        );
+
+        button.setAttribute(
+            'aria-expanded',
+            isOpen ? 'true' : 'false'
+        );
+
+        button.setAttribute(
+            'aria-label',
+            isOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+        menu.setAttribute(
+            'aria-hidden',
+            isOpen ? 'false' : 'true'
+        );
+    }
+
+    button.addEventListener(
+        'click',
+        function (event) {
+
+            event.stopPropagation();
+
+            toggleMenu();
+        }
+    );
+
+    menu.querySelectorAll('a').forEach(
+        function (link) {
+
+            link.addEventListener(
+                'click',
+                closeMenu
+            );
+
+        }
+    );
+
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            if (
+                !menu.contains(event.target) &&
+                !button.contains(event.target)
+            ) {
+                closeMenu();
+            }
+
+        }
+    );
+
+    document.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+
+        }
+    );
+
+    window.addEventListener(
+        'resize',
+        function () {
+
+            if (window.innerWidth > 1000) {
+                closeMenu();
+            }
+
+        }
+    );
+
+});
+</script>
+
+
 </body>
 
 </html>
