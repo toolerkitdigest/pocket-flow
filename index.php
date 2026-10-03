@@ -794,18 +794,13 @@
 </section>
 
 
-<!-- ==================================================
-     WAYS TO EARN
-================================================== -->
 
 <section
   class="section offers-section"
   id="rewards"
 >
 
-
   <div class="section-heading">
-
 
     <div>
 
@@ -819,11 +814,9 @@
 
     </div>
 
-
     <a href="offers.php">
       View all offers →
     </a>
-
 
   </div>
 
@@ -831,162 +824,162 @@
   <div class="offer-grid">
 
 
-    <article class="offer-card">
-
-  <div class="offer-feature-image app-placeholder">
-
-    <!--
-      Real image will go here later.
-
-      Suggested file:
-      assets/images/offer-apps.png
-    -->
-
-    <img
-      src="assets/images/offer-apps.png"
-      alt="Discover new apps and earn rewards"
-      onerror="this.style.display='none';"
-    >
-
-  </div>
-
-  <div class="offer-body">
-
-    <span class="tag">
-      App Install
-    </span>
-
-    <h3>
-      Discover new apps
-    </h3>
-
-    <p>
-      Explore an available app offer and follow
-      its listed requirements.
-    </p>
-
-  </div>
-
-  <div class="offer-bottom">
-
-    <strong>
-      Earn rewards
-    </strong>
-
-    <a href="offers.php">
-      Start →
-    </a>
-
-  </div>
-
-</article>
-    
-    
-    <article class="offer-card">
-<article class="offer-card">
-
-  <div class="offer-feature-image survey-placeholder">
-
-    <!--
-      Real image will go here later.
-
-      Suggested file:
-      assets/images/offer-surveys.png
-    -->
-
-    <img
-      src="assets/images/offer-surveys.png"
-      alt="Share your opinion through surveys"
-      onerror="this.style.display='none';"
-    >
-
-  </div>
-
-  <div class="offer-body">
-
-    <span class="tag">
-      Survey
-    </span>
-
-    <h3>
-      Share your opinion
-    </h3>
-
-    <p>
-      Answer an available survey and complete
-      the required steps.
-    </p>
-
-  </div>
-
-  <div class="offer-bottom">
-
-    <strong>
-      Earn rewards
-    </strong>
-
-    <a href="offers.php">
-      Start →
-    </a>
-
-  </div>
-
-</article>
+    <!-- ==================================================
+         OFFER 1
+    ================================================== -->
 
     <article class="offer-card">
-<article class="offer-card">
 
-  <div class="offer-feature-image special-placeholder">
+      <div class="offer-feature-image app-placeholder">
 
-    <!--
-      Real image will go here later.
+        <img
+          src="assets/images/offer-apps.png"
+          alt="Discover new apps and earn rewards"
+          onerror="this.style.display='none';"
+        >
 
-      Suggested file:
-      assets/images/offer-special.png
-    -->
+      </div>
 
-    <img
-      src="assets/images/offer-special.png"
-      alt="Explore special reward opportunities"
-      onerror="this.style.display='none';"
-    >
 
-  </div>
+      <div class="offer-body">
 
-  <div class="offer-body">
+        <span class="tag">
+          App Install
+        </span>
 
-    <span class="tag">
-      Special Offer
-    </span>
+        <h3>
+          Discover new apps
+        </h3>
 
-    <h3>
-      Explore opportunities
-    </h3>
+        <p>
+          Explore an available app offer and follow
+          its listed requirements.
+        </p>
 
-    <p>
-      Browse additional offers available
-      for your account.
-    </p>
+      </div>
 
-  </div>
 
-  <div class="offer-bottom">
+      <div class="offer-bottom">
 
-    <strong>
-      Earn rewards
-    </strong>
+        <strong>
+          Earn rewards
+        </strong>
 
-    <a href="offers.php">
-      Start →
-    </a>
+        <a href="offers.php">
+          Start →
+        </a>
 
-  </div>
+      </div>
 
-</article>
+    </article>
+
+
+    <!-- ==================================================
+         OFFER 2
+    ================================================== -->
+
+    <article class="offer-card">
+
+      <div class="offer-feature-image survey-placeholder">
+
+        <img
+          src="assets/images/offer-surveys.png"
+          alt="Share your opinion through surveys"
+          onerror="this.style.display='none';"
+        >
+
+      </div>
+
+
+      <div class="offer-body">
+
+        <span class="tag">
+          Survey
+        </span>
+
+        <h3>
+          Share your opinion
+        </h3>
+
+        <p>
+          Answer an available survey and complete
+          the required steps.
+        </p>
+
+      </div>
+
+
+      <div class="offer-bottom">
+
+        <strong>
+          Earn rewards
+        </strong>
+
+        <a href="offers.php">
+          Start →
+        </a>
+
+      </div>
+
+    </article>
+
+
+    <!-- ==================================================
+         OFFER 3
+    ================================================== -->
+
+    <article class="offer-card">
+
+      <div class="offer-feature-image special-placeholder">
+
+        <img
+          src="assets/images/offer-special.png"
+          alt="Explore special reward opportunities"
+          onerror="this.style.display='none';"
+        >
+
+      </div>
+
+
+      <div class="offer-body">
+
+        <span class="tag">
+          Special Offer
+        </span>
+
+        <h3>
+          Explore opportunities
+        </h3>
+
+        <p>
+          Browse additional offers available
+          for your account.
+        </p>
+
+      </div>
+
+
+      <div class="offer-bottom">
+
+        <strong>
+          Earn rewards
+        </strong>
+
+        <a href="offers.php">
+          Start →
+        </a>
+
+      </div>
+
+    </article>
+
 
   </div>
 
 </section>
+  
+
+
 
 
 <!-- ==================================================
